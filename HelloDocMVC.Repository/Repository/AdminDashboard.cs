@@ -8,6 +8,7 @@ using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using HelloDocMVC.Entity.DataModels;
+using System.Net;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -39,11 +40,24 @@ namespace HelloDocMVC.Repository.Repository
                            PatientPhoneNumber = req.Requestclient.PhoneNumber,
                            RequestorPhoneNumber = req.Request.PhoneNumber,
                            Notes = req.Requestclient.Notes,
-                           Address = req.Requestclient.Address + " " + req.Requestclient.Street + " " + req.Requestclient.City + " " + req.Requestclient.State + " " + req.Requestclient.Zipcode
+                           Address = req.Requestclient.Address + " " + req.Requestclient.Street + " " + req.Requestclient.City + " " + req.Requestclient.State + " " + req.Requestclient.ZipCode
                        })
-                       .OrderByDescending(req => req.RequestedDate)
+                       .OrderBy(req => req.RequestedDate)
                         .ToList();
             return list;
+        }
+        public CountStatusWiseRequestModel IndexData()
+        {
+            return new CountStatusWiseRequestModel
+            {
+                NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
+                PendingRequest = _context.Requests.Where(r => r.Status == 2).Count(),
+                ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5)).Count(),
+                ConcludeRequest = _context.Requests.Where(r => r.Status == 6).Count(),
+                ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8)).Count(),
+                UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count(),
+                adminDashboardList = NewRequestData()
+            };
         }
     }
 }

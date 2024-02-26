@@ -1,0 +1,48 @@
+﻿body {
+    font-family: Poppins;
+}
+.logo {
+    height: 70px;
+}
+.backBtn {
+    position: absolute;
+    right: 10vw;
+    top: 13vh;
+    border: 2px solid rgb(9, 215, 230);
+    border-radius: 5px;
+}
+.form-floating label {
+    margin-top: 1px;
+    margin-left: 15px;
+}
+#phone {
+    display: block;
+    width: 620px;
+    line-height: 2.7;
+}
+.active {
+    color: #8dcaf0 !important;
+    font-weight: 600;
+    border-bottom: 2px solid #8dcaf0;
+}
+.bg-body{
+    background-color:white !important;
+}
+.dNone {
+    display: block;
+}
+
+.dBlock {
+    display: none;
+}
+
+@media only screen and (max-width: 760px) {
+    .dNone {
+        display: none;
+    }
+
+    .dBlock {
+        display: block;
+    }
+}
+/*admindash*/
