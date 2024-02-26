@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+}
+<body class="bg-light">
+
+    <div class="maindiv text-center col-md mt-3">
+
+ 
+        <center><h1>I am a...</h1></center>
+        <div class="backBtn">
+            <a asp-controller="Home" asp-action="Index"><i class='fa fa-angle-left text-info p-2'>Back</i></a>
+        </div>
+        <div class="btn-group-vertical ">
+            <a asp-controller="Forms" asp-action="PatientForm" type="button" class="btn btn-p1 py-3 m-3 px-6 rounded">PATIENT</a>
+            <a asp-controller="Forms" asp-action="FamilyFriend" type="button" class="btn btn-outline-info btn-f py-3 m-3 px-5 rounded">FAMILY/FRIEND</a>
+            <a asp-controller="Forms" asp-action="Concierge" type="button" class="btn btn-outline-success py-3 m-3 px-5 rounded">CONCIERGE</a>
+            <a asp-controller="Forms" asp-action="BusinessPartner" type="button" class="btn btn-p2 py-3 m-3 px-5 rounded">BUSINESS PARTNERS</a>
+        </div>
+    </div>
+
+</body>
+
+

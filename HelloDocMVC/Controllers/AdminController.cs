@@ -16,5 +16,10 @@ namespace HelloDocMVC.Controllers
             var Data = _IAdminDashboard.IndexData();
             return View(Data);
         }
+        public IActionResult ViewCase(int? id)
+        {
+            var Data = _IAdminDashboard.ViewCaseData(id);
+            return View(Data);
+        }
     }
 }

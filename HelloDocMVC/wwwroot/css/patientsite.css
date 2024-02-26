@@ -1,0 +1,143 @@
+.Moon {
+    border: 2px solid rgb(9, 215, 230);
+    padding: 3px;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+body {
+    font-family: Poppins;
+}
+/* submitreq ..........................................................................................*/
+.maindiv {
+    align-items: center;
+    justify-content: space-between;
+}
+
+header img {
+    height: 90px;
+}
+
+.btn-p1,
+.btn-p1:active,
+.btn-p1:visited,
+.btn-p1:focus {
+    background-color: rgb(198, 170, 198);
+    border-color: rgb(125, 43, 125);
+    color: rgb(125, 43, 125);
+}
+
+    .btn-p1:hover {
+        background-color: rgb(125, 43, 125);
+        border-color: rgb(125, 43, 125);
+        color: rgb(253, 252, 253);
+    }
+
+.btn-p2,
+.btn-p2:active,
+.btn-p2:visited,
+.btn-p2:focus {
+    background-color: rgb(250, 227, 237);
+    border-color: rgb(156, 90, 121);
+    color: rgb(156, 90, 121);
+}
+
+    .btn-p2:hover {
+        background-color: rgb(156, 90, 121);
+        border-color: rgb(156, 90, 121);
+        color: rgb(253, 252, 253);
+    }
+
+.btn-f {
+    background-color: rgb(193, 227, 243);
+}
+
+.btn-outline-success {
+    background-color: rgb(195, 236, 195);
+}
+
+.backBtn {
+    position: absolute;
+    right: 10vw;
+    top: 13vh;
+    border: 2px solid rgb(9, 215, 230);
+    border-radius: 5px;
+}
+
+
+/* login.......................................................... */
+.backimg {
+    background: linear-gradient(rgba(255,255,255,.60), rgba(255,255,255,.60)), url('../images/11116016_415-removebg-preview.png');
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: contain;
+    backdrop-filter: blur(5px);
+    height: 100vh;
+    font-family: Poppins;
+}
+
+.plogin {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 15vh;
+}
+
+.heading {
+    position: relative;
+}
+
+.icon {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+}
+
+.patient {
+    margin-top: 150px;
+}
+
+.back {
+    position: absolute;
+    top: 30vh;
+    left: 26%;
+}
+
+/* formpatient.............................................. */
+header img {
+    height: 90px;
+}
+
+.backBtn {
+    position: absolute;
+    right: 10vw;
+    top: 97px;
+    border: 2px solid rgb(9, 215, 230);
+    border-radius: 5px;
+    
+}
+
+.form-floating label {
+    margin-top: 1px;
+    margin-left: 15px;
+}
+
+header, .sbox {
+    box-shadow: 0 0 10px 0 black;
+}
+
+.form-control {
+    line-height: 2.5;
+}
+
+.iti {
+    display: block;
+    width: 100%;
+}
+.form-floating label {
+    margin-top: 1px;
+    margin-left: 15px;
+}
+
+

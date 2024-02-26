@@ -12,5 +12,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
     {
         public List<AdminDashboardList> NewRequestData();
         public CountStatusWiseRequestModel IndexData();
+        public ViewCase ViewCaseData(int? id);
     }
 }

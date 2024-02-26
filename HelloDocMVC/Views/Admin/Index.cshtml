@@ -35,7 +35,7 @@
         </button>
 
         <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded active ps-2 pt-3">
+            <div class="p-1 rounded active1 ps-2 pt-3">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-circle-check me-2 align-self-center d-none d-sm-block"></i>
                     ACTIVE
@@ -248,7 +248,7 @@
                                 <small>Actions</small>
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#"><i class="bi bi-journal-text"></i> View Case</a></li>
+                                <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="bi bi-card-checklist"></i> View Uploads</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="bi bi-journals"></i> View Notes</a></li>
                             </ul>

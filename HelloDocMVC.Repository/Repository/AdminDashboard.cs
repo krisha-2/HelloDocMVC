@@ -9,6 +9,8 @@ using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 using HelloDocMVC.Entity.DataModels;
 using System.Net;
+using static HelloDocMVC.Entity.Models.Constant;
+using System.Reflection;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -58,6 +60,29 @@ namespace HelloDocMVC.Repository.Repository
                 UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count(),
                 adminDashboardList = NewRequestData()
             };
+        }
+        public ViewCase ViewCaseData(int? id)
+        {
+            ViewCase viewCase = _context.Requests.Join
+                       (_context.RequestClients,
+                       requestclients => requestclients.RequestId, requests => requests.RequestId,
+                       (requests, requestclients) => new { Request = requests, Requestclient = requestclients }
+                       )
+                       .Where(R=>R.Request.RequestId == id)
+                       .Select(req => new ViewCase()
+                       {
+                                            RequestTypeId = req.Request.RequestTypeId,
+                                            ConfNo = req.Requestclient.City.Substring(0, 2) + req.Requestclient.IntDate.ToString() + req.Requestclient.StrMonth + req.Requestclient.IntYear.ToString() + req.Requestclient.RcLastName.Substring(0, 2) + req.Requestclient.RcFirstName.Substring(0, 2) + "002",
+                                            Symptoms = req.Requestclient.Notes,
+                                            FirstName = req.Requestclient.RcFirstName,
+                                            LastName = req.Requestclient.RcLastName,
+                                            DOB = new DateTime((int)req.Requestclient.IntYear, Convert.ToInt32(req.Requestclient.StrMonth.Trim()), (int)req.Requestclient.IntDate),
+                                            Mobile = req.Requestclient.PhoneNumber,
+                                            Email = req.Requestclient.Email,
+                                            Address = req.Requestclient.Address
+
+                       }).FirstOrDefault();
+            return viewCase;
         }
     }
 }

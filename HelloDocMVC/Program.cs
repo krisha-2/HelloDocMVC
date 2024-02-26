@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HelloDocDbContext>();
 builder.Services.AddScoped<IAdminDashboard, AdminDashboard>();
+builder.Services.AddScoped<IPatientForms, PatientForms>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 

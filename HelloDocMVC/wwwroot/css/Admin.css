@@ -6,6 +6,16 @@ body {
 .hdr {
     box-shadow: 0 0 10px 0;
 }
+.form-floating label {
+    margin-top: 1px;
+    margin-left: 15px;
+}
+
+#phone {
+    display: block;
+    width: 620px;
+    line-height: 2.7;
+}
 
 .header-img {
     height: 70px;
@@ -38,14 +48,14 @@ body {
         color: white;
     }
 
-.active {
+.active1 {
     border: solid thin #198754;
     color: #338038;
     background-color: #e9f0e8;
     height: 100px;
 }
 
-    .active:hover {
+    .active1:hover {
         background-color: #228c20;
         color: white;
     }
