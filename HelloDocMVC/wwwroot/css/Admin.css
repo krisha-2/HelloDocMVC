@@ -10,6 +10,13 @@ body {
     margin-top: 1px;
     margin-left: 15px;
 }
+.backBtn {
+    position: absolute;
+    right: 10vw;
+    top: 97px;
+    border: 2px solid rgb(9, 215, 230);
+    border-radius: 5px;
+}
 
 #phone {
     display: block;

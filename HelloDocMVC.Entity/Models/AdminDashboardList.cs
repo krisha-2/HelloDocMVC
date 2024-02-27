@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,5 +20,13 @@ namespace HelloDocMVC.Entity.Models
         public string Address { get; set; }
         public string Notes { get; set; }
         public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public string PatientId { get; set; }
+        public int ProviderId { get; set; }
+        public string ProviderName { get; set; }
+        public string Region { get; set; }
+        public short ADStatus { get; set; }
+        public  string PhysicianName { get; set; }
+        public string DateOfService { get; set; }
     }
 }

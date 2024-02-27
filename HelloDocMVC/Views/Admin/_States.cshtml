@@ -1,0 +1,163 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+﻿@using static HelloDocMVC.Entity.Models.Constant
+
+
+<form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
+      asp-action="_SearchResult" asp-controller="Admin" novalidate="novalidate">
+    <input type="hidden" name="Status" id="hiddenfirst" />
+    <div class="row mb-2 t-tab" style="--bs-gutter-x: 0rem;">
+        <button type="submit" value="1" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
+            <div class="p-1 rounded new active ps-2 pt-3 a-new">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-circle-plus me-2 align-self-center d-none d-sm-block"></i>
+                    NEW
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.NewRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button type="submit" value="2" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded pending ps-2 pt-3 a-pending">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-user-clock me-2 align-self-center d-none d-sm-block"></i>
+                    PENDING
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.PendingRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button type="submit" value="4,5" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded active1 ps-2 pt-3 a-active1">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-circle-check me-2 align-self-center d-none d-sm-block"></i>
+                    ACTIVE
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.ActiveRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button type="submit" value="6" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded conclude ps-2 pt-3 a-conclude">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-clock-rotate-left me-2 align-self-center d-none d-sm-block"></i>
+                    CONCLUDE
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.ConcludeRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button type="submit" value="3,7,8" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded toClose ps-2 pt-3 a-toClose">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-user-xmark me-2 align-self-center d-none d-sm-block"></i>
+                    TO CLOSE
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.ToCloseRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button type="submit" value="9" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-circle-dollar-to-slot me-2 align-self-center d-none d-sm-block"></i>
+                    UNPAID
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.UnpaidRequest</span>
+                </div>
+            </div>
+        </button>
+    </div>
+</form>
+@*<div class="mx-sm-1 mx-md-2 mx-xxl-4 mt-0 bg-light">
+    <!--Status of requests-->
+    <div class="row mb-2" style="--bs-gutter-x: 0rem;">
+        <button class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded new ps-2 pt-3">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-circle-plus me-2 align-self-center d-none d-sm-block"></i>
+                    NEW
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.NewRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded pending ps-2 pt-3">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-user-clock me-2 align-self-center d-none d-sm-block"></i>
+                    PENDING
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.PendingRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded active1 ps-2 pt-3">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-circle-check me-2 align-self-center d-none d-sm-block"></i>
+                    ACTIVE
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.ActiveRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded conclude ps-2 pt-3">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-clock-rotate-left me-2 align-self-center d-none d-sm-block"></i>
+                    CONCLUDE
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.ConcludeRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded toClose ps-2 pt-3">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-user-xmark me-2 align-self-center d-none d-sm-block"></i>
+                    TO CLOSE
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.ToCloseRequest</span>
+                </div>
+            </div>
+        </button>
+
+        <button class="btn col-4 col-md-2 text-start shadow-none">
+            <div class="p-1 rounded unpaid ps-2 pt-3">
+                <div class="d-inline-flex">
+                    <i class="fa-solid fa-circle-dollar-to-slot me-2 align-self-center d-none d-sm-block"></i>
+                    UNPAID
+                </div>
+                <div class="mt-2">
+                    <span class="h4 fw-bold">@Model.UnpaidRequest</span>
+                </div>
+            </div>
+        </button>
+    </div>
+    <!--End Status of requests-->
+    <!--Important links-->
+
+
+*@

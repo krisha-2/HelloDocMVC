@@ -21,7 +21,7 @@
     <header>
         <nav class="navbar px-2  border-2 border-bottom navbar-expand-lg bg-white">
             <div class="container-fluid">
-                <i class="fa fa-solid fa-bars text-info border rounded border-info d-block d-sm-none align-self-center my-3 p-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
+                <i class="fa fa-solid fa-bars text-info border rounded border-info d-block d-lg-none align-self-center my-3 p-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
                 <img src="~/images/Fig56._Patient_site_1-removebg-preview.png" class="img-fluid logo mx-1 header-img" />
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 </ul>
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </nav>
-        <partial name="../_PartialView/AdminSubNav" />
+    <partial name="../_PartialView/AdminSubNav" />
     </header>
     <main role="main" class="pb-3 min-vh-100 container-fluid  bg-light">
         @RenderBody()
@@ -58,6 +58,9 @@
         </div>
     </footer>
     <script src="~/js/custom.js"></script>
+    <script src="@Url.Content("~/plugins/mvc-jquery-ajax/jquery.unobtrusive-ajax.js")"></script>
+    <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.js")"></script>
+    <script src="@Url.Content("~/plugins/mvc-jquery-validate/jquery.validate.unobtrusive.js")"></script>
 @*    <script>
         let metemp = false;
         let elsetemp = false;
