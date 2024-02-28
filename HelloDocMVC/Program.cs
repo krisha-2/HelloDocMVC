@@ -10,6 +10,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HelloDocDbContext>();
 builder.Services.AddScoped<IAdminDashboard, AdminDashboard>();
 builder.Services.AddScoped<IPatientForms, PatientForms>();
+builder.Services.AddScoped<IPatientDashboard, PatientDashboard>();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 

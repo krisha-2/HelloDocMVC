@@ -35,7 +35,7 @@ namespace HelloDocMVC.Repository.Repository
                            RequestId = req.Request.RequestId,
                            PatientName = req.Requestclient.RcFirstName + " " + req.Requestclient.RcLastName,
                            Email = req.Requestclient.Email,
-                           //DateOfBirth = new DateTime((int)req.Requestclient.Intyear, Convert.ToInt32(req.Requestclient.Strmonth.Trim()), (int)req.Requestclient.Intdate),
+                           //DateOfBirth = new DateTime((int)req.Requestclient.IntYear, Convert.ToInt32(req.Requestclient.StrMonth.Trim()), (int)req.Requestclient.IntDate),
                            RequestTypeId = req.Request.RequestTypeId,
                            Requestor = req.Request.RFirstName + " " + req.Request.RLastName,
                            RequestedDate = req.Request.CreatedDate,
@@ -63,7 +63,7 @@ namespace HelloDocMVC.Repository.Repository
         }
         public ViewCase ViewCaseData(int? id)
         {
-            ViewCase viewCase = _context.Requests.Join
+            ViewCase? viewCase = _context.Requests.Join
                        (_context.RequestClients,
                        requestclients => requestclients.RequestId, requests => requests.RequestId,
                        (requests, requestclients) => new { Request = requests, Requestclient = requestclients }
@@ -97,7 +97,7 @@ namespace HelloDocMVC.Repository.Repository
                                                 on req.PhysicianId equals phys.PhysicianId into physGroup
                                                 from p in physGroup.DefaultIfEmpty()
                                                 join reg in _context.Regions
-                                               on rc.RegionId equals reg.RegionId into RegGroup
+                                                on rc.RegionId equals reg.RegionId into RegGroup
                                                 from rg in RegGroup.DefaultIfEmpty()
                                                 where statusdata.Contains(req.Status)
                                                 orderby req.CreatedDate descending
@@ -108,7 +108,9 @@ namespace HelloDocMVC.Repository.Repository
                                                     RequestTypeId = req.RequestTypeId,
                                                     Requestor = req.RFirstName + " " + req.RLastName,
                                                     PatientName = rc.RcFirstName + " " + rc.RcLastName,
-                                                    //Dob = new DateOnly((int)rc.Intyear, DateTime.ParseExact(rc.Strmonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.Intdate),
+                                                    //DateOfBirth = new DateOnly((int)rc.IntYear, DateTime.ParseExact(rc.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.IntDate),
+                                                    //DateOfBirth = new DateTime((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate),
+                                                    DateOfBirth = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
                                                     RequestedDate = req.CreatedDate,
                                                     Email = rc.Email,
                                                     Region = rg.Name,

@@ -7,6 +7,8 @@ namespace HelloDocMVC.Entity.Models
         public int Id { get; set; }
         public string UserName { get; set; }
         public string PassWord { get; set; }
+        public string PasswordHash { get; set; }
+        
         [Required(ErrorMessage = "FirstName is required")]
         public string FirstName { get; set; }
         public string? LastName { get; set; }

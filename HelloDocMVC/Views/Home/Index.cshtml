@@ -2,11 +2,27 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center heading">
+                <img src="images/Fig56._Patient_site_1-removebg-preview.png" alt="Patient">
+                <div class="Moon">
+                    <i class="fa fa-light fa-moon-o fa-2x text-info"></i>
+                </div>
+            </div>
 
-  
+        </div>
+        <div class="row plogin align-center d-flex flex-column">
+            <a class="col-5 align-self-center btn btn-lg btn-info m-3 mx-auto text-decoration-none text-light" asp-controller="Forms" asp-action="Index">
+                 Submit A Request
+            </a>
+            <a class="col-5 align-self-center btn btn-lg btn-primary m-3 mx-auto text-decoration-none text-light" asp-controller="Login" asp-action="Index">
+                 Registered Patients
+            </a>
+        </div>
+    </div>
+</body>
+
 

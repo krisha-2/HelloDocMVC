@@ -15,5 +15,14 @@ namespace HelloDocMVC.Entity.Models
             Family,
             Concierge
         }
+        public enum Status
+        {
+            New=1,
+                Pending=2,
+                Active=3,
+                Conclude=4,
+                ToClose=5,
+                UnPaid=6
+        }
     }
 }

@@ -1,0 +1,127 @@
+﻿@{
+    Layout = "_LayoutDashboard";
+}
+@using Microsoft.AspNetCore.Http
+@using HelloDocMVC.Entity.Models.ViewModel
+@model  List<PatientDashboardList>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
+}
+<div class="justify-content-between d-flex container-fluid mt-5 position-relative ">
+    <div>
+        <h3 class="fw-bolder">
+            Medical History @*@userId*@
+        </h3>
+    </div>
+</div>
+<div class="card border-0 shadow py-4 mb-5 mx-3 mt-3 rounded">
+    <div class="text-end mx-2 px-3">
+            <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Create New Request
+        </button>
+    </div>
+        <div class="modal fade text-start" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Create New Request</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Here, I want to create new request for...</p>
+                        <div>
+                            <button class="btn btn-outline-info mx-2" id="me">Me</button>
+                            <button class="btn btn-outline-info mx-2" id="else">Someone Else</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-info" id="cont">Continue</button>
+                        <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="table-responsive dNone">
+        <table class="table table-responsive mt-3 p-3">
+            <thead class="bg-light">
+                <tr>
+                    <th scope="col" width="25%">Created Date <i class="bi bi-arrow-down"></i></th>
+                    <th scope="col" width="60%">Current Status</th>
+                    <th scope="col">Document</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider mx-5">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td scope="row"> @item.createdDate</td>
+                        <td>@item.Status</td>
+                        <td>
+                            @{
+                                if (item.Fcount != 0)
+                                {
+                                    <a asp-action="Document" asp-controller="Dashboard" asp-route-id="@item.RequestId" class="btn btn-outline-info btn-sm document-button">
+                                        Document (@item.Fcount)
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
+                                             class="bi bi-arrow-down-circle mx-1" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd"
+                                                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
+                                        </svg>
+                                    </a>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+    <div class="dBlock">
+        <div class="accordion" id="accordionExample">
+        @foreach (var item in Model)
+        {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="flush-heading-@item.RequestId">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-@item.RequestId" aria-expanded="true" aria-controls="flush-collapseOne">
+                            <i class="fa fa-clock text-info me-2"></i>
+                            <b>Created Date :  </b>
+                            @item.createdDate.ToString("MMM d, yyyy")
+                        </button>
+                    </h2>
+                    <div id="flush-@item.RequestId" class="accordion-collapse collapse collapse show" aria-labelledby="flush-heading-@item.RequestId" data-bs-parent="#accordionExample">
+                        <div class="accordion-body">
+                            <div class="mb-1">
+                                <i class="fa-solid fa-user text-info border border-info rounded-circle"></i>
+                                <b> Provider : </b>
+                            </div>
+
+                            <div class="mb-1">
+                                <i class="fa fa-check text-info border border-info rounded-circle"></i>
+                                <b> Current Status : </b>
+                                @item.Status
+                            </div>
+                            <div>
+                                @{
+                                    if (item.Fcount != 0)
+                                    {
+                                        <a asp-action="UploadDocument" asp-controller="Dashboard" asp-route-id="@item.RequestId" class="btn btn-outline-info btn-sm">
+                                            Documents
+                                            <i class="fa-solid fa-download"></i>
+                                        </a>
+
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        }
+        </div>
+    </div>
+
+    
+</div>
+

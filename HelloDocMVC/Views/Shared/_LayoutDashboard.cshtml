@@ -1,0 +1,82 @@
+@using static HelloDocMVC.Models.CV;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HelloDoc</title>
+    <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <link href="~/css/Dashboard.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar px-2  border-2 border-bottom navbar-expand-lg bg-white">
+            <div class="container-fluid">
+                <i class="fa fa-solid fa-bars text-info border rounded border-info d-block d-sm-none align-self-center my-3 p-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample"></i>
+                    <img src="~/images/Fig56._Patient_site_1-removebg-preview.png" class="img-fluid logo mx-1" />
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                </ul>
+                <div class=" top-0 end-0 my-4 mx-5 position-absolute text-info border-info rounded-3 d-flex ">
+                    <h5 class="text-dark align-bottom pt-2 dNone">
+                        Welcome <span class="fw-bolder"> @*@CV.UserName()*@ </span>
+                    </h5>
+                    <a asp-action="Logout" asp-controller="Login" class="btn btn-outline-info mx-2">Logout</a>
+                    <button class="btn btn-outline-info" onclick="mode()">
+                        <i class="fa fa-light fa-moon-o fa-2x text-info"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        @*<partial name="../_PartialView/DashboardSubNav" />*@
+    </header>
+    <main role="main" class="pb-3 min-vh-100 container-fluid  bg-light">
+        @RenderBody()
+    </main>
+    <footer>
+        <div class=" justify-content-end position-static  w-100 align-self-end d-flex left-0 bg-dark text-light px-2 align-items-end  bottom-0 py-3 fs-7 align-text-bottom align-items-end">
+            <div class="text-center">
+
+                <span class="text-center mx-2">
+                    Term Of Condition
+                </span>
+                <span>
+                    I
+                </span>
+                <span class="mx-2">
+                    Privacy Policy
+                </span>
+            </div>
+        </div>
+    </footer>
+    <script src="~/js/custom.js"></script>
+    <script>
+        let metemp = false;
+        let elsetemp = false;
+
+        $('#me').on('click', function () {
+            metemp = true;
+            elsetemp = false;
+        })
+        $('#else').on('click', function () {
+            elsetemp = true;
+            metemp = false;
+        })
+        $('#cont').on('click', function () {
+            if (metemp == true) {
+                window.location.href = "/RequestByPatient/Me";
+            }
+            else if (elsetemp == true) {
+                window.location.href = "/RequestByPatient/SomeoneElse";
+            }
+        })
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

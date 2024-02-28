@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HelloDoc</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/css/patientsite.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+</head>
+<body>
+    @*<header>
+        <div class="row">
+            <div class="col-12 text-center heading">
+                <img src="images/Fig56._Patient_site_1-removebg-preview.png" alt="Patient">
+                <div class="Moon">
+                    <i class="fa fa-light fa-moon-o fa-2x text-info"></i>
+                </div>
+            </div>
+
+        </div>
+    </header>*@
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <footer class="fixed-bottom foot text-center">
+        <a href="" class="link-underline link-underline-opacity-0 text-decoration-none">
+            <small class="text-secondary">
+                Terms
+                & Conditions
+            </small>
+        </a> |
+        <a href="" class="link-underline link-underline-opacity-0 text-decoration-none">
+            <small class="text-secondary">
+                Privacy
+                Policy
+            </small>
+        </a>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

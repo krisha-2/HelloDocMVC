@@ -196,12 +196,18 @@
                 <div class="accordion-body container-fluid">
                     <p> <i class="fa fa-calendar border border-info rounded-pill p-1 me-2" aria-hidden="true"></i>Date of Birth: @item.DateOfBirth</p>
                     <p> <i class="fa fa-envelope border border-info rounded-pill p-1 me-2"></i> Email : @item.Email</p>
-                    <p> <i class="fa fa-phone border  border-info rounded-pill p-1 me-2"></i> Patient : @item.PatientPhoneNumber</p>
+                    @*<p> <i class="fa fa-phone border  border-info rounded-pill p-1 me-2"></i> Patient : @item.PatientPhoneNumber</p>*@
                     <p><i class="fa fa-sticky-note border border-info rounded-pill p-1 me-2"></i> Transfer Notes : @item.Notes</p>
                     <p><i class="fa fa-calendar border border-info rounded-pill p-1 me-2"></i>Date of service : @item.RequestedDate</p>
-                    <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Requestor : @item.Requestor</p>
+                    <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Physician : @item.PhysicianName</p>
+                    <p><i class="fa fa-map-marker border border-info rounded-pill p-1 me-2"></i>Region : @item.Region</p>
 
                     <div class="row">
+                        <div class="col-6 mb-3">
+                            <button class="btn btn-danger text-white rounded-pill 2px w-100">
+                                <small>Close Case</small>
+                            </button>
+                        </div>
                         <div class="col-6 mb-3">
                             <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
                                 <small>View Notes</small>
@@ -224,8 +230,8 @@
                             </button>
                         </div>
                         <div class="col-6 mb-3">
-                            <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #FFD43B;">
-                                <small>Orders</small>
+                            <button class="btn btn-warning text-white rounded-pill 2px w-100">
+                                <small>Clear Case</small>
                             </button>
                         </div>
                         <div class="col-6 mb-3 ">
