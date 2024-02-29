@@ -1,0 +1,30 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="modal fade text-start" id="BlockCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Confirm Block</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="BlockCase" asp-controller="Admin">
+                <input type="hidden" id="RequestID_Input_ModelBlockCase" name="RequestId" />
+                <div class="modal-body">
+                    <h3 class="modal-title fs-5" id="exampleModelLabel">Patient Name:<span class="text-info" id="PatientName_ModelBlockCase"> </span></h3>
+                    <div class="form-floating mb-3">
+                        <textarea id="changenote" rows="4" name="Note" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
+                        <label class="inputs-label inputs-label-textarea fs-6" id="notedata">Notes</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class=" btn btn-info text-white">Confirm</button>
+                    <a class="btn btn-outline-info" data-bs-dismiss="modal">Close</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

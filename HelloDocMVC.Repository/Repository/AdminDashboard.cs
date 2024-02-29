@@ -7,6 +7,8 @@ using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Net.NetworkInformation;
 using HelloDocMVC.Entity.DataModels;
 using System.Net;
 using static HelloDocMVC.Entity.Models.Constant;
@@ -68,18 +70,18 @@ namespace HelloDocMVC.Repository.Repository
                        requestclients => requestclients.RequestId, requests => requests.RequestId,
                        (requests, requestclients) => new { Request = requests, Requestclient = requestclients }
                        )
-                       .Where(R=>R.Request.RequestId == id)
+                       .Where(R => R.Request.RequestId == id)
                        .Select(req => new ViewCase()
                        {
-                                            RequestTypeId = req.Request.RequestTypeId,
-                                            ConfNo = req.Requestclient.City.Substring(0, 2) + req.Requestclient.IntDate.ToString() + req.Requestclient.StrMonth + req.Requestclient.IntYear.ToString() + req.Requestclient.RcLastName.Substring(0, 2) + req.Requestclient.RcFirstName.Substring(0, 2) + "002",
-                                            Symptoms = req.Requestclient.Notes,
-                                            FirstName = req.Requestclient.RcFirstName,
-                                            LastName = req.Requestclient.RcLastName,
-                                            DOB = new DateTime((int)req.Requestclient.IntYear, Convert.ToInt32(req.Requestclient.StrMonth.Trim()), (int)req.Requestclient.IntDate),
-                                            Mobile = req.Requestclient.PhoneNumber,
-                                            Email = req.Requestclient.Email,
-                                            Address = req.Requestclient.Address
+                           RequestTypeId = req.Request.RequestTypeId,
+                           ConfNo = req.Requestclient.City.Substring(0, 2) + req.Requestclient.IntDate.ToString() + req.Requestclient.StrMonth + req.Requestclient.IntYear.ToString() + req.Requestclient.RcLastName.Substring(0, 2) + req.Requestclient.RcFirstName.Substring(0, 2) + "002",
+                           Symptoms = req.Requestclient.Notes,
+                           FirstName = req.Requestclient.RcFirstName,
+                           LastName = req.Requestclient.RcLastName,
+                           DOB = new DateTime((int)req.Requestclient.IntYear, Convert.ToInt32(req.Requestclient.StrMonth.Trim()), (int)req.Requestclient.IntDate),
+                           Mobile = req.Requestclient.PhoneNumber,
+                           Email = req.Requestclient.Email,
+                           Address = req.Requestclient.Address
 
                        }).FirstOrDefault();
             return viewCase;
@@ -124,5 +126,89 @@ namespace HelloDocMVC.Repository.Repository
 
             return allData;
         }
+        public bool CancelCase(int RequestID, string Note, string CaseTag)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == RequestID);
+                if (requestData != null)
+                {
+                    requestData.CaseTag = CaseTag;
+                    requestData.Status = 8;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    RequestStatusLog rsl = new RequestStatusLog
+                    {
+                        RequestId = RequestID,
+                        Notes = Note,
+                        Status = 8,
+                        CreatedDate = DateTime.Now
+                    };
+                    _context.RequestStatusLogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool BlockCase(int RequestID, string Note)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == RequestID);
+                if (requestData != null)
+                {
+                    requestData.Status = 11;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    BlockRequest blc = new BlockRequest
+                    {
+                        RequestId = requestData.RequestId,
+                        PhoneNumber = requestData.PhoneNumber,
+                        Email = requestData.Email,
+                        Reason = Note,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
+                    };
+                    _context.BlockRequests.Add(blc);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public async Task<bool> AssignProvider(int RequestId, int ProviderId, string notes)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
+            request.PhysicianId = ProviderId;
+            request.Status = 2;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.PhysicianId = ProviderId;
+            rsl.Notes = notes;
+
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 2;
+            _context.RequestStatusLogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+        }
     }
 }
+

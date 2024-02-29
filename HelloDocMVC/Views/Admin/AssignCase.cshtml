@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="modal fade text-start" id="AssignCase" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title fs-5" id="exampleModalLabel">Assign Physician</h5>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <form asp-action="CancelCase" asp-controller="Admin">
+                <div class="modal-body">
+                    <small class="modal-title">to assign this request,select and search another physician.</small>
+                    <input type="hidden" id="RequestID_Input_ModelAssignCase" name="RequestId" />
+                    <div class="col my-3">
+                        <div class="form-floating">
+                            <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                                <option>All Region</option>
+                            </select>
+                            <label for="region2">Region</label>
+                        </div>
+                    </div>
+
+                    <div class="col mb-3">
+                        <div class="form-floating">
+                            <select class="form-select input-outline input-outline-select w-100" required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+                                <option>Select Physician</option>
+                            </select>
+                            <label for="region2">Select Physician</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <textarea id="changenote" placeholder=" " name="Notes" class="input-outline w-100 fs-6 form-control shadow-none" type="text" style=" height:100px;s"></textarea>
+
+                        <textarea id="changenote" placeholder=" " name="Notes" class="input-outline w-100 fs-6 form-control shadow-none" type="text" style=" height:100px;"></textarea>
+                        <label class="inputs-lable inputs-lable-textarea fs-6" id="notedata">Notes</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class=" btn btn-info text-white" value="Assign">Assign</button>
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function myFunction1() {
+        var region = $("#region2").val();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ProviderbyRegion", "Admin")?Regionid=' + region,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                var s = '<option value="-1">Please Select</option>';
+                for (var i = 0; i < response.length; i++) {
+                    s += '<option value="' + response[i].physicianid + '">' + response[i].firstName + ' ' + response[i].lastname + '</option>';
+                }
+                $("#provider").html(s);
+            },
+            error: function () {
+                alert("Error while checking email.");
+            }
+        });
+    }
+</script>

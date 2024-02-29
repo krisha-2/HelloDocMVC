@@ -2,6 +2,9 @@ using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Repository.Repository.Interface;
 
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +13,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<HelloDocDbContext>();
 builder.Services.AddScoped<IAdminDashboard, AdminDashboard>();
 builder.Services.AddScoped<IPatientForms, PatientForms>();
+builder.Services.AddScoped<IComboBox, ComboBox>();
 builder.Services.AddScoped<IPatientDashboard, PatientDashboard>();
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
@@ -29,6 +34,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseNotyf();
 app.UseSession();
 
 app.UseAuthorization();

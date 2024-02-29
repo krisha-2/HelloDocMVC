@@ -118,65 +118,66 @@
             </tr>
         </thead>
         <tbody class="bg-white mb-5">
-            @foreach (var item in Model)
-            {
-                <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeId) text-white border-bottom border-white">
-                    <td><small>@item.PatientName</small></td>
-                    <td>
-                        <button class="btn border-white text-white">
-                            <i class="fa-regular fa-envelope"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <small>@item.DateOfBirth.ToString("MMM d , yyyy")</small>
-                    </td>
-                    <td><small>@item.Requestor</small></td>
-                    <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
-                    <td>
-                        <button class="btn border border-white text-white mt-2">
-                            <i class="fa-solid fa-phone pe-2"></i>
-                            <small>@item.PatientPhoneNumber</small>
-                        </button>
-                        <div>
-                            <small>(Patient)</small>
-                        </div>
-
-                        @if (item.RequestTypeId != 2)
-                        {
+           @* @foreach (var item in Model)*@
+                @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
+                {
+                    <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeId) text-white border-bottom border-white">
+                        <td><small>@item.PatientName</small></td>
+                        <td>
+                            <button class="btn border-white text-white">
+                                <i class="fa-regular fa-envelope"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <small>@item.DateOfBirth.ToString("MMM d , yyyy")</small>
+                        </td>
+                        <td><small>@item.Requestor</small></td>
+                        <td><small>@item.RequestedDate.ToString("MMM d , yyyy")</small></td>
+                        <td>
                             <button class="btn border border-white text-white mt-2">
                                 <i class="fa-solid fa-phone pe-2"></i>
-                                <small>@item.RequestorPhoneNumber</small>
+                                <small>@item.PatientPhoneNumber</small>
                             </button>
                             <div>
-                                <small>
-                                    (@Enum.GetName(typeof(RequestType), item.RequestTypeId))
-                                </small>
+                                <small>(Patient)</small>
                             </div>
-                        }
-                    </td>
-                    <td><small>@item.Address</small></td>
-                    <td><small>Admin transferred to Dr. AGOLA</small></td>
-                    <td>
-                        <button class="btn border border-white text-white my-2">
-                            <small>Provider</small>
-                        </button>
-                    </td>
-                    <td>
-                        <button class="btn border border-white text-white my-2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <small>Actions</small>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-journal-text"></i> Assign Case</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Cancel Case</a></li>
-                            <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
-                            <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin"><i class="bi bi-journals"></i> View Notes</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-ban"></i> Block Patient</a></li>
 
-                        </ul>
+                            @if (item.RequestTypeId != 2)
+                            {
+                                <button class="btn border border-white text-white mt-2">
+                                    <i class="fa-solid fa-phone pe-2"></i>
+                                    <small>@item.RequestorPhoneNumber</small>
+                                </button>
+                                <div>
+                                    <small>
+                                        (@Enum.GetName(typeof(RequestType), item.RequestTypeId))
+                                    </small>
+                                </div>
+                            }
+                        </td>
+                        <td><small>@item.Address</small></td>
+                        <td><small>Admin transferred to Dr. AGOLA</small></td>
+                        <td>
+                            <button class="btn border border-white text-white my-2">
+                                <small>Provider</small>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn border border-white text-white my-2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <small>Actions</small>
+                            </button>
+                            <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#CancelCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
+                                <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
+                                <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin"><i class="bi bi-journals"></i> View Notes</a></li>
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" id="CancelCase_@item.RequestId" data-bs-toggle="modal" data-bs-target="#BlockCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-ban"></i> Block Patient</a></li>
+                            </ul>
 
-                    </td>
-                </tr>
-            }
+                        </td>
+                    </tr>
+                }
+           
         </tbody>
     </table>
 </div>
@@ -265,3 +266,17 @@
 
 
 <!--End Mobile Screen View of table-->
+<script>
+    function model_Case(id) {
+        console.log(id);
+        var modeldata = @Html.Raw(Json.Serialize(Model));
+            console.log(modeldata[id]);
+        document.getElementById('PatientName_ModelCancelCase').innerText = modeldata[id].patientName;
+        document.getElementById('RequestID_Input_ModelCancelCase').value = modeldata[id].requestId;
+        console.log(document.getElementById('PatientName_ModelCancelCase').innerText)
+        console.log(document.getElementById('RequestID_Input_ModelCancelCase').value)
+        document.getElementById('RequestID_Input_ModelAssignCase').value = modeldata[id].requestId;
+        document.getElementById('RequestID_Input_ModelBlockCase').value = modeldata[id].requestId;
+        document.getElementById('PatientName_ModelBlockCase').innerText = modeldata[id].patientName;
+    }
+</script>

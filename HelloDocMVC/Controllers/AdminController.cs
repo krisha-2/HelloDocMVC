@@ -1,6 +1,7 @@
 ﻿using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using System.Diagnostics;
 using HelloDocMVC.Entity;
 using HelloDocMVC.Entity.DataModels;
@@ -8,26 +9,32 @@ using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Models;
 using Microsoft.EntityFrameworkCore;
 using static HelloDocMVC.Entity.Models.Constant;
+using HelloDocMVC.Repository.Repository;
 
 namespace HelloDocMVC.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IAdminDashboard _IAdminDashboard;
+        private readonly IComboBox _comboBox;
+        private readonly INotyfService _notyf;
 
-        public AdminController(IAdminDashboard adminDashboard)
+        public AdminController(IAdminDashboard adminDashboard, IComboBox comboBox, INotyfService notyf)
         {
             _IAdminDashboard = adminDashboard;
+            _comboBox = comboBox;
+            _notyf = notyf;
         }
         //public IActionResult Index()
         //{
         //    var Data = _IAdminDashboard.IndexData();
         //    return View(Data);
         //}
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
+            ViewBag.RegionComboBox = await _comboBox.RegionComboBox();
+            ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
             CountStatusWiseRequestModel sm = _IAdminDashboard.IndexData();
-
             return View(sm);
         }
         public IActionResult ViewCase(int? id)
@@ -83,6 +90,53 @@ namespace HelloDocMVC.Controllers
 
             return PartialView("../Admin/_New", contacts);
         }
+        public IActionResult CancelCase(int RequestID, string Note, string CaseTag)
+        {
+            bool CancelCase = _IAdminDashboard.CancelCase(RequestID, Note, CaseTag);
+            if (CancelCase)
+            {
+                _notyf.Success("Case Canceled Successfully");
+
+            }
+            else
+            {
+                _notyf.Error("Case Not Canceled");
+
+            }
+            return RedirectToAction("Index", "Admin");
+        }
+        public IActionResult BlockCase(int RequestID, string Note)
+        {
+            bool BlockCase = _IAdminDashboard.BlockCase(RequestID, Note);
+            if (BlockCase)
+            {
+                _notyf.Success("Case Blocked Successfully");
+            }
+            else
+            {
+                _notyf.Error("Case Not Blocked");
+            }
+            return RedirectToAction("Index", "Admin");
+        }
+        //public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
+        //{
+        //    if (await _IAdminDashboard.AssignProvider(requestid, ProviderId, Notes))
+        //    {
+        //        _notyf.Success("Physician Assigned successfully...");
+        //    }
+        //    else
+        //    {
+        //        _notyf.Error("Physician Not Assigned...");
+        //    }
+        //    return RedirectToAction("Index", "AdminDashBoard");
+        //}
+
+        //#region providerbyregion
+        //public IActionResult ProviderbyRegion(int? Regionid)
+        //{
+        //    var v = _comboBox.ProviderbyRegion(Regionid);
+        //    return Json(v);
+        //}
 
     }
 }
