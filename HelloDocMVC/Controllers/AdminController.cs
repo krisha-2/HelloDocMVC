@@ -32,13 +32,14 @@ namespace HelloDocMVC.Controllers
         //}
         public async Task<IActionResult> IndexAsync()
         {
-            ViewBag.RegionComboBox = await _comboBox.RegionComboBox();
+            ViewBag.RegionComboBox =  _comboBox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
             CountStatusWiseRequestModel sm = _IAdminDashboard.IndexData();
             return View(sm);
         }
         public IActionResult ViewCase(int? id)
         {
+            ViewBag.RegionComboBox =  _comboBox.RegionComboBox();
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
@@ -118,25 +119,28 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index", "Admin");
         }
-        //public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
-        //{
-        //    if (await _IAdminDashboard.AssignProvider(requestid, ProviderId, Notes))
-        //    {
-        //        _notyf.Success("Physician Assigned successfully...");
-        //    }
-        //    else
-        //    {
-        //        _notyf.Error("Physician Not Assigned...");
-        //    }
-        //    return RedirectToAction("Index", "AdminDashBoard");
-        //}
+        #region AssignProvider
+        public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
+        {
+            if (await _IAdminDashboard.AssignProvider(requestid, ProviderId, Notes))
+            {
+                _notyf.Success("Physician Assigned successfully...");
+            }
+            else
+            {
+                _notyf.Error("Physician Not Assigned...");
+            }
 
-        //#region providerbyregion
-        //public IActionResult ProviderbyRegion(int? Regionid)
-        //{
-        //    var v = _comboBox.ProviderbyRegion(Regionid);
-        //    return Json(v);
-        //}
+            return RedirectToAction("Index", "Admin");
+        }
+        #endregion
+        #region providerbyregion
+        public IActionResult ProviderbyRegion(int Regionid)
+        {
+            var v = _comboBox.ProviderbyRegion(Regionid);
+            return Json(v);
+        }
+        #endregion
 
     }
 }

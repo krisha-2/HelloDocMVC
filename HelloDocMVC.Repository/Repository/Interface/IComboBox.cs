@@ -10,8 +10,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
 {
     public interface IComboBox
     {
-        Task<List<RegionComboBox>> RegionComboBox();
+        public List<RegionComboBox> RegionComboBox();
         Task<List<CaseReasonComboBox>> CaseReasonComboBox();
-        public List<Physician> ProviderbyRegion(int? regionid);
+        public List<Physician> ProviderbyRegion(int regionid);
     }
 }

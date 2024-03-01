@@ -73,6 +73,7 @@ namespace HelloDocMVC.Repository.Repository
                        .Where(R => R.Request.RequestId == id)
                        .Select(req => new ViewCase()
                        {
+                           RequestId= id,
                            RequestTypeId = req.Request.RequestTypeId,
                            ConfNo = req.Requestclient.City.Substring(0, 2) + req.Requestclient.IntDate.ToString() + req.Requestclient.StrMonth + req.Requestclient.IntYear.ToString() + req.Requestclient.RcLastName.Substring(0, 2) + req.Requestclient.RcFirstName.Substring(0, 2) + "002",
                            Symptoms = req.Requestclient.Notes,
@@ -112,7 +113,10 @@ namespace HelloDocMVC.Repository.Repository
                                                     PatientName = rc.RcFirstName + " " + rc.RcLastName,
                                                     //DateOfBirth = new DateOnly((int)rc.IntYear, DateTime.ParseExact(rc.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.IntDate),
                                                     //DateOfBirth = new DateTime((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate),
-                                                    DateOfBirth = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
+                                                    //DateOfBirth = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
+                                                    IntYear = rc.IntYear,
+                                                    StrMonth = rc.StrMonth,
+                                                    IntDate = rc.IntDate,
                                                     RequestedDate = req.CreatedDate,
                                                     Email = rc.Email,
                                                     Region = rg.Name,

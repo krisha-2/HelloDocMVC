@@ -19,9 +19,8 @@
                 <a asp-controller="Dashboard" asp-action="Index" class=""><i class='fa fa-angle-left text-info p-2'>Back</i></a>
             </div>
         </div>
-        
     </div>
-    <form class="bg-white container mt-5 sbox" method="post" asp-controller="PatientProfile" asp-action="Edit">
+    <form class="bg-white container mt-5 sbox" method="post" >
         <input type="hidden" asp-for="UserId" />
         <h5><b>Patient Information</b></h5>
 
@@ -85,9 +84,18 @@
             </div>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-info text-white mx">Assign</button>
-            <button type="submit" class="btn btn-info text-white mx-2">View Notes</button>
+            <button class="btn btn-info text-white mx" onclick="model_Case(@Model.RequestId)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@Model.RequestId" data-bs-patientname="@Model.FirstName">Assign</button>
+            <button class="btn btn-info text-white mx-2">View Notes</button>
             <button class="btn text-white bg-danger">Cancel</button>
         </div>
     </form>
 </div>
+<partial name="AssignCase.cshtml" />
+<script>
+    function model_Case(id) {
+        console.log(id);
+        var modeldata = @Html.Raw(Json.Serialize(Model))
+            document.getElementById('RequestID_Input_ModelAssignCase').value = id;
+    }
+
+</script>

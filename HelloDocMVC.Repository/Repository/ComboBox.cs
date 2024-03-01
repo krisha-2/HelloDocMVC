@@ -19,14 +19,14 @@ namespace HelloDocMVC.Repository.Repository
         {
             _context = context;
         }
-        public async Task<List<RegionComboBox>> RegionComboBox()
+        public  List<RegionComboBox> RegionComboBox()
         {
-            return await _context.Regions.Select(req => new RegionComboBox()
+            return _context.Regions.Select(req => new RegionComboBox()
             {
                 RegionId = req.RegionId,
                 RegionName = req.Name
             })
-                .ToListAsync();
+                .ToList();
         }
         public async Task<List<CaseReasonComboBox>> CaseReasonComboBox()
         {
@@ -37,7 +37,8 @@ namespace HelloDocMVC.Repository.Repository
             })
                 .ToListAsync();
         }
-        public List<Physician> ProviderbyRegion(int? regionid)
+        #region Provider_By_Region
+        public List<Physician> ProviderbyRegion(int regionid)
         {
             var result = _context.Physicians
                         .Where(r => r.RegionId == regionid)
@@ -46,5 +47,6 @@ namespace HelloDocMVC.Repository.Repository
 
             return result;
         }
+        #endregion
     }
 }

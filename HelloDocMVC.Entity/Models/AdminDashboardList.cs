@@ -12,6 +12,10 @@ namespace HelloDocMVC.Entity.Models
         public int? RequestId { get; set; }
         public string PatientName { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public int? IntYear { get; set; }
+        public int? IntDate { get; set; }
+        public string? StrMonth { get; set; }
+
         public int? RequestTypeId { get; set; }
         public string Requestor { get; set; }
         public DateTime RequestedDate { get; set; }

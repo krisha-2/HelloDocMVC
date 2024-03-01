@@ -58,7 +58,7 @@
                 console.log(response);
                 var s = '<option value="-1">Please Select</option>';
                 for (var i = 0; i < response.length; i++) {
-                    s += '<option value="' + response[i].physicianid + '">' + response[i].firstName + ' ' + response[i].lastname + '</option>';
+                    s += '<option value="' + response[i].physicianId + '">' + response[i].firstName + ' ' + response[i].lastName + '</option>';
                 }
                 $("#provider").html(s);
             },
