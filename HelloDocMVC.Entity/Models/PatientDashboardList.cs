@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using static HelloDocMVC.Entity.Models.Constant;
 
-
 namespace HelloDocMVC.Entity.Models.ViewModel
 {
     public class PatientDashboardList
@@ -14,7 +13,5 @@ namespace HelloDocMVC.Entity.Models.ViewModel
         public Status Status { get; set; }
         public int RequestId { get; set; }
         public int Fcount { get; set; }
-
-
     }
 }

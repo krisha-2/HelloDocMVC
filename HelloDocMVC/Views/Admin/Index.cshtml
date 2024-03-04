@@ -6,7 +6,6 @@
 }
 @using static HelloDocMVC.Entity.Models.Constant;
 @model HelloDocMVC.Entity.Models.CountStatusWiseRequestModel
-
 <div class="mx-sm-1 mx-md-2 mx-xxl-4 mt-0">
     <partial name="AssignCase.cshtml" />
     <partial name="CancelCase.cshtml" />
@@ -14,13 +13,10 @@
     <partial name="_States.cshtml" />
     <div id="SearchResult"></div>
 </div>
-
 <script>
-
     $(function () {
         var val = 1;
         $("#hiddenfirst").val(val);
         $("#filterForm").submit();
     });
-
 </script>

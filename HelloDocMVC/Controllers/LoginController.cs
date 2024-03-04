@@ -15,7 +15,6 @@ namespace HelloDoc.Controllers
         private readonly HelloDocDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         public LoginController(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor)
-
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
@@ -28,7 +27,6 @@ namespace HelloDoc.Controllers
         {
             return View("../Login/Forgetpass");
         }
-
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult Validate(string Email, string PasswordHash)
@@ -79,7 +77,6 @@ namespace HelloDoc.Controllers
                 return RedirectToAction("Index", "PatientDashboard");
             }
         }
-
             public IActionResult Logout()
         {
             HttpContext.Session.Clear();
@@ -89,8 +86,6 @@ namespace HelloDoc.Controllers
         //public IActionResult Resetpass(string email, string datetime)
         //{
         //    //Encyptdecypt en = new Encyptdecypt();
-
-
         //    TempData["email"] = email;
         //    TimeSpan time = DateTime.Now - DateTime.Parse(datetime);
         //    if (time.TotalHours > 24)
@@ -101,21 +96,18 @@ namespace HelloDoc.Controllers
         //    {
         //        return View();
         //    }
-
         //}
         //[HttpPost]
         //public IActionResult SavePassword(string email, string Password)
         //{
         //    //var hasher = new PasswordHasher<string>();
         //    //string hashedPassword = hasher.HashPassword(null, Password);
-
         //    var aspnetuser = _context.AspNetUsers.FirstOrDefault(m => m.Email == email);
         //    if (aspnetuser != null)
         //    {
         //        aspnetuser.PasswordHash = Password;
         //        _context.AspNetUsers.Update(aspnetuser);
         //        _context.SaveChangesAsync();
-
         //        TempData["emailmessage"] = "Your password is changed!!";
         //        return RedirectToAction("Index", "Login");
         //    }
@@ -153,7 +145,6 @@ namespace HelloDoc.Controllers
         //        DateTime dateTime = DateTime.Now;
         //        string datetime = dateTime.ToString();
         //        string resetLink = $"https://localhost:44398/Login/Resetpass?email={email}&datetime={datetime}";
-
         //        //send mail
         //        MailMessage MM = new();
         //        MM.From = new MailAddress(_emailConfig.From);
@@ -174,7 +165,6 @@ namespace HelloDoc.Controllers
         //            smtpClient.Port = _emailConfig.Port;
         //            smtpClient.Credentials = new NetworkCredential(_emailConfig.UserName, _emailConfig.Password);
         //            smtpClient.EnableSsl = true;
-
         //            smtpClient.Send(MM);
         //        }
         //        ViewData["EmailCheck"] = "Your ID Pass Send In Your Mail";
@@ -184,9 +174,6 @@ namespace HelloDoc.Controllers
         //        ViewData["EmailCheck"] = "Your Email Is not registered";
         //        return View("Resetpass");
         //    }
-
-
-
         //    return RedirectToAction("Index", "Login");
         //}
         //private bool AspnetuserExists(string id)
@@ -196,17 +183,14 @@ namespace HelloDoc.Controllers
         //public async Task<bool> CheckregisterdAsync(string email)
         //{
         //    string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-
         //    if (!string.IsNullOrEmpty(email) && Regex.IsMatch(email, pattern))
         //    {
-
         //        var U = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Email == email);
         //        if (U != null)
         //        {
         //            return true;
         //        }
         //    }
-
         //    return false;
         //}
         //private static Random random = new Random();

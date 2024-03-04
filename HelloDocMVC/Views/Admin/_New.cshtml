@@ -118,7 +118,6 @@
             </tr>
         </thead>
         <tbody class="bg-white mb-5">
-           @* @foreach (var item in Model)*@
                 @foreach (var (item, index) in Model.Select((item, index) => (item, index)))
                 {
                     <tr class="@Enum.GetName(typeof(RequestType), item.RequestTypeId) text-white border-bottom border-white">
@@ -141,7 +140,6 @@
                             <div>
                                 <small>(Patient)</small>
                             </div>
-
                             @if (item.RequestTypeId != 2)
                             {
                                 <button class="btn border border-white text-white mt-2">
@@ -173,11 +171,9 @@
                                 <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin"><i class="bi bi-journals"></i> View Notes</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" id="CancelCase_@item.RequestId" data-bs-toggle="modal" data-bs-target="#BlockCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-ban"></i> Block Patient</a></li>
                             </ul>
-
                         </td>
                     </tr>
                 }
-           
         </tbody>
     </table>
 </div>
@@ -214,10 +210,7 @@
                     <p> <i class="fa fa-calendar border border-info rounded-pill p-1 me-2" aria-hidden="true"></i>Date of Birth: @item.DateOfBirth</p>
                     <p> <i class="fa fa-envelope border border-info rounded-pill p-1 me-2"></i> Email : @item.Email</p>
                     <p> <i class="fa fa-phone border  border-info rounded-pill p-1 me-2"></i> Patient : @item.PatientPhoneNumber</p>
-                    @*<p><i class="fa fa-sticky-note border border-info rounded-pill p-1 me-2"></i> Transfer Notes : @item.Notes</p>*@
-                    @*<p><i class="fa fa-calendar border border-info rounded-pill p-1 me-2"></i>Date of service : @item.RequestedDate</p>*@
                     <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Requestor : @item.Requestor</p>
-
                     <div class="row">
                         <div class="col-6 mb-3">
                             <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: mediumpurple;">
@@ -258,13 +251,10 @@
                     </div>
                 </div>
             </div>
-
         </div>
     }
 </div>
- </div>
-
-
+</div>
 <!--End Mobile Screen View of table-->
 <script>
     function model_Case(id) {

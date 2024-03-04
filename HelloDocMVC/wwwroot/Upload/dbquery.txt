@@ -1,0 +1,138 @@
+REQUEST
+
+CREATE TABLE public."Request"
+(
+    "RequestId" integer NOT NULL,
+    "RequestTypeId" integer NOT NULL,
+    "UserId" integer,
+    "FirstName" character varying(100),
+    "LastName" character varying(100),
+    "PhoneNumber" character varying(23),
+    "Email" character varying(50),
+    "Status" smallint NOT NULL,
+    "PhysicianId " integer,
+    "ConfirmationNumber" character varying(20),
+    "CreatedDate" timestamp with time zone NOT NULL,
+    "IsDeleted " bit,
+    "ModifiedDate" timestamp with time zone,
+    "DeclinedBy" character varying(250),
+    "IsUrgentEmailSent" bit NOT NULL,
+    "LastWellnessDate" timestamp with time zone,
+    "IsMobile" bit,
+    "CallType" smallint,
+    "CompletedByPhysician" bit,
+    "LastReservationDate " timestamp with time zone,
+    "AcceptedDate" timestamp with time zone,
+    "RelationName " character varying(100),
+    "CaseNumber " character varying(50),
+    "IP" character varying(20),
+    "CaseTag" character varying(50),
+    "CaseTagPhysician" character varying(50),
+    "PatientAccountId" character varying(128),
+    "CreatedUserId" integer,
+    PRIMARY KEY ("RequestId"),
+    CONSTRAINT "Request" FOREIGN KEY ("UserId")
+        REFERENCES public."User" ("UserId") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+
+REQUESTCLIENT.........................................................................................................................................
+
+
+CREATE TABLE public."RequestClient"
+(
+    "RequestClientId" integer NOT NULL,
+    "RequestId" integer NOT NULL,
+    "FirstName" character varying(100) NOT NULL,
+    "LastName" character varying(100),
+    "PhoneNumber" character varying(23),
+    "Location " character varying(100),
+    "Address" character varying(500),
+    "RegionId " integer,
+    "NotiMobile" character varying(20),
+    "NotiEmail" character varying(50),
+    "Notes" character varying(500),
+    "Email" character varying(50),
+    "strMonth" character varying(20),
+    "intYear" integer,
+    "intDate" integer,
+    "IsMobile" bit(100),
+    "Street" character varying(100),
+    "City" character varying(100),
+    "State" character varying(100),
+    "ZipCode " character varying(10),
+    "CommunicationType" smallint,
+    "RemindReservationCount" smallint,
+    "RemindHouseCallCount " smallint,
+    "IsSetFollowupSent" smallint,
+    "IP " character varying(20),
+    "IsReservationReminderSent" smallint,
+    "Latitude" numeric(9),
+    "Longitude" numeric(9),
+    PRIMARY KEY ("RequestClientId"),
+    CONSTRAINT "Request" FOREIGN KEY ("RequestId")
+        REFERENCES public."Request" ("RequestId") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+ALTER TABLE IF EXISTS public."RequestClient"
+    OWNER to postgres;
+
+ALTER TABLE IF EXISTS public."Request"
+    OWNER to postgres;
+
+REQUESTCONCIERGE...................................................................................................................................................
+
+CREATE TABLE public."RequestConcierge"
+(
+    "Id" integer NOT NULL,
+    "RequestId" integer NOT NULL,
+    "ConciergeId" integer NOT NULL,
+    "IP" character varying(20),
+    PRIMARY KEY ("Id"),
+    CONSTRAINT "Request" FOREIGN KEY ("RequestId")
+        REFERENCES public."Request" ("RequestId") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+REQUESTBUSINESS....................................................................................................................................................
+
+CREATE TABLE public."RequestBusiness"
+(
+    "RequestBusinessId" integer NOT NULL,
+    "RequestId" integer NOT NULL,
+    "BusinessId" integer NOT NULL,
+    "IP" character varying(20),
+    PRIMARY KEY ("RequestBusinessId"),
+    CONSTRAINT "Request" FOREIGN KEY ("RequestId")
+        REFERENCES public."Request" ("RequestId") MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+        NOT VALID
+);
+
+REGION..................................................................................................................................................................
+
+CREATE TABLE public."Region"
+(
+    "RegionId" integer NOT NULL,
+    "Name" character varying(50) NOT NULL,
+    "Abbreviation" character varying(50),
+    PRIMARY KEY ("RegionId")
+);
+
+BUSINESSTYPE................................................................................................................................................................
+
+CREATE TABLE public."BusinessType"
+(
+    "BusinessTypeId " integer NOT NULL,
+    "Name" character varying(50) NOT NULL,
+    PRIMARY KEY ("BusinessTypeId ")
+);

@@ -19,7 +19,6 @@ namespace HelloDocMVC.Repository.Repository
     public class AdminDashboard : IAdminDashboard
     {
         private readonly HelloDocDbContext _context;
-
         public AdminDashboard(HelloDocDbContext context)
         {
             _context = context;
@@ -89,9 +88,7 @@ namespace HelloDocMVC.Repository.Repository
         }
         public List<AdminDashboardList> GetRequests(string Status)
         {
-
             List<int> statusdata = Status.Split(',').Select(int.Parse).ToList();
-
             List<AdminDashboardList> allData = (from req in _context.Requests
                                                 join reqClient in _context.RequestClients
                                                 on req.RequestId equals reqClient.RequestId into reqClientGroup
@@ -127,7 +124,6 @@ namespace HelloDocMVC.Repository.Repository
                                                     //ProviderId = req.PhysicianId,
                                                     RequestorPhoneNumber = req.PhoneNumber
                                                 }).ToList();
-
             return allData;
         }
         public bool CancelCase(int RequestID, string Note, string CaseTag)

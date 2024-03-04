@@ -2,8 +2,6 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 ﻿@using static HelloDocMVC.Entity.Models.Constant
-
-
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="Admin" novalidate="novalidate">
     <input type="hidden" name="Status" id="hiddenfirst" />
@@ -19,7 +17,6 @@
                 </div>
             </div>
         </button>
-
         <button type="submit" value="2" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
             <div class="p-1 rounded pending ps-2 pt-3 a-pending">
                 <div class="d-inline-flex">
@@ -31,7 +28,6 @@
                 </div>
             </div>
         </button>
-
         <button type="submit" value="4,5" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
             <div class="p-1 rounded active1 ps-2 pt-3 a-active1">
                 <div class="d-inline-flex">
@@ -43,7 +39,6 @@
                 </div>
             </div>
         </button>
-
         <button type="submit" value="6" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
             <div class="p-1 rounded conclude ps-2 pt-3 a-conclude">
                 <div class="d-inline-flex">
@@ -55,7 +50,6 @@
                 </div>
             </div>
         </button>
-
         <button type="submit" value="3,7,8" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
             <div class="p-1 rounded toClose ps-2 pt-3 a-toClose">
                 <div class="d-inline-flex">
@@ -67,7 +61,6 @@
                 </div>
             </div>
         </button>
-
         <button type="submit" value="9" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
             <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid">
                 <div class="d-inline-flex">

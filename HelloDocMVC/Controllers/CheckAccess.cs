@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace HelloDocMVC.Controllers
 {
-
     public class CheckAccess : ActionFilterAttribute, IAuthorizationFilter
     {
         public void OnAuthorization(AuthorizationFilterContext filterContext)
@@ -12,13 +11,11 @@ namespace HelloDocMVC.Controllers
             string currentAction = rd.Values["action"].ToString();
             string currentController = rd.Values["controller"].ToString();
             //string currentArea = rd.DataTokens["area"].ToString();
-
             if (filterContext.HttpContext.Session.GetString("UserID") == null)
             {
                 filterContext.Result = new RedirectResult("~/Login/");
             }
         }
-
         public override void OnResultExecuting(ResultExecutingContext filterContext)
         {
             filterContext.HttpContext.Response.Headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
@@ -27,6 +24,5 @@ namespace HelloDocMVC.Controllers
             base.OnResultExecuting(filterContext);
         }
     }
-
 }
 

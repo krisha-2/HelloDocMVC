@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Concierge";
 }
 @using HelloDocMVC.Entity.Models;
@@ -60,10 +59,8 @@
                 <span asp-validation-for="ZipCode" class="text-danger"></span>
             </div>
         </div>
-
         <h5><b>Patient Information</b></h5>
         <div class="form-group p-3">
-         
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Enter Brief Details of Symptoms"></textarea>
         </div>
         <div class="row">
@@ -90,24 +87,18 @@
                 <label for="Email">Email</label>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-         
             <div class="mb-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating my-3">
                 <input asp-for="PhoneNumber" type="tel" class="form-control shadow-none" id="phone1">
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
         </div>
-
         <h5><b>Patient Location</b></h5>
-
-
         <div class="row">
             <div class="form-group col-md-6 p-3 form-floating">
                 <input asp-for="RoomSuite" type="text" class="form-control" id="name" placeholder="Room">
                 <label for="name">Room #/Suite(Optional)</label>
             </div>
         </div>
-
-
         <div class="d-flex justify-content-end">
             <button  type="submit" class="btn btn-info text-white mx-2">Submit</button>
             <button class="btn btn-outline-info text-info">Cancel</button>

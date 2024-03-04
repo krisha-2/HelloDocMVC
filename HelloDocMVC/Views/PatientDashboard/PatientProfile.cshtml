@@ -1,0 +1,101 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
+    Layout = "_LayoutDashboard";
+}
+@{
+    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
+}
+@*@model HelloDoc.Models.UserProfile;*@
+@model HelloDocMVC.Entity.Models.UserProfile
+<div>
+    <div class="d-flex justify-content-between container">
+        <h3 class="mt-2"><b>User Profile</b></h3>
+        <div class="border border-info rounded p-1 m-1">
+            <a asp-controller="Dashboard" asp-action="Index" class=" "><i class='fa fa-angle-left text-info p-2'>Back</i></a>
+        </div>
+    </div>
+    <form class="bg-white container mt-5 sbox" method="post" asp-controller="PatientProfile" asp-action="Edit">
+        <input type="hidden" asp-for="UserId" />
+        <h5><b>General Information</b></h5>
+        <div class="row">
+            <div class="form-group col-md-6 p-3 form-floating">
+                <input asp-for="FirstName" type="text" class="form-control" id="name" placeholder="Name">
+                <label for="name">First Name</label>
+            </div>
+            <div class="col-md-6 p-3 form-floating">
+                <input asp-for="LastName" type="text" class="form-control" id="naming" placeholder="Username">
+                <label for="naming">Lastname</label>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input asp-for="DOB" type="date" class="form-control" id="name" placeholder="Name">
+                    <label for="name">Date of Birth</label>
+                </div>
+            </div>
+        </div>
+        <h5><b>Contact Information</b></h5>
+        <div class="row">
+            <div class="col-md-4 p-3 form-floating">
+                <select class="form-select" aria-label="Phone" id="dd">
+                    <option selected>Phone</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                </select>
+                <label for="dd">Type</label>
+            </div>
+            <div class="mb-3 col-xl-4 col-lg-6 col-md-4 col-sm-12 col-12 form-floating my-3">
+                <input type="tel" class="form-control shadow-none" id="phone">
+            </div>
+            <div class="form-group col-md-4 p-3 form-floating">
+                <input asp-for="Email" type="text" class="form-control" id="name" placeholder="Email">
+                <label for="name">Email</label>
+            </div>
+        </div>
+        <h5><b>Location Information</b></h5>
+        <div class="row">
+            <div class="form-group col-md-6 p-3 form-floating">
+                <input asp-for="Street" type="text" class="form-control" id="name" placeholder="Name">
+                <label for="name">Street</label>
+            </div>
+            <div class="col-md-6 p-3 form-floating">
+                <input asp-for="City" type="text" class="form-control" id="naming" placeholder="Username">
+                <label for="naming">City</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-md-6 p-3 form-floating">
+                <input asp-for="State" type="text" class="form-control" id="name" placeholder="Name">
+                <label for="name">State</label>
+            </div>
+            <div class="col-md-6 p-3 form-floating">
+                <input asp-for="ZipCode" type="text" class="form-control" id="naming" placeholder="Username">
+                <label for="naming">Zipcode</label>
+            </div>
+        </div>
+        <div class="row px-3 d-flex justify-content-end">
+            <a id="editprofile" onclick="enable_disable()" class="col-1 btn btn-info text-white rounded p-2">Edit</a>
+            <input type="submit" id="submit" class="col-1 btn bg-info text-white rounded p-2" value="save">
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("input").prop("readonly", true);
+        $("select").prop("readonly", true);
+        $("input").css("background-color", "#e9ecef");
+        $("select").css("background-color", "#e9ecef");
+        $("#submit").css("display", "none");
+    });
+</script>
+<script>
+    function enable_disable() {
+        $("input").prop("readonly", false);
+        $("#submit").prop("readonly", false);
+        $("#submit").css("display", "block");
+        $("#editprofile").css("display", "none");
+        $("input").css("background-color", "transparent");
+        $("select").css("background-color", "transparent");
+    }
+</script>

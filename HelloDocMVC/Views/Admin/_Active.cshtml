@@ -1,6 +1,5 @@
 ﻿@model List<HelloDocMVC.Entity.Models.AdminDashboardList>
 @using static HelloDocMVC.Entity.Models.Constant
-
 <!--End Desktop Screen View of table-->
 <!--Important links-->
 <div class="d-flex justify-content-between mx-2">
@@ -178,19 +177,14 @@
                             <li><a class="dropdown-item" href="#"><i class="bi bi-journal-text"></i> Orders</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Doctors Notes</a></li>
                             <li><a class="dropdown-item" href="#"><i class="bi bi-ban"></i> Encounter</a></li>
-
                         </ul>
-
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 </div>
-
 <div class="accordion mt-3 d-block d-sm-none" id="accordionExample">
-
-
     <div class="dBlock">
         @foreach (var item in Model)
         {
@@ -226,7 +220,6 @@
                         <p><i class="fa fa-calendar border border-info rounded-pill p-1 me-2"></i>Date of service : @item.RequestedDate</p>
                         <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Physician : @item.ProviderName</p>
                         <p><i class="fa fa-user border border-info rounded-pill p-1 me-2"></i>Requestor : @item.Requestor</p>
-
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
@@ -238,7 +231,6 @@
                                     <small>Doctors Note</small>
                                 </button>
                             </div>
-
                             <div class="col-6 mb-3">
                                 <button class="btn btn-white text-white rounded-pill 2px w-100" style="background-color: #3ecc4e;">
                                     <small>View Uploads</small>
@@ -273,11 +265,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         }
     </div>
-
     <!--End Mobile Screen View of table-->
-
 </div>

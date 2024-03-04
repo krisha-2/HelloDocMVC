@@ -15,7 +15,6 @@ namespace HelloDocMVC.Entity.Models
         public int? IntYear { get; set; }
         public int? IntDate { get; set; }
         public string? StrMonth { get; set; }
-
         public int? RequestTypeId { get; set; }
         public string Requestor { get; set; }
         public DateTime RequestedDate { get; set; }

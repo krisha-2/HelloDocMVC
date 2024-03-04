@@ -21,7 +21,6 @@ namespace HelloDoc.Controllers
         {
             return View();
         }
-
         public IActionResult Patientform()
         {
             return View();
@@ -32,7 +31,6 @@ namespace HelloDoc.Controllers
             _patientForms.PatientRequest(viewdata);
             return View("../Forms/Index");
         }
-
         public IActionResult FamilyFriend()
         {
             return View();
@@ -43,7 +41,6 @@ namespace HelloDoc.Controllers
             _patientForms.FamilyFriendRequest(viewdata);
             return View("../Forms/Index");
         }
-
         public IActionResult Concierge()
         {
             return View();
@@ -54,7 +51,6 @@ namespace HelloDoc.Controllers
             _patientForms.ConciergeRequest(viewdata);
             return View("../Forms/Index");
         }
-
         public IActionResult BusinessPartner()
         {
             return View();
@@ -74,18 +70,15 @@ namespace HelloDoc.Controllers
             if (aspnetuser == null)
             {
                 message = "False";
-
             }
             else
             {
                 message = "success";
-
             }
             return Json(new
             {
                 isAspnetuser = aspnetuser == null
             });
         }
-
     }
 }

@@ -45,10 +45,8 @@ namespace HelloDocMVC.Controllers
         }
         public IActionResult ViewNotes()
         {
-            //var Data = _IAdminDashboard.ViewCaseData(id);
             return View();
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(string Status)
@@ -85,10 +83,7 @@ namespace HelloDocMVC.Controllers
 
                     return PartialView("../Admin/_UnPaid", contacts);
                     break;
-             
             }
-
-
             return PartialView("../Admin/_New", contacts);
         }
         public IActionResult CancelCase(int RequestID, string Note, string CaseTag)
@@ -141,7 +136,6 @@ namespace HelloDocMVC.Controllers
             return Json(v);
         }
         #endregion
-
     }
 }
       

@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+﻿﻿@{
+    string path = Context.Request.Path;
+}
+<nav class="navbar px-5 navbar-expand-sm bg-body shadow mb-5  rounded border border-top d-none d-sm-block">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link px-3 text-dark currentpage @(path.StartsWith("/PatientDashboard") ? "active" : "")" aria-current="page" asp-action="Index" asp-controller="PatientDashboard">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 text-dark @(path.StartsWith("../PatientProfile") ? "active" : "")" asp-action="PatientProfile" asp-controller="PatientDashboard">Profile</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="offcanvas offcanvas-start w-50 dBlock" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+    <div class="offcanvas-header bg-info text-white">
+        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Welcome <strong>@CV.UserName()</strong></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item h6"><a asp-controller="PatientDashboard" asp-action="Index" class="text-decoration-none text-dark">Dashboard</a></li>
+            <li class="list-group-item h6"><a asp-controller="PatientDashboard" asp-action="PatientProfile" class="text-decoration-none text-dark">Profile</a></li>
+
+        </ul>
+    </div>
+</div>

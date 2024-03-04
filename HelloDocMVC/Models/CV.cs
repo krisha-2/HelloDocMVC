@@ -3,12 +3,10 @@
     public static class CV
     {
         private static IHttpContextAccessor _httpContextAccessor;
-
         static CV()
         {
             _httpContextAccessor = new HttpContextAccessor();
         }
-
         public static string? UserName()
         {
             string? UserName = null;
@@ -18,11 +16,9 @@
             }
             return UserName;
         }
-
         public static string? UserID()
         {
             string? UserID = null;
-
             if (_httpContextAccessor.HttpContext.Session.GetString("UserID") != null)
             {
                 UserID = _httpContextAccessor.HttpContext.Session.GetString("UserID");
@@ -30,6 +26,5 @@
             }
             return UserID;
         }
-
     }
 }

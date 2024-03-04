@@ -23,7 +23,6 @@
     <form class="bg-white container mt-5 sbox" method="post" >
         <input type="hidden" asp-for="UserId" />
         <h5><b>Patient Information</b></h5>
-
         <small>Confirmation Number</small>
         <div class="form-group p-2">
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Brief Details of Symptoms" disabled></textarea>
@@ -97,5 +96,4 @@
         var modeldata = @Html.Raw(Json.Serialize(Model))
             document.getElementById('RequestID_Input_ModelAssignCase').value = id;
     }
-
 </script>

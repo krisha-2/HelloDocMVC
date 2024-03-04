@@ -1,6 +1,8 @@
 ﻿@{
     Layout = "_LayoutDashboard";
 }
+@using HelloDocMVC.Entity.Models
+@model List<ViewDocument>;
 <div class="container mb-3">
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
         <div class="card-header d-flex justify-content-between  border-0  bg-transparent p-1  mt-3 mb-2">
@@ -11,10 +13,7 @@
         <div class="card-body m-1 shadow" style="border-radius: 15px;">
             <div class="doc-text-card">Patient name</div>
             <span class="d-flex align-items-center">
-                @foreach (var item in ViewBag.requestinfo)
-                {
-                    <div class="Patient-name text-info"><b> @item.RFirstName @item.RLastName </b></div>
-                }
+                <div class="Patient-name text-info"><b> @ViewData["UserName"] </b></div>
             </span>
             <div class="doc-text-card mt-2">
                 check here for any files that you or the
@@ -22,16 +21,13 @@
                 review
             </div>
             <div class="col-md-12 mt-3">
-                @foreach (var item in ViewBag.requestinfo)
-                {
-                    <form method="post" asp-action="UploadDoc" asp-controller="Dashboard" enctype="multipart/form-data">
+                <form method="post" enctype="multipart/form-data">
                         <div class="d-flex">
                             <input class="form-control doc_uploder" id="formFileSm" name="UploadFile" type="file">
-                            <input type="hidden" name="RequestId" value="@item.RequestId" />
+                            @*<input type="hidden" name="RequestId" value="@item.RequestId" />*@
                             <input type="submit" class="btn btn-info btn-submit" value="Upload">
                         </div>
                     </form>
-                }
                 <div class="card-header-2 mt-3 d-flex justify-content-between  border-0  bg-transparent ">
                     <div class="mt-2">
                         <h6> Document</h6>
@@ -56,7 +52,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item2 in ViewBag.DocList)
+                            @foreach (var item2 in Model)
                             {
                                 <tr>
                                     <td class="table-text px-3">
@@ -65,17 +61,12 @@
                                         </div>
                                     </td>
                                     <td class="table-text px-3">@item2.FileName</td>
-                                    @foreach (var item3 in ViewBag.requestinfo)
-                                    {
-                                        <td class="table-text px-3">@item3.RFirstName</td>
-                                    }
+                                    <td class="table-text px-3">@item2.RFirstName</td>
                                     <td class="table-text px-3">@item2.CreatedDate</td>
-
                                     <td class="table-text ">
                                         <a class="btn btn-sm download-link  btn-outline-info document-button" download href="/Upload/@item2.FileName">
                                             <i class="fa fa-cloud-download"></i>
                                         </a>
-
                                     </td>
                                 </tr>
                             }
@@ -98,23 +89,18 @@
                 selectAllCheckbox.checked = false;
                 break;
             }
-
         }
         if (i == allCheckboxes.length) {
             selectAllCheckbox.checked = true;
         }
-
-
     }
     function select_Desectall() {
         var selectAllCheckbox = document.getElementById('selectall');
         var allCheckboxes = document.getElementsByClassName('doc-checkbox');
-
         for (var i = 0; i < allCheckboxes.length; i++) {
             allCheckboxes[i].checked = selectAllCheckbox.checked;
         }
     }
-
     function Downlode_all() {
         var allcheckbox = document.getElementsByClassName('doc-checkbox');
         var alllinks = document.getElementsByClassName('download-link');
@@ -127,5 +113,4 @@
             }
         }
     }
-
 </script>

@@ -1,5 +1,4 @@
-﻿
-using HelloDocMVC.Entity.DataContext;
+﻿using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
@@ -22,7 +21,6 @@ namespace HelloDocMVC.Repository.Repository
         {
             _context = context;
         }
-
         public void PatientRequest(Patient viewdata)
         {
             AspNetUser A = new AspNetUser();
@@ -30,7 +28,6 @@ namespace HelloDocMVC.Repository.Repository
             Request R = new Request();
             RequestClient RClient = new RequestClient();
             var isexist = _context.Users.FirstOrDefault(x => x.Email == viewdata.Email);
-
             //AspNetUser
             if (isexist == null)
             {
@@ -126,9 +123,7 @@ namespace HelloDocMVC.Repository.Repository
                 _context.RequestWiseFiles.Add(RequestWiseFile);
                 _context.SaveChanges();
             }
-         
         }
-
         public void FamilyFriendRequest(FamilyFriend viewdata)
         {
             AspNetUser A = new();
@@ -209,7 +204,6 @@ namespace HelloDocMVC.Repository.Repository
             _context.SaveChanges();
          
         }
-
         public void ConciergeRequest(Concierge viewdata)
         {
             AspNetUser A = new AspNetUser();
@@ -300,7 +294,6 @@ namespace HelloDocMVC.Repository.Repository
             _context.Add(RConcierge);
             _context.SaveChanges();
     }
-
         public void BusinessRequest(Business viewdata)
         {
             AspNetUser A = new AspNetUser();
@@ -391,6 +384,5 @@ namespace HelloDocMVC.Repository.Repository
             _context.SaveChanges();
     }
     }
-    
 }
 

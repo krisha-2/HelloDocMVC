@@ -10,12 +10,10 @@ namespace HelloDocMVC.Entity.Models
         [Required(ErrorMessage = "FirstName is required")]
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
-       
         [Required(ErrorMessage = "PhoneNumber is required")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Mobile Number must be of 10 digits!")]
         [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Mobile Number must contain digits!")]
         public string PhoneNumber { get; set; }
-
         [Required(ErrorMessage = "PhoneNumber is required")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Mobile Number must be of 10 digits!")]
         [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Mobile Number must contain digits!")]
