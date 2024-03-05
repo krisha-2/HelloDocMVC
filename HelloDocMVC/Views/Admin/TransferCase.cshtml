@@ -1,20 +1,22 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<div class="modal fade text-start" id="AssignCase" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+@{
+}
+<div class="modal fade" id="transfercase" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header bg-info text-white">
-                <h5 class="modal-title fs-5" id="exampleModalLabel">Assign Physician</h5>
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Assign Physician </h1>
                 <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
             </div>
-            <form asp-action="AssignProvider" asp-controller="Admin">
+            <form asp-action="TransferProvider" asp-controller="Admin">
                 <div class="modal-body">
-                    <small class="modal-title">to assign this request,select and search another physician.</small>
-                    <input type="hidden" id="RequestID_Input_ModelAssignCase" name="RequestId" />
+                    <small class="modal-title">to assign  this request,select and search another physician.</small>
+                    <input type="hidden" name="requestid" id="RequestID_Input_ModelTransferCase" />
                     <div class="col my-3">
                         <div class="form-floating">
-                            <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region3" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                                 <option>All Region</option>
                             </select>
                             <label for="region2">Region</label>
@@ -29,7 +31,6 @@
                         </div>
                     </div>
                     <div class="form-floating mb-3">
-
                         <textarea id="changenote" placeholder=" " name="Notes" class="input-outline w-100 fs-6 form-control shadow-none" type="text" style=" height:100px;"></textarea>
                         <label class="inputs-lable inputs-lable-textarea fs-6" id="notedata">Notes</label>
                     </div>
@@ -44,7 +45,7 @@
 </div>
 <script type="text/javascript">
     function myFunction1() {
-        var region = $("#region2").val();
+        var region = $("#region3").val();
         $.ajax({
             type: "POST",
             url: '@Url.Action("ProviderbyRegion", "Admin")?Regionid=' + region,
@@ -53,7 +54,7 @@
                 console.log(response);
                 var s = '<option value="-1">Please Select</option>';
                 for (var i = 0; i < response.length; i++) {
-                    s += '<option value="' + response[i].physicianId + '">' + response[i].firstName + ' ' + response[i].lastName + '</option>';
+                    s += '<option value="' + response[i].physicianId + '">' + response[i].firstName + ' ' + response[i].lastNHame + '</option>';
                 }
                 $("#provider").html(s);
             },

@@ -1,9 +1,12 @@
-﻿using System;
+﻿using HelloDocMVC.Repository.Repository.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HelloDocMVC.Entity.Models.ViewModel;
 using HelloDocMVC.Entity.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace HelloDocMVC.Repository.Repository.Interface
 {
@@ -16,5 +19,9 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public bool CancelCase(int RequestID, string Note, string CaseTag);
         public bool BlockCase(int RequestID, string Note);
         public Task<bool> AssignProvider(int RequestId, int ProviderId, string notes);
+        public Task<bool> TransferProvider(int RequestId, int ProviderId, string notes);
+        public ViewDocument ViewUpload(int requestid);
+        public void UploadDoc(ViewDocument v, IFormFile? UploadFile);
+
     }
 }

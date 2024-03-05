@@ -58,7 +58,7 @@ namespace HelloDocMVC.Repository.Repository
                 UploadImage = "~" + FilePath.Replace("wwwroot\\", "/") + "/" + UploadFile.FileName;
                 using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
                 {
-                    UploadFile.CopyTo(stream)
+                    UploadFile.CopyTo(stream);
                 }
                 var requestwisefile = new RequestWiseFile
                 {

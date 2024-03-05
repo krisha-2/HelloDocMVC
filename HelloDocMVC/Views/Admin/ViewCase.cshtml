@@ -8,6 +8,7 @@
     var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
 }*@
 @model HelloDocMVC.Entity.Models.ViewCase
+<partial name="../Admin/AssignCase" />
 <div>
     <div class="d-flex justify-content-between container">
         <div class="d-inline-flex">
@@ -83,13 +84,14 @@
             </div>
         </div>
         <div class="d-flex justify-content-end">
-            <button class="btn btn-info text-white mx" onclick="model_Case(@Model.RequestId)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@Model.RequestId" data-bs-patientname="@Model.FirstName">Assign</button>
+            @*<button class="btn btn-info text-white mx" onclick="model_Case(@Model.RequestId)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@Model.RequestId" data-bs-patientname="@Model.FirstName">Assign</button>*@
+            <button  type="button" class="btn btn-info text-white mx" onclick="model_Case(@Model.RequestId)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@Model.RequestId" data-bs-patientname="@Model.FirstName">Assign</button>
             <button class="btn btn-info text-white mx-2">View Notes</button>
             <button class="btn text-white bg-danger">Cancel</button>
         </div>
     </form>
 </div>
-<partial name="AssignCase.cshtml" />
+<partial name="../Admin/AssignCase.cshtml" />
 <script>
     function model_Case(id) {
         console.log(id);

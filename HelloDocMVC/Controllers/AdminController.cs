@@ -3,6 +3,7 @@ using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using System.Diagnostics;
+using System.Web;
 using HelloDocMVC.Entity;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.DataContext;
@@ -136,6 +137,33 @@ namespace HelloDocMVC.Controllers
             return Json(v);
         }
         #endregion
+        //#region Clear_case
+        //public IActionResult ClearCase(int RequestID)
+        //{
+        //    bool cc = _IAdminDashboard.ClearCase(RequestID);
+        //    if (cc)
+        //    {
+        //        _notyf.Success("Case Cleared...");
+        //        _notyf.Warning("You can not show Cleared Case ...");
+        //    }
+        //    else
+        //    {
+        //        _notyf.Error("there is some error in deletion...");
+        //    }
+        //    return RedirectToAction("Index", "AdminDashBoard", new { Status = "2" });
+        //}
+        //#endregion
+        public IActionResult ViewUpload(int RequestId)
+        {
+            var result = _IAdminDashboard.ViewUpload(RequestId);
+            return View(result);
+        }
+        [HttpPost]
+        public IActionResult ViewUpload(ViewDocument v, IFormFile? UploadFile)
+        {
+            _IAdminDashboard.UploadDoc(v, UploadFile);
+            return ViewUpload(v.RequestId);
+        }
     }
 }
       

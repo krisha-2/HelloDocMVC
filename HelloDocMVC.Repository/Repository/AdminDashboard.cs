@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HelloDocMVC.Entity.Models;
+using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,8 @@ using HelloDocMVC.Entity.DataModels;
 using System.Net;
 using static HelloDocMVC.Entity.Models.Constant;
 using System.Reflection;
+using Microsoft.AspNetCore.Http;
+using System.Collections;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -134,7 +137,7 @@ namespace HelloDocMVC.Repository.Repository
                 if (requestData != null)
                 {
                     requestData.CaseTag = CaseTag;
-                    requestData.Status = 8;
+                    requestData.Status = 3;
                     _context.Requests.Update(requestData);
                     _context.SaveChanges();
                     RequestStatusLog rsl = new RequestStatusLog
@@ -208,6 +211,103 @@ namespace HelloDocMVC.Repository.Repository
             _context.SaveChanges();
 
             return true;
+        }
+        public async Task<bool> TransferProvider(int RequestId, int ProviderId, string notes)
+        {
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
+            request.PhysicianId = ProviderId;
+            request.Status = 2;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.PhysicianId = ProviderId;
+            rsl.Notes = notes;
+            rsl.CreatedDate = DateTime.Now;
+            //rsl.Transtophysicianid = ProviderId;
+            rsl.Status = 2;
+            _context.RequestStatusLogs.Update(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool ClearCase(int RequestID)
+        {
+            try
+            {
+                var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == RequestID);
+                if (requestData != null)
+                {
+                    requestData.Status = 10;
+                    _context.Requests.Update(requestData);
+                    _context.SaveChanges();
+                    RequestStatusLog rsl = new RequestStatusLog
+                    {
+                        RequestId = RequestID,
+                        Status = 10,
+                        CreatedDate = DateTime.Now
+                    };
+                    _context.RequestStatusLogs.Add(rsl);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else { return false; }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public ViewDocument ViewUpload(int requestid)
+        {
+            ViewDocument items = _context.RequestClients.Include(rc => rc.Request)
+                                  .Where(rc => rc.RequestId == requestid)
+                                    .Select(rc => new ViewDocument()
+                                    {
+                                        FirstName = rc.RcFirstName,
+                                        LastName = rc.RcLastName,
+                                        ConfirmationNumber = rc.Request.ConfirmationNumber
+
+                                    }).FirstOrDefault();
+            List<RequestWiseFile> list = _context.RequestWiseFiles
+                      .Where(r => r.RequestId == requestid && r.IsDeleted == new BitArray(1))
+                      .OrderByDescending(x => x.CreatedDate)
+                      .Select(r => new RequestWiseFile
+                      {
+                          CreatedDate = r.CreatedDate,
+                          FileName = r.FileName,
+                          RequestWiseFileId = r.RequestWiseFileId,
+                          RequestId = r.RequestId,
+                          IsDeleted = new BitArray(1)
+
+                      }).ToList();
+            items.Files = list;
+            return items;
+        }
+        public void UploadDoc(ViewDocument vp, IFormFile? UploadFile)
+        {
+            string UploadImage;
+            if (UploadFile != null)
+            {
+                string FilePath = "wwwroot\\Upload";
+                string path = Path.Combine(Directory.GetCurrentDirectory(), FilePath);
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                string fileNameWithPath = Path.Combine(path, UploadFile.FileName);
+                UploadImage = "~" + FilePath.Replace("wwwroot\\", "/") + "/" + UploadFile.FileName;
+                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    UploadFile.CopyTo(stream);
+                }
+                var requestwisefile = new RequestWiseFile
+                {
+                    RequestId = vp.RequestId,
+                    FileName = UploadFile.FileName,
+                    CreatedDate = DateTime.Now,
+                    IsDeleted = new BitArray(1)
+                };
+                _context.RequestWiseFiles.Add(requestwisefile);
+                _context.SaveChanges();
+            }
         }
     }
 }
