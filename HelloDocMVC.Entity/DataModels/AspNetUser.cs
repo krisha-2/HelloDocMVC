@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -21,20 +20,8 @@ public partial class AspNetUser
     [Column(TypeName = "character varying")]
     public string? PhoneNumber { get; set; }
 
-    [Column("TwoFactorEnabled ", TypeName = "bit(1)")]
-    public BitArray? TwoFactorEnabled { get; set; }
-
-    [Column("LockoutEndDateUtc ", TypeName = "timestamp without time zone")]
-    public DateTime? LockoutEndDateUtc { get; set; }
-
-    [Column("AccessFailedCount ")]
-    public int? AccessFailedCount { get; set; }
-
     [Column("IP ", TypeName = "character varying(20)[]")]
     public string[]? Ip { get; set; }
-
-    [Column("CorePasswordHash ", TypeName = "character varying")]
-    public string? CorePasswordHash { get; set; }
 
     [Column(TypeName = "timestamp without time zone")]
     public DateTime? CreatedDate { get; set; }

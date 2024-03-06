@@ -1,0 +1,219 @@
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.hdr {
+    box-shadow: 0 0 10px 0;
+}
+
+.form-floating label {
+    margin-top: 1px;
+    margin-left: 15px;
+}
+
+.backBtn {
+    position: absolute;
+    right: 10vw;
+    top: 97px;
+    border: 2px solid rgb(9, 215, 230);
+    border-radius: 5px;
+}
+
+#phone {
+    display: block;
+    width: 620px;
+    line-height: 2.7;
+}
+
+.header-img {
+    height: 70px;
+}
+
+.offcanvas {
+    z-index: 10555;
+}
+
+.new {
+    border: solid thin #063982;
+    color: #334585;
+    background-color: #e9eaef;
+    height: 100px;
+}
+
+    .new:hover {
+        background-color: #203f9a;
+        color: white;
+    }
+
+.pending {
+    border: solid thin #0AA2C0;
+    color: #70c9e7;
+    background-color: #e5f2f8;
+    height: 100px;
+}
+
+    .pending:hover {
+        background-color: #00adef;
+        color: white;
+    }
+
+.active1 {
+    border: solid thin #198754;
+    color: #338038;
+    background-color: #e9f0e8;
+    height: 100px;
+}
+
+    .active1:hover {
+        background-color: #228c20;
+        color: white;
+    }
+
+.conclude {
+    border: solid thin #AB296A;
+    color: #b32379;
+    background-color: #f7e6ee;
+    height: 100px;
+}
+
+    .conclude:hover {
+        background-color: #da0f82;
+        color: white;
+    }
+
+.toClose {
+    border: solid thin #0A58CA;
+    color: #246cb3;
+    background-color: #e5eef5;
+    height: 100px;
+}
+
+    .toClose:hover {
+        background-color: #0370d7;
+        color: white;
+    }
+
+.unpaid {
+    border: solid thin #8C68CD;
+    color: #956eba;
+    background-color: #efeef4;
+    height: 100px;
+}
+
+    .unpaid:hover {
+        background-color: #9966cd;
+        color: white;
+    }
+
+.search {
+    position: relative;
+    box-shadow: 0 0 40px rgba(51, 51, 51, .1);
+}
+
+    .search input, .search select {
+        height: 50px;
+        text-indent: 25px;
+        border: 2px solid #d6d4d4;
+    }
+
+    .search select {
+        min-width: 230px;
+    }
+
+        .search input:focus, .search select:focus {
+            box-shadow: none;
+            border: 2px solid #0dcaf0;
+        }
+
+    .search .fa-search {
+        position: absolute;
+        top: 20px;
+        left: 16px;
+    }
+
+.searchBar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.searchPatientRegion {
+    display: inline-flex;
+}
+
+.requestType {
+    display: inline-flex;
+    align-items: center;
+}
+
+.Patient {
+    background-color: #5fbc61;
+}
+
+.Business {
+    background-color: #cd697b;
+}
+
+.Family {
+    background-color: #ed9124;
+}
+
+.Concierge {
+    background-color: #0a7cb9;
+}
+
+@media (max-width : 925px) {
+    .searchBar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .requestType {
+        display: flex;
+        justify-content: start;
+    }
+
+    .adminIcon {
+        display: none;
+    }
+}
+
+@media (max-width : 425px) {
+    .searchPatientRegion {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.txt-Patient {
+    color: #5fbc61;
+}
+
+.txt-Business {
+    color: #0a7cb9;
+}
+
+.txt-Family {
+    color: #ed9124;
+}
+
+.txt-Concierge {
+    color: #cd697b;
+}
+
+.btn-i {
+    background-color: #e5f2f8;
+}
+
+.offcanvas-backdrop.show {
+    opacity: .5;
+}
+
+.offcanvas-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000 !important;
+    opacity: 0.3 !important;
+}

@@ -31,6 +31,7 @@ namespace HelloDocMVC.Controllers
         //    var Data = _IAdminDashboard.IndexData();
         //    return View(Data);
         //}
+        [CheckAdminAccess]
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.RegionComboBox =  _comboBox.RegionComboBox();

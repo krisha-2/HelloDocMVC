@@ -26,5 +26,16 @@
             }
             return UserID;
         }
+        public static string? RoleID()
+        {
+            string? RoleID = null;
+
+            if (_httpContextAccessor.HttpContext.Session.GetString("RoleId") != null)
+            {
+                RoleID = _httpContextAccessor.HttpContext.Session.GetString("RoleId");
+
+            }
+            return RoleID;
+        }
     }
 }

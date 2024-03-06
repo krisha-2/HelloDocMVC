@@ -36,6 +36,20 @@
                     <div class="text-end">
                         <a class="btn btn-outline-info btn-back text-end" onclick="Downlode_all()">Download all</a>
                     </div>
+                    <form method="post" id="deleted">
+                        <input type="hidden" id="deleteids" name="deleteids" />
+                        <input type="hidden" value="@Model.RequestId" name="Requestid" />
+                        <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
+                            <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
+                        </div>
+                    </form>
+                    <form method="post" id="sendmails">
+                        <input type="hidden" value="@Model.RequestId" name="Requestid" />
+                        <input type="hidden" id="mailids" name="mailids" />
+                        <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
+                            <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
+                        </div>
+                    </form>
                 </div>
                 <div class="table-responsive mt-3 mb-0">
                     <table class="table mb-0">
