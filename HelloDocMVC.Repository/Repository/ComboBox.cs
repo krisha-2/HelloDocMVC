@@ -48,5 +48,30 @@ namespace HelloDocMVC.Repository.Repository
             return result;
         }
         #endregion
+        public List<Profession> Profession()
+        {
+            return _context.HealthProfessionalTypes.Select(hl => new Profession()
+            {
+                HealthProfessionalId = hl.HealthProfessionalId,
+                ProfessionName = hl.ProfessionName
+            }).ToList();
+        }
+        public List<HealthProfessional> Business(int profession)
+        {
+            var result = _context.HealthProfessionals
+                        .Where(r => r.Profession == profession)
+                        .OrderByDescending(x => x.CreatedDate)
+                        .ToList();
+
+            return result;
+        }
+        public HealthProfessional OrderData(int vendorid)
+        {
+            var result = _context.HealthProfessionals
+                        .FirstOrDefault(r => r.VendorId == vendorid);
+                        
+
+            return result;
+        }
     }
 }

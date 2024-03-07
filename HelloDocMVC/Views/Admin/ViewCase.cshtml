@@ -4,9 +4,6 @@
 @{
     Layout = "_LayoutAdminDashboard";
 }
-@*@{
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
-}*@
 @model HelloDocMVC.Entity.Models.ViewCase
 <partial name="../Admin/AssignCase" />
 <div>

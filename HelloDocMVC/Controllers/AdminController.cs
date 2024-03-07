@@ -34,6 +34,7 @@ namespace HelloDocMVC.Controllers
         [CheckAdminAccess]
         public async Task<IActionResult> IndexAsync()
         {
+            ViewBag.Profession = _comboBox.Profession();
             ViewBag.RegionComboBox =  _comboBox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
             CountStatusWiseRequestModel sm = _IAdminDashboard.IndexData();
@@ -49,6 +50,7 @@ namespace HelloDocMVC.Controllers
         {
             return View();
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(string Status)
@@ -138,6 +140,22 @@ namespace HelloDocMVC.Controllers
             return Json(v);
         }
         #endregion
+        public IActionResult Orders()
+        {
+            ViewBag.Profession = _comboBox.Profession();
+           
+            return View();
+        }
+        public IActionResult Business(int profession)
+        {
+            var v = _comboBox.Business(profession);
+            return Json(v);
+        } 
+        public IActionResult OrderData(int profession)
+        {
+            var v = _comboBox.OrderData(profession);
+            return Json(v);
+        }
         //#region Clear_case
         //public IActionResult ClearCase(int RequestID)
         //{
@@ -165,6 +183,7 @@ namespace HelloDocMVC.Controllers
             _IAdminDashboard.UploadDoc(v, UploadFile);
             return ViewUpload(v.RequestId);
         }
+
     }
 }
       

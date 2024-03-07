@@ -309,6 +309,27 @@ namespace HelloDocMVC.Repository.Repository
                 _context.SaveChanges();
             }
         }
+        //public async Task<bool> Business(int RequestId, int ProviderId, string notes)
+        //{
+
+        //    var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
+        //    request.PhysicianId = ProviderId;
+        //    request.Status = 2;
+        //    _context.Requests.Update(request);
+        //    _context.SaveChanges();
+
+        //    RequestStatusLog rsl = new RequestStatusLog();
+        //    rsl.RequestId = RequestId;
+        //    rsl.PhysicianId = ProviderId;
+        //    rsl.Notes = notes;
+
+        //    rsl.CreatedDate = DateTime.Now;
+        //    rsl.Status = 2;
+        //    _context.RequestStatusLogs.Update(rsl);
+        //    _context.SaveChanges();
+
+        //    return true;
+        //}
     }
 }
 

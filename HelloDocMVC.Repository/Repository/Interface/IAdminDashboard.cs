@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using HelloDocMVC.Entity.Models.ViewModel;
 using HelloDocMVC.Entity.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HelloDocMVC.Repository.Repository.Interface
 {
@@ -22,6 +23,5 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> TransferProvider(int RequestId, int ProviderId, string notes);
         public ViewDocument ViewUpload(int requestid);
         public void UploadDoc(ViewDocument v, IFormFile? UploadFile);
-
     }
 }

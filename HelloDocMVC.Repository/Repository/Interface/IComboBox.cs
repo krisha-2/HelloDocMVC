@@ -13,5 +13,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public List<RegionComboBox> RegionComboBox();
         Task<List<CaseReasonComboBox>> CaseReasonComboBox();
         public List<Physician> ProviderbyRegion(int regionid);
+        public List<Profession> Profession();
+        public List<HealthProfessional> Business(int profession);
+        public HealthProfessional OrderData(int vendorid);
     }
 }
