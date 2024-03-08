@@ -156,7 +156,7 @@ namespace HelloDocMVC.Controllers
             var v = _comboBox.OrderData(profession);
             return Json(v);
         }
-        //#region Clear_case
+        #region Clear_case
         //public IActionResult ClearCase(int RequestID)
         //{
         //    bool cc = _IAdminDashboard.ClearCase(RequestID);
@@ -200,4 +200,4 @@ namespace HelloDocMVC.Controllers
 
     }
 }
-      
+#endregion    

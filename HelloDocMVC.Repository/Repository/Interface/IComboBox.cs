@@ -17,6 +17,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public List<Profession> Profession();
         public List<HealthProfessional> Business(int profession);
         public HealthProfessional OrderData(int vendorid);
-        public IActionResult ClearCase(int RequestID)
+       
     }
 }
