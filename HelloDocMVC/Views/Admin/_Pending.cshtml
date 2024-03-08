@@ -134,8 +134,9 @@
                         <small>@item.IntDate/@item.StrMonth/@item.IntYear</small>
                     </td>
                     <td><small>@item.Requestor</small></td>
-....                    <td><small>@item.PhysicianName</small></td>
-....                    <td><small>@item.DateOfService</small></td>
+                   
+                    <td><small>@item.ProviderName</small></td>
+                   <td><small>@item.DateOfService</small></td>
                     <td>
                         <button class="btn border border-white text-white mt-2">
                             <i class="fa-solid fa-phone pe-2"></i>
@@ -271,4 +272,14 @@
     }
 </div>
 </div>
+<script>
+    function model_Case(id) {
+        console.log(id);
+        var modeldata = @Html.Raw(Json.Serialize(Model));
+        console.log(modeldata[id]);
+        document.getElementById('RequestID_Input_ModelTransferCase').value = modeldata[id].requestId;
+        console.log("123");
+        document.getElementById('RequestID_Input_ModelClearCase').value = modeldata[id].requestID
+    }
+</script>
 <!--End Mobile Screen View of table-->

@@ -183,6 +183,20 @@ namespace HelloDocMVC.Controllers
             _IAdminDashboard.UploadDoc(v, UploadFile);
             return ViewUpload(v.RequestId);
         }
+        public async Task<IActionResult> TransferProvider(int requestId, int ProviderId, string Notes)
+        {
+            if (await _IAdminDashboard.TransferProvider(requestId, ProviderId, Notes))
+            {
+                _notyf.Success("Physician Transfered successfully...");
+            }
+            else
+            {
+                _notyf.Error("Physician Not Transfered...");
+            }
+
+            return RedirectToAction("Index", "Admin");
+        }
+
 
     }
 }

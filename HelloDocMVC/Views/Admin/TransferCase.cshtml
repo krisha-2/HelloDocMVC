@@ -13,10 +13,10 @@
             <form asp-action="TransferProvider" asp-controller="Admin">
                 <div class="modal-body">
                     <small class="modal-title">to assign  this request,select and search another physician.</small>
-                    <input type="hidden" name="requestid" id="RequestID_Input_ModelTransferCase" />
+                    <input type="hidden" name="requestId" id="RequestID_Input_ModelTransferCase" />
                     <div class="col my-3">
                         <div class="form-floating">
-                            <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region3" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                            <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction2()" id="region3" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                                 <option>All Region</option>
                             </select>
                             <label for="region2">Region</label>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="col mb-3">
                         <div class="form-floating">
-                            <select class="form-select input-outline input-outline-select w-100" required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level">
+                            <select class="form-select input-outline input-outline-select w-100" required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider1" data-control="select2" data-placeholder="Select Level">
                                 <option>Select Physician</option>
                             </select>
                             <label for="region2">Select Physician</label>
@@ -44,7 +44,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    function myFunction1() {
+    function myFunction2() {
         var region = $("#region3").val();
         $.ajax({
             type: "POST",
@@ -54,9 +54,10 @@
                 console.log(response);
                 var s = '<option value="-1">Please Select</option>';
                 for (var i = 0; i < response.length; i++) {
-                    s += '<option value="' + response[i].physicianId + '">' + response[i].firstName + ' ' + response[i].lastNHame + '</option>';
+                    console.log("dsdfv");
+                    s += '<option value="' + response[i].physicianId + '">' + response[i].firstName + ' ' + response[i].lastName + '</option>';
                 }
-                $("#provider").html(s);
+                $("#provider1").html(s);
             },
             error: function () {
                 alert("Error while checking email.");

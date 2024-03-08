@@ -1,5 +1,6 @@
 ﻿using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public List<Profession> Profession();
         public List<HealthProfessional> Business(int profession);
         public HealthProfessional OrderData(int vendorid);
+        public IActionResult ClearCase(int RequestID)
     }
 }
