@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HelloDocMVC.Entity.DataContext;
+using HelloDocMVC.Entity.DataModels;
+using HelloDocMVC.Entity.Models;
+using HelloDocMVC.Repository.Repository.Interface;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Data;
 
@@ -6,32 +11,31 @@ namespace HelloDocMVC.Controllers
 {
     public class AdminLogin : Controller
     {
+        private readonly HelloDocDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILoginRepository _loginRepository;
+        private readonly IJwtSession _jwtSession;
+        public AdminLogin(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, ILoginRepository loginRepository, IJwtSession jwtSession)
+        {
+            _context = context;
+            _httpContextAccessor = httpContextAccessor;
+            _loginRepository = loginRepository;
+            _jwtSession = jwtSession;
+        }
         public IActionResult Index()
         {
             return View("../AdminLogin/Index");
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Validate(string Email, string Passwordhash)
+        public async Task<IActionResult> Validate(AspNetUser aspNetUser)
         {
-            NpgsqlConnection connection = new NpgsqlConnection("Server=localhost;Database=HelloDoc;User Id=postgres;Password=Krisha@1357;Include Error Detail=True");
-            string Query = "select * from \"AspNetUsers\" au inner join \"AspNetUserRoles\" aur on au.\"Id\" = aur.\"UserId\" inner join \"AspNetRoles\" roles on aur.\"RoleId\" = roles.\"Id\"\r\n where \"Email\"=@Email and \"PasswordHash\"=@Passwordhash";
-            connection.Open();
-            NpgsqlCommand command = new NpgsqlCommand(Query, connection);
-            command.Parameters.AddWithValue("@Email", Email);
-            command.Parameters.AddWithValue("@Passwordhash", Passwordhash);
-            NpgsqlDataReader reader = command.ExecuteReader();
-            DataTable dataTable = new DataTable();
-            dataTable.Load(reader);
-            int numRows = dataTable.Rows.Count;
-            if (numRows > 0)
+            UserInfo u = await _loginRepository.CheckAccessLogin(aspNetUser);
+
+            if (u != null)
             {
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    HttpContext.Session.SetString("UserName", row["username"].ToString());
-                    HttpContext.Session.SetString("UserID", row["Id"].ToString());
-                    HttpContext.Session.SetString("RoleId", row["roleid"].ToString());
-                }
+                var jwttoken = _jwtSession.GenerateJWTAuthetication(u);
+                Response.Cookies.Append("jwt", jwttoken);
                 return RedirectToAction("Index", "Admin");
             }
             else
@@ -40,11 +44,13 @@ namespace HelloDocMVC.Controllers
                 return View("../AdminLogin/Index");
             }
         }
-        public IActionResult Logout()
+        #region end_session
+        public async Task<IActionResult> Logout()
         {
-            HttpContext.Session.Clear();
+            Response.Cookies.Delete("jwt");
             return RedirectToAction("Index", "AdminLogin");
         }
+        #endregion
         public IActionResult AuthError()
         {
             return View("../AdminLogin/AuthError");

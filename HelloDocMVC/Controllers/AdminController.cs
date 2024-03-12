@@ -31,7 +31,7 @@ namespace HelloDocMVC.Controllers
         //    var Data = _IAdminDashboard.IndexData();
         //    return View(Data);
         //}
-        [CheckAdminAccess]
+        [CheckProviderAccess("Admin")]
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.Profession = _comboBox.Profession();
@@ -46,10 +46,7 @@ namespace HelloDocMVC.Controllers
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
-        public IActionResult ViewNotes()
-        {
-            return View();
-        }
+       
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -157,21 +154,21 @@ namespace HelloDocMVC.Controllers
             return Json(v);
         }
         #region Clear_case
-        //public IActionResult ClearCase(int RequestID)
-        //{
-        //    bool cc = _IAdminDashboard.ClearCase(RequestID);
-        //    if (cc)
-        //    {
-        //        _notyf.Success("Case Cleared...");
-        //        _notyf.Warning("You can not show Cleared Case ...");
-        //    }
-        //    else
-        //    {
-        //        _notyf.Error("there is some error in deletion...");
-        //    }
-        //    return RedirectToAction("Index", "AdminDashBoard", new { Status = "2" });
-        //}
-        //#endregion
+        public IActionResult ClearCase(int RequestID)
+        {
+            bool cc = _IAdminDashboard.ClearCase(RequestID);
+            if (cc)
+            {
+                _notyf.Success("Case Cleared...");
+                _notyf.Warning("You can not show Cleared Case ...");
+            }
+            else
+            {
+                _notyf.Error("there is some error in deletion...");
+            }
+            return RedirectToAction("Index", "Admin", new { Status = "2" });
+        }
+        #endregion
         public IActionResult ViewUpload(int RequestId)
         {
             var result = _IAdminDashboard.ViewUpload(RequestId);
@@ -196,8 +193,74 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("Index", "Admin");
         }
+        #region View_Notes
+        public IActionResult ViewNotes(int id)
+        {
 
+            ViewNotesData sm = _IAdminDashboard.getNotesByID(id);
+            return View("../Admin/ViewNotes", sm);
+        }
+        #endregion
 
+        #region Edit_Notes
+        public IActionResult ChangeNotes(int RequestID, string? adminnotes, string? physiciannotes)
+        {
+            if (adminnotes != null || physiciannotes != null)
+            {
+                bool result = _IAdminDashboard.EditViewNotes(adminnotes, physiciannotes, RequestID);
+                if (result)
+                {
+                    _notyf.Success("Notes Updated successfully...");
+                    return RedirectToAction("ViewNotes", new { id = RequestID });
+                }
+                else
+                {
+                    _notyf.Error("Notes Not Updated");
+                    return View("../Admin/ViewNotes");
+                }
+            }
+            else
+            {
+                _notyf.Information("Please Select one of the note!!");
+                TempData["Errormassage"] = "Please Select one of the note!!";
+                return RedirectToAction("ViewNotes", new { id = RequestID });
+            }
+        }
+        #endregion
+        //public IActionResult Orders(Orders sm)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        bool data = _IAdminDashboard.Orders(sm);
+        //        if (data)
+        //        {
+        //            _notyf.Success("Order Created  successfully...");
+        //            _notyf.Information("Mail is sended to Vendor successfully...");
+        //            return RedirectToAction("Index", "AdminDashBoard");
+        //        }
+        //        else
+        //        {
+        //            _notyf.Error("Order Not Created...");
+        //            return View("../Admin/Orders", sm);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return View("../Admin/Orders", sm);
+        //    }
+        //}
+        #region SendAgreement
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SendAgreementmail(int requestid)
+        {
+            if (_IAdminDashboard.SendAgreement(requestid))
+            {
+                _notyf.Success("Mail Send  Successfully..!");
+            }
+            return RedirectToAction("Index", "Admin");
+        }
+        #endregion
     }
 }
-#endregion    
+    

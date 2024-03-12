@@ -24,5 +24,12 @@ namespace HelloDocMVC.Entity.Models
                 ToClose=5,
                 UnPaid=6
         }
+        public enum Status1
+        {
+            Unassigne = 1,
+            Accepted, Cancelled, MDEnRoute, MDONSite, Conclude, CancelledByPatients, Closed, Unpaid, Clear,
+            Block
+
+        }
     }
 }

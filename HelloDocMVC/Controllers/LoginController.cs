@@ -27,6 +27,7 @@ namespace HelloDoc.Controllers
         {
             return View("../Login/Forgetpass");
         }
+
         //[HttpPost]
         //[ValidateAntiForgeryToken]
         //public IActionResult Validate(string Email, string PasswordHash)

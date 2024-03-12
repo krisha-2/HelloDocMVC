@@ -23,5 +23,12 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> TransferProvider(int RequestId, int ProviderId, string notes);
         public ViewDocument ViewUpload(int requestid);
         public void UploadDoc(ViewDocument v, IFormFile? UploadFile);
+        public bool ClearCase(int RequestID);
+        //public bool Orders(Orders sm);
+        public ViewNotesData getNotesByID(int id);
+        public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
+        public Boolean SendAgreement(int requestid);
+        public Boolean SendAgreement_accept(int RequestID);
+        public Boolean SendAgreement_Reject(int RequestID, string Notes);
     }
 }

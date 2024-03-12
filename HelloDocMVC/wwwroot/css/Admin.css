@@ -6,10 +6,14 @@ body {
 .hdr {
     box-shadow: 0 0 10px 0;
 }
-.form-floating label {
-    margin-top: 1px;
+/*.form-floating label {
+    margin-top: 12px;
     margin-left: 15px;
-}
+}*/
+/*.form-floating label {
+    margin-top: 1px;
+   
+}*/
 .backBtn {
     position: absolute;
     right: 10vw;
@@ -20,8 +24,12 @@ body {
 
 #phone {
     display: block;
-    width: 620px;
+   
     line-height: 2.7;
+}
+.iti {
+    display: block;
+    width: 100%;
 }
 
 .header-img {

@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HELLO_DOC</title>
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HELLO_DOC.styles.css" asp-append-version="true" />
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="pb-3" style="min-height:1000px">
+        <div class="container mt-5 p-4 fs-4 f-flex justify-items-center ">
+            <p>
+                To provide best medical service, we cannot determine the cost right away. If you agree to our service, so we will provide care and follow-up until all care is completed. So with this points, if you like us to provide care to you click on "Agree" and we'll get started immediately, if you do not agree simply click "Cancel".
+            </p>
+            <div class="text-center d-flex">
+                <form asp-action="accept" asp-controller="AgreementPage">
+                    <input type="hidden" name="RequestID" value="@TempData["RequestID"]" />
+                    <input type="submit" class=" btn btn-success text-white" value="IAgree">
+                </form>
+                <button type="button" class="btn btn-danger text-white mx-3" data-bs-toggle="modal" data-bs-target="#Reject">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+
+
+    ﻿
+    <div class="modal fade" id="Reject" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header  bg-info text-white">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Confirm Concellation</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form asp-action="Reject" asp-controller="AgreementPage">
+                    <input type="hidden" value="@TempData["RequestID"]" name="RequestId" />
+
+                    <div class="modal-body">
+                        <h3 class="modal-title fs-5" id="exampleModalLabel">Patient Name : <span class="text-info"> @TempData["PatientName"] </span></h3>
+
+
+                        <div class="inputs-control w-100 mt-2">
+                            <textarea id="changenote" placeholder=" " name="Notes" rows="5" class="input-outline w-100  " type="text"></textarea>
+
+                            <label class="inputs-lable inputs-lable-textarea " id="notedata">Provide Brif Information why you want to Cancel</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class=" btn btn-info text-white">Confirm</button>
+                        <a class="btn btn-outline-info" data-bs-dismiss="modal">Close</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/js/custom.js" asp-append-version="true"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+</body>
+</html>

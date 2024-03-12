@@ -1,0 +1,36 @@
+﻿<div class="modal fade" id="sendagreement" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Send Agreement </h1>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <form asp-action="SendAgreementmail" asp-controller="Admin" method="post">
+                <div class="modal-body">
+                    <span class="d-flex">
+                        @* <i class="fa-solid fa-circle fa-xs @Enum.GetName(typeof(RequestType), Model.RequestTypeID)"></i>
+                        @Enum.GetName(typeof(RequestType), Model.RequestTypeID) *@
+                    </span>
+                    <small class="modal-title">To send agreement please make sure you are updating correct contact information below for the responsible party.</small>
+                    <input id="RequestID_sendAgreement" placeholder=" " name="RequestID" type="hidden">
+                    <div class="col my-3">
+                        <div class="form-floating">
+                            <input id="Phonenumber_sendAgreement" name="PhoneNumber" type="text" class="form-control shadow-none inputs" placeholder="PhoneNumber">
+                            <label for="Phonenumber_sendAgreement">Phone Number</label>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating">
+                            <input id="Email_sendAgreement" type="text" name="Email" class="form-control shadow-none inputs" placeholder="Email">
+                            <label for="Email_sendAgreement">Email</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class=" btn btn-info text-white" value="Assign">Send</button>
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

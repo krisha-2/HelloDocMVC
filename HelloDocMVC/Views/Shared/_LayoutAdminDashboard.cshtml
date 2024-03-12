@@ -1,4 +1,4 @@
-﻿@using static HelloDocMVC.Models.CV;
+@using static HelloDocMVC.Models.CV;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,7 +29,7 @@
                     <h5 class="text-dark align-bottom pt-2 dNone">
                         Welcome <span class="fw-bolder"> @CV.UserName() </span>
                     </h5>
-                    <a asp-action="Logout" asp-controller="Login" class="btn btn-outline-info mx-2">Logout</a>
+                    <a asp-action="Logout" asp-controller="AdminLogin" class="btn btn-outline-info mx-2">Logout</a>
                     <button class="btn btn-outline-info" onclick="mode()">
                         <i class="fa fa-light fa-moon-o fa-2x text-info"></i>
                     </button>

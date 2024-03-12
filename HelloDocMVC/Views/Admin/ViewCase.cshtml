@@ -6,15 +6,15 @@
 }
 @model HelloDocMVC.Entity.Models.ViewCase
 <partial name="../Admin/AssignCase" />
-<div>
+<div class="p-3">
     <div class="d-flex justify-content-between container">
         <div class="d-inline-flex">
             <h3 class="mt-2"><b>New Request</b></h3>
             <span class="@Enum.GetName(typeof(RequestType), Model.RequestTypeId) text-white rounded-pill m-2 p-3 py-1">@Enum.GetName(typeof(RequestType), Model.RequestTypeId)</span>
         </div>
         <div>
-            <div class="border border-info rounded p-1 m-1">
-                <a asp-controller="Dashboard" asp-action="Index" class=""><i class='fa fa-angle-left text-info p-2'>Back</i></a>
+            <div class="border border-info rounded p-2 m-1">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
             </div>
         </div>
     </div>
@@ -81,7 +81,6 @@
             </div>
         </div>
         <div class="d-flex justify-content-end">
-            @*<button class="btn btn-info text-white mx" onclick="model_Case(@Model.RequestId)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@Model.RequestId" data-bs-patientname="@Model.FirstName">Assign</button>*@
             <button  type="button" class="btn btn-info text-white mx" onclick="model_Case(@Model.RequestId)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@Model.RequestId" data-bs-patientname="@Model.FirstName">Assign</button>
             <button class="btn btn-info text-white mx-2">View Notes</button>
             <button class="btn text-white bg-danger">Cancel</button>
