@@ -261,6 +261,45 @@ namespace HelloDocMVC.Controllers
             return RedirectToAction("Index", "Admin");
         }
         #endregion
+        #region CloseCase
+        public async Task<IActionResult> CloseCase(int RequestID)
+        {
+            ViewCloseCase vc = _IAdminDashboard.CloseCaseData(RequestID);
+            return View("../Admin/CloseCase", vc);
+        }
+        public IActionResult CloseCaseUnpaid(int id)
+        {
+            bool sm = _IAdminDashboard.CloseCase(id);
+            if (sm)
+            {
+                _notyf.Success("Case Closed...");
+                _notyf.Information("You can see Closed case in unpaid State...");
+
+            }
+            else
+            {
+                _notyf.Error("there is some error in CloseCase...");
+            }
+            return RedirectToAction("Index", "Admin");
+        }
+        #endregion
+
+        public IActionResult EditForCloseCase(ViewCloseCase sm)
+        {
+            bool result = _IAdminDashboard.EditForCloseCase(sm);
+
+            if (result)
+            {
+                _notyf.Success("Case Edited Successfully..");
+                return RedirectToAction("CloseCase", new { sm.RequestID });
+            }
+            else
+            {
+                _notyf.Error("Case Not Edited...");
+                return RedirectToAction("CloseCase", new { sm.RequestID });
+            }
+
+        }
     }
 }
     

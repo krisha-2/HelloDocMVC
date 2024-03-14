@@ -19,6 +19,7 @@ namespace HelloDocMVC.Entity.Models
         public string ConfirmationNumber { get; set; }
         //public string Filename { get; set; }
         public string isDeleted { get; set; }
+        public int RequestWiseFileId { get; set; }
         public List<RequestWiseFile> Files { get; set; }
     }
 }

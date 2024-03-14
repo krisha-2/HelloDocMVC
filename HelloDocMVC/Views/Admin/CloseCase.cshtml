@@ -1,0 +1,192 @@
+﻿@{
+    Layout = "_LayoutAdminDashboard";
+}
+@model HelloDocMVC.Entity.Models.ViewCloseCase
+@using static HelloDocMVC.Entity.Models.Constant
+<script>
+    window.onload = function (e) {
+        toggleFormElements('true')
+    }
+    function toggleFormElements(bDisabled) {
+        var inputs = document.getElementsByClassName("inputs");
+        var submit = document.getElementById("save");
+        var editprofile = document.getElementById("edit");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = !inputs[i].disabled;
+        }
+        if (inputs[0].disabled) {
+            submit.style.display = "none";
+            editprofile.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            editprofile.style.display = "none";
+        }
+        document.getElementById("email").disabled = (1 == 1);
+    }
+</script>
+<div class="container">
+    @* heading *@
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>Close Case</strong></h4>
+        </div>
+        <a asp-controller="Admin" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <span class="text-info">
+                <i class="fa fa-angle-left align-middle"></i>
+                <b>&nbsp;&nbsp;Back</b>
+            </span>
+        </a>
+    </div>
+    @* Case Information *@
+    <div class="bg-white rounded shadow mt-3">
+        <div class="p-4">
+            @* heading *@
+            <div class="d-flex justify-content-between">
+                <div class="mt-3">
+                    <small class="pt-3">Patient Name</small>
+                    <h5 class="text-info">@Model.Firstname @Model.Lastname</h5>
+                </div>
+                <a asp-controller="" asp-action="" class="btn border border-info rounded mt-3 mb-1 align-self-center">
+                    <span class="text-info">
+                        <b>Create invoice through quickbook</b>
+                    </span>
+                </a>
+            </div>
+            @* Document *@
+            <div class="card-header  border-0 bg-transparent p-1 my-1">
+                <div class="text-start">
+                    <h6 class="mt-2"><strong>Documents</strong></h6>
+                </div>
+            </div>
+            @* dashboard view *@
+            <div class="table-responsive mt-3 d-none d-sm-block">
+                <table class="table">
+                    <thead class="border-0">
+                        <tr class="table-secondary">
+                            <th scope="col" class="table-text-header px-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
+                                </div>
+                            </th>
+                            <th scope="col" class="table-text-header px-3">File Name</th>
+                            <th scope="col" class="table-text-header px-3">Uploder</th>
+                            <th scope="col" class="table-text-header ">uplode date</th>
+                            <th scope="col" class="table-text-header ">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item2 in @Model.documentslist)
+                        {
+                            <tr>
+                                <td class="table-text px-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                        <input class="form-check-input RequestwisefilesId" type="hidden" value="@item2.RequestWiseFileId">
+                                    </div>
+                                </td>
+                                <td class="table-text  px-3 filename"> <span> @item2.FileName </span></td>
+                                <td class="table-text  px-3">@item2.FirstName </td>
+                                <td class="table-text  px-3">@item2.CreatedDate</td>
+                                <td class="table-text text-center ">
+                                    <a class="btn btn-sm btn-outline-info document-button" download href="@item2.FileName.Replace("~","")">
+                                        <i class="fa fa-cloud-download"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <!--Mobile screen View-->
+            <div class="d-block d-sm-none border-top my-2 t-tab">
+                @foreach (var item in Model.documentslist)
+                {
+                    <div class="border-bottom">
+                        <div class="d-inline-flex my-2">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                <input class="form-check-input RequestwisefilesId" type="hidden" value="@item.RequestWiseFileId">
+                            </div>
+                            <div>
+                                <small>@item.FileName</small>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column">
+                            <label class="text-break"><small>@item.FirstName</small></label>
+                            <label><small>@item.CreatedDate</small></label>
+                        </div>
+                        <div class="mb-3">
+                            <a class="btn btn-sm download-link btn-outline-info document-button" download href="@item.FileName.Replace("~","")">
+                                <i class="fa fa-cloud-download"></i>
+                            </a>
+                            <a class="btn btn-sm download-link btn-outline-info" asp-action="DeleteFile" asp-controller="Admin" asp-route-id="@item.RequestWiseFileId" asp-route-Requestid="@Model.RequestID">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                }
+            </div>
+            @* data *@
+            <div class="card-header  border-0 bg-transparent p-1 my-1">
+                <div class="text-start">
+                    <h6 class="mt-2"><strong>Patient Information</strong></h6>
+                </div>
+            </div>
+            <form method="post" asp-controller="Admin" asp-action="EditForCloseCase" asp-route-RequestID="@Model.RequestID">
+                <input type="hidden" asp-for="RequestID" class="inputs" />
+                @*<div class="col-xl-12">*@
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="RC_FirstName" type="text" class="form-control shadow-none inputs" id="fname" placeholder="First Name">
+                                <label for="fname">First Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="RC_LastName" type="text" class="form-control shadow-none inputs" id="lname" placeholder="Last Name">
+                                <label for="lname">Last Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="RC_Dob" type="date" class="form-control shadow-none inputs" id="dob" placeholder="Date Of Birth">
+                                <label for="dob">Date Of Birth</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="mb-3 d-flex">
+                                <div class="form-floating h-100 w-100">
+                                    <input asp-for="RC_PhoneNumber" type="tel" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
+                                   @* <label for="phone">Phone Number</label>*@
+                                </div>
+                                <button class="btn border border-info text-info mx-2 " style="height:3.5rem;width:4rem">
+                                    <i class="bi bi-telephone-fill"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input asp-for="RC_Email" type="text" class="form-control shadow-none inputs" id="email" placeholder="Email">
+                                <label for="Email">Email</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    @* Edit *@
+                    <div class="d-flex justify-content-end">
+                        <span id="edit" onclick=" toggleFormElements('true')" class="btn btn-info text-white rounded me-2">Edit</span>
+                        <input type="submit" value="Save" id="save" class="btn btn-info text-white rounded me-2">
+
+                    
+                @*</div>*@
+            </form>
+            <form asp-action="CloseCaseUnpaid" asp-controller="Admin" asp-route-id="@Model.RequestID">
+                <input type="hidden" name="RequestID" value="@Model.RequestID" class="inputs" />
+                <input type="submit" value="Close Case" class="btn btn-info text-white rounded me-2">
+            </form>
+        </div>
+        </div>
+    </div>
+</div>

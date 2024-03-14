@@ -6,10 +6,10 @@ body {
 .hdr {
     box-shadow: 0 0 10px 0;
 }
-/*.form-floating label {
+.form-floating label {
     margin-top: 12px;
     margin-left: 15px;
-}*/
+}
 /*.form-floating label {
     margin-top: 1px;
    
@@ -152,19 +152,19 @@ body {
 }
 
 .Patient {
-    background-color: #5fbc61;
+    background-color: green !important;
 }
 
 .Business {
-    background-color: #cd697b;
+    background-color: #cd697b !important;
 }
 
 .Family {
-    background-color: #ed9124;
+    background-color: orange !important;
 }
 
 .Concierge {
-    background-color: #0a7cb9;
+    background-color: deepskyblue !important;
 }
 
 @media (max-width : 925px) {
@@ -217,4 +217,16 @@ body {
     z-index: 1040;
     background-color: #000 !important;
     opacity: 0.3 !important;
+}
+#tableID_filter {
+    display: none;
+}
+
+.dataTables_wrapper .dataTables_length {
+    position: absolute;
+    bottom: -33px;
+}
+
+.dataTables_wrapper {
+    margin-bottom: 2.5rem !important;
 }
