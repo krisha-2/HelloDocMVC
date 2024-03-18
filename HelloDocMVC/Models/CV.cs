@@ -74,6 +74,11 @@ namespace HelloDocMVC.Models
 
             return UserID;
         }
+        public static string? CurrentStatus()
+        {
+            string? Status = _httpContextAccessor.HttpContext.Request.Cookies["Status"];
+            return Status;
+        }
 
     }
 }

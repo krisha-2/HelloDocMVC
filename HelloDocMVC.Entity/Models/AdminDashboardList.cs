@@ -27,9 +27,27 @@ namespace HelloDocMVC.Entity.Models
         public string? PatientId { get; set; }
         public int ProviderId { get; set; }
         public string? ProviderName { get; set; }
-        public string Region { get; set; }
-        public short ADStatus { get; set; }
+        public string RegionId { get; set; }
+        public string ADStatus { get; set; }
         public  string PhysicianName { get; set; }
         public string DateOfService { get; set; }
+    }
+    public class PaginatedViewModel
+    {
+        public List<AdminDashboardList>? adl { get; set; }
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+        public string? SearchInput { get; set; }
+        public int? RegionId { get; set; }
+        public int? RequestType { get; set; }
+        public string? Status { get; set; }
+        public int NewRequest { get; set; }
+        public int PendingRequest { get; set; }
+        public int ActiveRequest { get; set; }
+        public int ConcludeRequest { get; set; }
+        public int ToCloseRequest { get; set; }
+        public int UnpaidRequest { get; set; }
+
     }
 }

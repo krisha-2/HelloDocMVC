@@ -14,9 +14,9 @@ namespace HelloDocMVC.Repository.Repository.Interface
     public interface IAdminDashboard
     {
         public List<AdminDashboardList> NewRequestData();
-        public CountStatusWiseRequestModel IndexData();
+        public PaginatedViewModel IndexData();
         public ViewCase ViewCaseData(int? id);
-        public List<AdminDashboardList> GetRequests(string Status);
+        public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data);
         public bool CancelCase(int RequestID, string Note, string CaseTag);
         public bool BlockCase(int RequestID, string Note);
         public Task<bool> AssignProvider(int RequestId, int ProviderId, string notes);
@@ -27,9 +27,9 @@ namespace HelloDocMVC.Repository.Repository.Interface
         //public bool Orders(Orders sm);
         public ViewNotesData getNotesByID(int id);
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
-        public Boolean SendAgreement(int requestid);
-        public Boolean SendAgreement_accept(int RequestID);
-        public Boolean SendAgreement_Reject(int RequestID, string Notes);
+        public bool SendAgreement(int requestid);
+        public bool SendAgreement_accept(int RequestID);
+        public bool SendAgreement_Reject(int RequestID, string Notes);
         public ViewCloseCase CloseCaseData(int RequestID);
         public bool EditForCloseCase(ViewCloseCase model);
         public bool CloseCase(int RequestID);

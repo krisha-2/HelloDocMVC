@@ -1,0 +1,105 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@*@{
+    Layout = "_LayoutDashboard";
+}
+@model Patient;
+@{
+    ViewData["Title"] = "SomeoneElse";
+}
+<body class="bg-light">
+    <div class="container">
+        <div class="d-flex justify-content-between">
+            <h3 class="mt-2"><b>Submit Information</b></h3>
+            <div class="border border-info rounded p-1 m-1">
+                <a asp-controller="Dashboard" asp-action="Index" class=" "><i class='fa fa-angle-left text-info p-2'>Back</i></a>
+            </div>
+        </div>
+        <form class="bg-white container mt-5 sbox" method="post" asp-controller="RequestByPatient" asp-action="MeData" enctype="multipart/form-data">
+            <h5><b>Patient Information</b></h5>
+            <div class="form-group p-3">
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Enter Brief Details of Patients"></textarea>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input asp-for="FirstName" type="text" class="form-control" id="name" placeholder="fname">
+                    <label for="name">First Name</label>
+                </div>
+                <div class="col-md-6 p-3 form-floating">
+                    <input asp-for="LastName" type="text" class="form-control" id="naming" placeholder="lname">
+                    <label for="naming">Lastname</label>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6 p-3 form-floating">
+                        <input asp-for="DOB" type="date" class="form-control" id="name" placeholder="DOB">
+                        <label for="name">Date of Birth</label>
+                    </div>
+                </div>
+            </div>
+            <h5><b>Patient Contact Information</b></h5>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input asp-for="Email" type="text" class="form-control" id="name" placeholder="Email">
+                    <label for="name">Email</label>
+                </div>
+
+                <div class="mb-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating my-3">
+                    <input asp-for="Mobile" type="tel" class="form-control shadow-none" id="phone">
+                </div>
+            </div>
+            <h5><b>Patient Location</b></h5>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input asp-for="Street" type="text" class="form-control" id="name" placeholder="Street">
+                    <label for="name">Street</label>
+                </div>
+                <div class="col-md-6 p-3 form-floating">
+                    <input asp-for="City" type="text" class="form-control" id="naming" placeholder="City">
+                    <label for="naming">City</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input asp-for="State" type="text" class="form-control" id="name" placeholder="State">
+                    <label for="name">State</label>
+                </div>
+                <div class="col-md-6 p-3 form-floating">
+                    <input asp-for="ZipCode" type="text" class="form-control" id="naming" placeholder="ZipCode">
+                    <label for="naming">Zipcode</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input type="text" class="form-control" id="name" placeholder="Room">
+                    <label for="name">Room #/Suite(Optional)</label>
+                </div>
+            </div>
+            <h5><b>Relation</b></h5>
+            <div class="row">
+                <div class="form-group col-md-6 p-3 form-floating">
+                    <input asp-for="Street" type="text" class="form-control" id="name" placeholder="Street">
+                    <label for="name">Relation With Patient(Optional)</label>
+                </div>
+            <h5><b>(Optional) Upload Photo or Document</b></h5>
+            <div class="input-group mb-3 form-control">
+                <div class="col-xl-11">
+                    <p class="selected-filename " id="selectedFilename">No file chosen.</p>
+                </div>
+                <div class="upload col-xl-1">
+                    <input asp-for="UploadFile" type="file" id="myFile" class="custom-file-input" onchange="displayFilename()"
+                           style="display: none;">
+                        <label for="myFile" class="input-group-text bg-info text-white"><i class="fa fa-cloud-upload pe-1"></i>Upload</label>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button class="btn btn-info text-white mx-2">Submit</button>
+                <button type="button" class="btn btn-outline-info text-info">Cancel</button>
+            </div>
+        </form>
+    </div>
+    <script src="~/js/custom.js"></script>
+</body>*@
+
+
+

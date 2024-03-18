@@ -16,6 +16,7 @@ using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using System.Collections;
 using Microsoft.AspNetCore.Components.Forms;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -54,9 +55,9 @@ namespace HelloDocMVC.Repository.Repository
                         .ToList();
             return list;
         }
-        public CountStatusWiseRequestModel IndexData()
+        public PaginatedViewModel IndexData()
         {
-            return new CountStatusWiseRequestModel
+            return new PaginatedViewModel
             {
                 NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
                 PendingRequest = _context.Requests.Where(r => r.Status == 2).Count(),
@@ -64,7 +65,7 @@ namespace HelloDocMVC.Repository.Repository
                 ConcludeRequest = _context.Requests.Where(r => r.Status == 6).Count(),
                 ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8)).Count(),
                 UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count(),
-                adminDashboardList = NewRequestData()
+                adl = NewRequestData()
             };
         }
         public ViewCase ViewCaseData(int? id)
@@ -91,8 +92,12 @@ namespace HelloDocMVC.Repository.Repository
                        }).FirstOrDefault();
             return viewCase;
         }
-        public List<AdminDashboardList> GetRequests(string Status)
+        public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data)
         {
+            if (data.SearchInput != null)
+            {
+                data.SearchInput = data.SearchInput.Trim();
+            }
             List<int> statusdata = Status.Split(',').Select(int.Parse).ToList();
             List<AdminDashboardList> allData = (from req in _context.Requests
                                                 join reqClient in _context.RequestClients
@@ -104,7 +109,14 @@ namespace HelloDocMVC.Repository.Repository
                                                 join reg in _context.Regions
                                                 on rc.RegionId equals reg.RegionId into RegGroup
                                                 from rg in RegGroup.DefaultIfEmpty()
-                                                where statusdata.Contains(req.Status)
+                                                where statusdata.Contains(req.Status) && (data.SearchInput == null ||
+                                                         rc.RcFirstName.Contains(data.SearchInput) || rc.RcLastName.Contains(data.SearchInput) ||
+                                                         req.RFirstName.Contains(data.SearchInput) || req.RLastName.Contains(data.SearchInput) ||
+                                                         rc.Email.Contains(data.SearchInput) || rc.PhoneNumber.Contains(data.SearchInput) ||
+                                                         rc.Address.Contains(data.SearchInput) || rc.Notes.Contains(data.SearchInput) ||
+                                                         p.FirstName.Contains(data.SearchInput) || p.LastName.Contains(data.SearchInput) ||
+                                                         rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.RegionId == data.RegionId)
+                                                         && (data.RequestType == null || req.RequestTypeId == data.RequestType)
                                                 orderby req.CreatedDate descending
                                                 select new AdminDashboardList
                                                 {
@@ -121,7 +133,7 @@ namespace HelloDocMVC.Repository.Repository
                                                     IntDate = rc.IntDate,
                                                     RequestedDate = req.CreatedDate,
                                                     Email = rc.Email,
-                                                    Region = rg.Name,
+                                                    RegionId = rg.Name,
                                                     ProviderName = p.FirstName + " " + p.LastName,
                                                     PhoneNumber = rc.PhoneNumber,
                                                     Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
@@ -129,7 +141,20 @@ namespace HelloDocMVC.Repository.Repository
                                                     //ProviderId = req.PhysicianId,
                                                     RequestorPhoneNumber = req.PhoneNumber
                                                 }).ToList();
-            return allData;
+            int totalItemCount = allData.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
+            List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
+            
+            PaginatedViewModel paginatedViewModel = new PaginatedViewModel
+            {
+                adl = list1,
+                CurrentPage = data.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = data.PageSize,
+                SearchInput = data.SearchInput
+            };
+            return paginatedViewModel;
+           
         }
         public bool CancelCase(int RequestID, string Note, string CaseTag)
         {
@@ -512,7 +537,7 @@ namespace HelloDocMVC.Repository.Repository
         //        _context.SaveChanges();
         //}
         #region SendAgreement
-        public Boolean SendAgreement(int requestid)
+        public bool SendAgreement(int requestid)
         {
             var res = _context.RequestClients.FirstOrDefault(e => e.RequestId == requestid);
             var agreementUrl = "https://localhost:44338/AgreementPage?RequestID=" + requestid;
@@ -522,7 +547,7 @@ namespace HelloDocMVC.Repository.Repository
         #endregion
 
         #region SendAgreement_accept
-        public Boolean SendAgreement_accept(int RequestID)
+        public bool SendAgreement_accept(int RequestID)
         {
             var request = _context.Requests.Find(RequestID);
             if (request != null)
@@ -547,7 +572,7 @@ namespace HelloDocMVC.Repository.Repository
         #endregion
 
         #region SendAgreement_Reject
-        public Boolean SendAgreement_Reject(int RequestID, string Notes)
+        public bool SendAgreement_Reject(int RequestID, string Notes)
         {
             var request = _context.Requests.Find(RequestID);
             if (request != null)

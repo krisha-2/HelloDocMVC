@@ -37,7 +37,7 @@ namespace HelloDocMVC.Controllers
             ViewBag.Profession = _comboBox.Profession();
             ViewBag.RegionComboBox =  _comboBox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
-            CountStatusWiseRequestModel sm = _IAdminDashboard.IndexData();
+            PaginatedViewModel sm = _IAdminDashboard.IndexData();
             return View(sm);
         }
         public IActionResult ViewCase(int? id)
@@ -50,13 +50,17 @@ namespace HelloDocMVC.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> _SearchResult(string Status)
+        public async Task<IActionResult> _SearchResult(PaginatedViewModel data, String Status)
         {
             if (Status == null)
             {
-                Status = "1";
+                Status = CV.CurrentStatus();
+
             }
-            List<AdminDashboardList> contacts = _IAdminDashboard.GetRequests(Status);
+
+            Response.Cookies.Delete("Status");
+            Response.Cookies.Append("Status", Status);
+            PaginatedViewModel contacts = _IAdminDashboard.GetRequests(Status, data);
 
             switch (Status)
             {

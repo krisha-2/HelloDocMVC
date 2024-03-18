@@ -1,13 +1,13 @@
 ﻿@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-﻿@using static HelloDocMVC.Entity.Models.Constant
+@model HelloDocMVC.Entity.Models.PaginatedViewModel;
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="Admin" novalidate="novalidate">
-    <input type="hidden" name="Status" id="hiddenfirst" />
+    <input type="hidden" asp-for="Status" id="requeststatus" class="form-control">
     <div class="row mb-2 t-tab" style="--bs-gutter-x: 0rem;">
-        <button type="submit" value="1" name="Status" class="btn col-4 col-md-2 text-start shadow-none position-relative">
-            <div class="p-1 rounded new active ps-2 pt-3 a-new">
+            <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('1')">
+            <div class="p-1 rounded new active ps-2 pt-3 a-new @{if(CV.CurrentStatus()=="1"){@Html.Raw("active")}}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-circle-plus me-2 align-self-center d-none d-sm-block"></i>
                     NEW
@@ -17,8 +17,8 @@
                 </div>
             </div>
         </button>
-        <button type="submit" value="2" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded pending ps-2 pt-3 a-pending">
+        <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('2')">
+            <div class="p-1 rounded pending ps-2 pt-3 a-pending @{if(CV.CurrentStatus()=="2"){@Html.Raw("active")}}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-user-clock me-2 align-self-center d-none d-sm-block"></i>
                     PENDING
@@ -28,8 +28,8 @@
                 </div>
             </div>
         </button>
-        <button type="submit" value="4,5" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded active1 ps-2 pt-3 a-active1">
+       <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('4,5')">
+            <div class="p-1 rounded active1 ps-2 pt-3 a-active1  a-active1  @{if(CV.CurrentStatus()=="4,5"){@Html.Raw("active")}}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-circle-check me-2 align-self-center d-none d-sm-block"></i>
                     ACTIVE
@@ -39,8 +39,8 @@
                 </div>
             </div>
         </button>
-        <button type="submit" value="6" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded conclude ps-2 pt-3 a-conclude">
+        <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('6')">
+            <div class="p-1 rounded conclude ps-2 pt-3 a-conclude @{if(CV.CurrentStatus()=="6"){@Html.Raw("active")}}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-clock-rotate-left me-2 align-self-center d-none d-sm-block"></i>
                     CONCLUDE
@@ -50,8 +50,8 @@
                 </div>
             </div>
         </button>
-        <button type="submit" value="3,7,8" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded toClose ps-2 pt-3 a-toClose">
+        <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('3,7,8')">
+            <div class="p-1 rounded toClose ps-2 pt-3 a-toClose @{if(CV.CurrentStatus()=="3,7,8"){@Html.Raw("active")}}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-user-xmark me-2 align-self-center d-none d-sm-block"></i>
                     TO CLOSE
@@ -61,8 +61,8 @@
                 </div>
             </div>
         </button>
-        <button type="submit" value="9" name="Status" class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid">
+         <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('9')">
+            <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid @{if(CV.CurrentStatus()=="9"){@Html.Raw("active")}}">
                 <div class="d-inline-flex">
                     <i class="fa-solid fa-circle-dollar-to-slot me-2 align-self-center d-none d-sm-block"></i>
                     UNPAID
@@ -72,85 +72,104 @@
                 </div>
             </div>
         </button>
+    </div>
+    <div class="d-flex justify-content-between mx-2">
+        <div>
+            <strong class="fs-6">Patients</strong> <small>(Status)</small>
+        </div>
+        <div>
+            <button class="btn btn-info text-white shadow-none mb-2">
+                <small>
+                    <i class="bi bi-send"></i>
+                    <span class="adminIcon">Send Link</span>
+                </small>
+            </button>
+            <button class="btn btn-info text-white shadow-none mb-2">
+                <small>
+                    <i class="bi bi-file-earmark-plus"></i>
+                    <span class="adminIcon">Create Requests</span>
+                </small>
+            </button>
+            <button class="btn btn-info text-white shadow-none mb-2">
+                <small>
+                    <i class="fa-solid fa-share"></i>
+                    <span class="adminIcon">Export</span>
+                </small>
+            </button>
+            <button class="btn btn-info text-white shadow-none mb-2">
+                <small>
+                    <i class="fa-solid fa-share-from-square"></i>
+                    <span class="adminIcon">Export All</span>
+                </small>
+            </button>
+            <button class="btn btn-info text-white shadow-none mb-2">
+                <small>
+                    <i class="fa-solid fa-user-nurse"></i>
+                    <span class="adminIcon">Request DIY Support</span>
+                </small>
+            </button>
+        </div>
+    </div>
+    <!--End Important links-->
+    <!--Searchbar-->
+    <div class="mt-2 mx-2 bg-white">
+        <div class="searchBar px-2">
+            <div class="searchPatientRegion py-2">
+                <div class="search m-1">
+                    <div onclick="subsubmit()">
+                        <i class="fa fa-search"></i>
+                    </div>
+                    <input type="text" id="searchInput" asp-for="SearchInput" class="form-control" placeholder="Search Patients" onkeydown="subsubmit()">
+                </div>
+                <div class="search m-1">
+                    <i class="fa fa-search"></i>
+                    <select class="form-select" required aria-label="Phone" asp-for="RegionId" data-allow-clear="true" tabindex="-1" onchange="subsubmit()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        <option>All Region</option>
+                    </select>
+                </div>
+            </div>
+            <div class="requestType t-filter">
+                <input type="hidden" asp-for="RequestType" id="requesttypevalue" class="form-control" placeholder="Search Patients">
+                    <button class="me-3 btn shadow-none filterborder" onclick="assignvalue()">
+                        <small>All</small>
+                    </button>
+                    <button class="me-3 btn shadow-none" onclick="assignvalue(2)">
+                    <i class="fa-solid fa-circle fa-xs" style="color:#5fbc61;"></i>
+                    <small>Patient</small>
+                    </button>
+                    <button class="me-3 btn shadow-none" onclick="assignvalue(3)">
+                    <i class="fa-solid fa-circle fa-xs" style="color:#ed9124;"></i>
+                    <small>Family / Friend</small>
+                    </button>
+                    <button class="me-3 btn shadow-none" onclick="assignvalue(1)">
+                    <i class="fa-solid fa-circle fa-xs" style="color:#cd697b;"></i>
+                    <small>Business</small>
+                    </button>
+                    <button class="me-2 btn shadow-none" onclick="assignvalue(4)">
+                    <i class="fa-solid fa-circle fa-xs" style="color:#0a7cb9;"></i>
+                    <small>Concierge</small>
+                    </button>
+            </div>
+        </div>
     </div>
 </form>
-@*<div class="mx-sm-1 mx-md-2 mx-xxl-4 mt-0 bg-light">
-    <!--Status of requests-->
-    <div class="row mb-2" style="--bs-gutter-x: 0rem;">
-        <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded new ps-2 pt-3">
-                <div class="d-inline-flex">
-                    <i class="fa-solid fa-circle-plus me-2 align-self-center d-none d-sm-block"></i>
-                    NEW
-                </div>
-                <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.NewRequest</span>
-                </div>
-            </div>
-        </button>
+<script>
+    function subsubmit() {
+        $('#filterForm').submit();
+    }
+    function assignvalue(e) {
+        $('#requesttypevalue').val(e);
+        $('#filterForm').submit();
+    }
+    function changeStatus(e) {
+        $('#requeststatus').val(e);
+        $('#filterForm').submit();
+    }
 
-        <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded pending ps-2 pt-3">
-                <div class="d-inline-flex">
-                    <i class="fa-solid fa-user-clock me-2 align-self-center d-none d-sm-block"></i>
-                    PENDING
-                </div>
-                <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.PendingRequest</span>
-                </div>
-            </div>
-        </button>
-
-        <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded active1 ps-2 pt-3">
-                <div class="d-inline-flex">
-                    <i class="fa-solid fa-circle-check me-2 align-self-center d-none d-sm-block"></i>
-                    ACTIVE
-                </div>
-                <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.ActiveRequest</span>
-                </div>
-            </div>
-        </button>
-
-        <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded conclude ps-2 pt-3">
-                <div class="d-inline-flex">
-                    <i class="fa-solid fa-clock-rotate-left me-2 align-self-center d-none d-sm-block"></i>
-                    CONCLUDE
-                </div>
-                <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.ConcludeRequest</span>
-                </div>
-            </div>
-        </button>
-
-        <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded toClose ps-2 pt-3">
-                <div class="d-inline-flex">
-                    <i class="fa-solid fa-user-xmark me-2 align-self-center d-none d-sm-block"></i>
-                    TO CLOSE
-                </div>
-                <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.ToCloseRequest</span>
-                </div>
-            </div>
-        </button>
-
-        <button class="btn col-4 col-md-2 text-start shadow-none">
-            <div class="p-1 rounded unpaid ps-2 pt-3">
-                <div class="d-inline-flex">
-                    <i class="fa-solid fa-circle-dollar-to-slot me-2 align-self-center d-none d-sm-block"></i>
-                    UNPAID
-                </div>
-                <div class="mt-2">
-                    <span class="h4 fw-bold">@Model.UnpaidRequest</span>
-                </div>
-            </div>
-        </button>
-    </div>
-    <!--End Status of requests-->
-    <!--Important links-->
-
-
-*@
+    $(window).keydown(function (event) {
+        if (event.keyCode == 13) {
+            event.preventDefault();
+            return false;
+        }
+    });
+</script>
