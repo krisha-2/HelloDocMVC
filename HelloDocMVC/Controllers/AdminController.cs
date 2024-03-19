@@ -46,8 +46,11 @@ namespace HelloDocMVC.Controllers
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
-       
-        
+        public IActionResult Encounter()
+        {
+            return View("../Admin/Encounter");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(PaginatedViewModel data, String Status)

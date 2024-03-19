@@ -1,0 +1,176 @@
+﻿@model HelloDocMVC.Entity.Models.ViewEncounter;
+@using static HelloDocMVC.Entity.Models.Constant
+@{
+    Layout = "_LayoutAdminDashboard";
+}
+<div class="body">
+    <div class="container">
+        <div class="d-flex justify-content-between mt-3">
+            <div class="d-flex align-items-center">
+                <h4 class="pt-2"><strong>Encounter Form</strong></h4>
+            </div>
+            <div class="backBtn">
+                <a asp-controller="Home" asp-action="Index"><button><span class="material-icons back"><span class="material-symbols-outlined">arrow_back_ios</span></span>Back</button></a>
+            </div>
+        </div>
+        <form class="card border-0 shadow py-4 mb-5 mt-3 rounded p-3 rounded container" method="post">
+            <h4 class="mb-4 text-info d-flex justify-content-center"><strong>Medical Report - Confidential</strong></h4>
+            <input type="hidden" asp-for="RequestId" />
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="FirstName" class="form-control shadow-none" id="fName" placeholder="FirstName">
+                    <label for="fName" class="form-label">First Name</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="LastName" class="form-control shadow-none" id="lName" placeholder="LastName">
+                    <label for="lName" class="form-label">Last Name</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Location" class="form-control shadow-none" id="location" placeholder="Location">
+                    <label for="location" class="form-label">Location</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4 dateInput">
+                    <input type="date" asp-for="DOB" class="form-control shadow-none" id="date">
+                    <label for="date" class="form-label">Date of Birth</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4 dateInput">
+                    <input type="date" asp-for="DOS" class="form-control shadow-none" id="date">
+                    <label for="date" class="form-label">Date of Service</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4 phone">
+                    <input asp-for="Mobile" class="form-control shadow-none" id="phone">
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="email" asp-for="Email" class="form-control shadow-none" id="email" placeholder="Email">
+                    <label for="email" class="form-label">Email</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Injury" class="form-control shadow-none" id="injury" placeholder="History of present illness or injury">
+                    <label for="injury" class="form-label">History of present illness or injury</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="History" class="form-control shadow-none" id="history" placeholder="Medical History">
+                    <label for="history" class="form-label">Medical History</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Medications" class="form-control shadow-none" id="medications" placeholder="Medications">
+                    <label for="medications" class="form-label">Medications</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Allergies" class="form-control shadow-none" id="allergies" placeholder="Allergies">
+                    <label for="allergies" class="form-label">Allergies</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Temp" class="form-control shadow-none" id="temp" placeholder="Temp">
+                    <label for="temp" class="form-label">Temp</label>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="HR" class="form-control shadow-none" id="hr" placeholder="HR">
+                    <label for="hr" class="form-label">HR</label>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="RR" class="form-control shadow-none" id="rr" placeholder="RR">
+                    <label for="rr" class="form-label">RR</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Bp" class="form-control shadow-none" id="bp" placeholder="Blood Pressure">
+                    <label for="bp" class="form-label">Blood Pressure</label>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="O2" class="form-control shadow-none" id="o2" placeholder="O2">
+                    <label for="o2" class="form-label">O2</label>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Pain" class="form-control shadow-none" id="pain" placeholder="Pain">
+                    <label for="pain" class="form-label">Pain</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Heent" class="form-control shadow-none" id="heent" placeholder="Heent">
+                    <label for="heent" class="form-label">Heent</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="CV" class="form-control shadow-none" id="cv" placeholder="CV">
+                    <label for="cv" class="form-label">CV</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Chest" class="form-control shadow-none" id="chest" placeholder="Chest">
+                    <label for="chest" class="form-label">Chest</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="ABD" class="form-control shadow-none" id="abd" placeholder="ABD">
+                    <label for="abd" class="form-label">ABD</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Extr" class="form-control shadow-none" id="extr" placeholder="Extr">
+                    <label for="extr" class="form-label">Extr</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Skin" class="form-control shadow-none" id="skin" placeholder="Skin">
+                    <label for="skin" class="form-label">Skin</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Neuro" class="form-control shadow-none" id="neuro" placeholder="Neuro">
+                    <label for="neuro" class="form-label">Neuro</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Other" class="form-control shadow-none" id="other" placeholder="Other">
+                    <label for="other" class="form-label">Other</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Diagnosis" class="form-control shadow-none" id="diagnosis" placeholder="Diagnosis">
+                    <label for="diagnosis" class="form-label">Diagnosis</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Treatment" class="form-control shadow-none" id="treatment" placeholder="Treatment Plan">
+                    <label for="treatment" class="form-label">Treatment Plan</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="MDispensed" class="form-control shadow-none" id="mDispensed" placeholder="Medications Dispensed">
+                    <label for="mDispensed" class="form-label">Medications Dispensed</label>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Procedures" class="form-control shadow-none" id="procedures" placeholder="Procedures">
+                    <label for="procedures" class="form-label">Procedures</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 form-floating mb-4">
+                    <input type="text" asp-for="Followup" class="form-control shadow-none" id="followup" placeholder="Followup">
+                    <label for="followup" class="form-label">Followup</label>
+                </div>
+            </div>
+            <div class="row px-3 d-flex justify-content-end">
+                <button type="submit" class="col-1 btn btn-info text-white rounded mx-2 p-2">Save</button>
+                @*<input type="submit" class="col-1 btn btn-success text-white rounded mx-2 p-2" value="Finalize">*@
+                <a class="col-1 btn btn-outline-info text-info rounded mx-2 p-2">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+

@@ -28,7 +28,7 @@ namespace HelloDocMVC.Entity.Models
         public int ProviderId { get; set; }
         public string? ProviderName { get; set; }
         public string RegionId { get; set; }
-        public string ADStatus { get; set; }
+        public string? ADStatus { get; set; }
         public  string PhysicianName { get; set; }
         public string DateOfService { get; set; }
     }

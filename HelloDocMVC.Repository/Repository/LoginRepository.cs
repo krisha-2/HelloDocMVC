@@ -3,6 +3,7 @@ using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,25 +14,34 @@ using static HelloDocMVC.Repository.Repository.LoginRepository;
 
 namespace HelloDocMVC.Repository.Repository
 {
-    
-        public class LoginRepository : ILoginRepository
-        {
-            #region Constructor
-            private readonly IHttpContextAccessor httpContextAccessor;
-            private readonly HelloDocDbContext _context;
-        public LoginRepository(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor)
-            {
-                this.httpContextAccessor = httpContextAccessor;
-                _context = context;
-            }
-            #endregion
 
-            #region Constructor
-            public async Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser)
+    public class LoginRepository : ILoginRepository
+    {
+        #region Constructor
+        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly HelloDocDbContext _context;
+        public LoginRepository(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor)
+        {
+            this.httpContextAccessor = httpContextAccessor;
+            _context = context;
+        }
+        #endregion
+
+        #region Constructor
+        public async Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser)
+        {
+            var user = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email);
+            UserInfo admin = new UserInfo();
+            if (user != null)
             {
-                var user = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email && u.PasswordHash == aspNetUser.PasswordHash);
-                UserInfo admin = new UserInfo();
-                if (user != null)
+                var hasher = new PasswordHasher<string>();
+                PasswordVerificationResult result = hasher.VerifyHashedPassword(null, user.PasswordHash, aspNetUser.PasswordHash);
+
+                if (result != PasswordVerificationResult.Success)
+                {
+                    return null;
+                }
+                else
                 {
                     var data = _context.AspNetUserRoles.FirstOrDefault(E => E.UserId == user.Id);
                     var datarole = _context.AspNetRoles.FirstOrDefault(e => e.Id == data.RoleId);
@@ -56,12 +66,13 @@ namespace HelloDocMVC.Repository.Repository
                     }
                     return admin;
                 }
-                else
-                {
-                    return null;
-                }
             }
-            #endregion
+            else
+            {
+                return null;
+            }
         }
-    
+        #endregion
+    }
+
 }

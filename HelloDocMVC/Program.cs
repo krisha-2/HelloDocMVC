@@ -22,6 +22,7 @@ builder.Services.AddScoped<IComboBox, ComboBox>();
 builder.Services.AddScoped<IPatientDashboard, PatientDashboard>();
 builder.Services.AddScoped<IJwtSession, JwtSession>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
+builder.Services.AddScoped<IAdminProfile, AdminProfile>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();

@@ -27,6 +27,10 @@ body {
    
     line-height: 2.7;
 }
+#phone1 {
+    display: block;
+    line-height: 2.7;
+}
 .iti {
     display: block;
     width: 100%;

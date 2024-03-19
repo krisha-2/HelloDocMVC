@@ -288,7 +288,7 @@ namespace HelloDocMVC.Repository.Repository
         }
         public ViewDocument ViewUpload(int requestid)
         {
-            ViewDocument items = _context.RequestClients.Include(rc => rc.Request)
+            ViewDocument? items = _context.RequestClients.Include(rc => rc.Request)
                                   .Where(rc => rc.RequestId == requestid)
                                     .Select(rc => new ViewDocument()
                                     {
