@@ -13,7 +13,10 @@
                 <a asp-controller="Home" asp-action="Index"><button><span class="material-icons back"><span class="material-symbols-outlined">arrow_back_ios</span></span>Back</button></a>
             </div>
         </div>
-        <form class="card border-0 shadow py-4 mb-5 mt-3 rounded p-3 rounded container" method="post">
+        <form class="card border-0 shadow py-4 mb-5 mt-3 rounded p-3 rounded container" method="post" asp-action="EncounterPost" asp-controller="Admin">
+                    <input type="hidden" asp-for="RequestId" />
+            <input type="hidden" asp-for="AdminId" />
+
             <h4 class="mb-4 text-info d-flex justify-content-center"><strong>Medical Report - Confidential</strong></h4>
             <input type="hidden" asp-for="RequestId" />
             <div class="row">

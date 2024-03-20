@@ -8,8 +8,6 @@
             <form asp-action="SendAgreementmail" asp-controller="Admin" method="post">
                 <div class="modal-body">
                     <span class="d-flex">
-                        @* <i class="fa-solid fa-circle fa-xs @Enum.GetName(typeof(RequestType), Model.RequestTypeID)"></i>
-                        @Enum.GetName(typeof(RequestType), Model.RequestTypeID) *@
                     </span>
                     <small class="modal-title">To send agreement please make sure you are updating correct contact information below for the responsible party.</small>
                     <input id="RequestID_sendAgreement" placeholder=" " name="RequestID" type="hidden">

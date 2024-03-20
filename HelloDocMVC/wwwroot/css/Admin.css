@@ -6,14 +6,15 @@ body {
 .hdr {
     box-shadow: 0 0 10px 0;
 }
-.form-floating label {
+/*.form-floating label {
     margin-top: 12px;
     margin-left: 15px;
-}
-/*.form-floating label {
-    margin-top: 1px;
-   
 }*/
+.form-floating label {
+    margin-top: 1px;
+    margin-left: 10px;
+   
+}
 .backBtn {
     position: absolute;
     right: 10vw;

@@ -103,7 +103,7 @@
                             <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Notes</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#transfercase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-journal-text mx-1"></i>Transfer</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#clearcase"><i class="bi bi-x-circle me-1"></i> Clear Case</a></li>
-                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#sendagreement"><i class="bi bi-sticky me-1"></i>Send Agreement </a></li>
+                            <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#sendagreement"><i class="fa-solid fa-paper-plane me-1"></i>Send Agreement </a></li>
                         </ul>
                     </td>
                 </tr>
@@ -235,7 +235,7 @@
 <script>
     function model_Case(id) {
         console.log(id);
-        var modeldata = @Html.Raw(Json.Serialize(Model));
+        var modeldata = @Html.Raw(Json.Serialize(Model.adl));
         document.getElementById('RequestID_Input_ModelTransferCase').value = modeldata[id].requestId;
         document.getElementById('RequestID_Input_ModelClearCase').value = modeldata[id].requestId;
         document.getElementById('RequestID_sendAgreement').value = modeldata[id].requestId;

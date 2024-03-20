@@ -93,7 +93,7 @@
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#AssignCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-card-checklist me-1"></i>Assign Case</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#CancelCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-x-circle me-1"></i>Cancel Case</a></li>
                                 <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
-                                <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin"><i class="bi bi-journals"></i> View Notes</a></li>
+                                <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Notes</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" id="CancelCase_@item.RequestId" data-bs-toggle="modal" data-bs-target="#BlockCase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-ban"></i> Block Patient</a></li>
                             </ul>
                         </td>
@@ -220,7 +220,7 @@
 <script>
     function model_Case(id) {
         console.log(id);
-        var modeldata = @Html.Raw(Json.Serialize(Model));
+        var modeldata = @Html.Raw(Json.Serialize(Model.adl));
             console.log(modeldata[id]);
         document.getElementById('PatientName_ModelCancelCase').innerText = modeldata[id].patientName;
         document.getElementById('RequestID_Input_ModelCancelCase').value = modeldata[id].requestId;

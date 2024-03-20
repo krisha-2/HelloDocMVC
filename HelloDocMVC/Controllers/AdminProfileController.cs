@@ -48,9 +48,9 @@ namespace HelloDocMVC.Controllers
 
         #region EditAdministratorInfo
         [HttpPost]
-        public async Task<IActionResult> EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
+        public IActionResult EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
         {
-            if (await _IAdminProfile.EditAdministratorInfo(_viewAdminProfile))
+            if (_IAdminProfile.EditAdministratorInfo(_viewAdminProfile))
             {
                 _notyf.Success("Information changed Successfully...");
             }

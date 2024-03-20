@@ -48,7 +48,7 @@
             <input type="submit" value="Reset Password" id="resetpassbtn" class="btn border border-info text-info" />
         </div>
     </form>
-    <form class="bg-white container sbox" method="post" asp-controller="AdminProfile" asp-action="EditAdministratorInfo">
+    <form class="bg-white container sbox" asp-controller="AdminProfile" asp-action="EditAdministratorInfo" id="administratorInfo">
         <input type="hidden" asp-for="AdminId" />
         <h5><b>Administrator Information</b></h5>
         <div class="row">
@@ -79,6 +79,7 @@
                 <input asp-for="Mobile" type="tel" class="form-control shadow-none" id="phone" disabled>
                 <span asp-validation-for="Mobile" class="text-danger"></span>
             </div>
+            <input asp-for="Regionsid" type="hidden" id="regionids" />
             <div class="col-md-6 d-flex pb-3">
                 @foreach (var cb in ViewBag.RegionComboBox)
                 {
@@ -105,7 +106,7 @@
         </div>
         <div class="row px-3 d-flex justify-content-end">
             <a class="col-1 btn btn-info text-white rounded p-2 editprofile">Edit</a>
-            <input type="submit" class="col-1 btn bg-info text-white rounded p-2 submit" value="save" style="display:none;">
+            <input type="button" class="col-1 btn bg-info text-white rounded p-2 submit" id="save1" value="save" style="display:none;">
         </div>
     </form>
     <form class="bg-white container sbox" method="post" asp-controller="AdminProfile" asp-action="BillingInfoEdit">
@@ -158,6 +159,18 @@
             form.find("input").removeAttr('disabled');
             form.find(".submit").css("display", "block");
             $(this).css("display", "none");
+        });
+    });
+    $(function () {
+        $('#save1').on('click', function () {
+            let checkboxes = document.querySelectorAll('input[name="Region"]:checked');
+            let regionIds = [];
+            checkboxes.forEach((checkbox) => {
+                regionIds.push(checkbox.value);
+            });
+            document.querySelector('#regionids').value = regionIds.join(',');
+            console.log(document.querySelector('#regionids').value)
+            $('#administratorInfo').submit();
         });
     });
 </script>

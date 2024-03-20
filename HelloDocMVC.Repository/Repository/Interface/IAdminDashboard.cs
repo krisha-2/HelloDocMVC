@@ -23,6 +23,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> TransferProvider(int RequestId, int ProviderId, string notes);
         public ViewDocument ViewUpload(int requestid);
         public void UploadDoc(ViewDocument v, IFormFile? UploadFile);
+        public Task<bool> DeleteDocumentByRequest(string ids);
         public bool ClearCase(int RequestID);
         //public bool Orders(Orders sm);
         public ViewNotesData getNotesByID(int id);
@@ -33,5 +34,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public ViewCloseCase CloseCaseData(int RequestID);
         public bool EditForCloseCase(ViewCloseCase model);
         public bool CloseCase(int RequestID);
+        public ViewEncounter EncounterInfo(int id);
+        public void EditEncounterinfo(ViewEncounter ve);
     }
 }

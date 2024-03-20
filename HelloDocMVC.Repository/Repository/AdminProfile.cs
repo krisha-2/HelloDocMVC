@@ -83,7 +83,7 @@ namespace HelloDocMVC.Repository.Repository
         #endregion
 
         #region EditAdministratorInfo
-        public async Task<bool> EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
+        public bool EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace HelloDocMVC.Repository.Repository
                 }
                 else
                 {
-                    var DataForChange = await _context.Admins.Where(W => W.AdminId == _viewAdminProfile.AdminId).FirstOrDefaultAsync();
+                    var DataForChange =  _context.Admins.Where(W => W.AdminId == _viewAdminProfile.AdminId).FirstOrDefault();
                     if (DataForChange != null)
                     {
                         DataForChange.Email = _viewAdminProfile.Email;
@@ -102,35 +102,30 @@ namespace HelloDocMVC.Repository.Repository
                         DataForChange.Mobile = _viewAdminProfile.Mobile;
                         _context.Admins.Update(DataForChange);
                         _context.SaveChanges();
-                        List<int> regions = await _context.AdminRegions.Where(r => r.AdminId == _viewAdminProfile.AdminId).Select(req => req.RegionId).ToListAsync();
-                        //List<int> priceList = _viewAdminProfile.Regionsid.Split(',').Select(int.Parse).ToList();
-                        //foreach (var item in priceList)
-                        //{
-                        //    if (regions.Contains(item))
-                        //    {
-                        //        regions.Remove(item);
-                        //    }
-                        //    else
-                        //    {
-                        //        AdminRegion ar = new()
-                        //        {
-                        //            RegionId = item,
-                        //            AdminId = (int)_viewAdminProfile.AdminId
-                        //        };
-                        //        _context.AdminRegions.Update(ar);
-                        //        await _context.SaveChangesAsync();
-                        //        regions.Remove(item);
-                        //    }
-                        //}
-                        //if (regions.Count > 0)
-                        //{
-                        //    foreach (var item in regions)
-                        //    {
-                        //        AdminRegion ar = await _context.AdminRegions.Where(r => r.AdminId == _viewAdminProfile.AdminId && r.RegionId == item).FirstAsync();
-                        //        _context.AdminRegions.Remove(ar);
-                        //        await _context.SaveChangesAsync();
-                        //    }
-                        //}
+                        List<int> regions =  _context.AdminRegions.Where(r => r.AdminId == _viewAdminProfile.AdminId).Select(req => req.RegionId).ToList();
+                        List<int> priceList = _viewAdminProfile.Regionsid.Split(',').Select(int.Parse).ToList();
+                        foreach (var item in priceList)
+                        {
+                            if (regions.Contains(item))
+                            {
+                                regions.Remove(item);
+                            }
+                            else
+                            {
+                                AdminRegion ar = new() { RegionId = item, AdminId = (int)_viewAdminProfile.AdminId };
+                                _context.AdminRegions.Update(ar);
+                                 _context.SaveChanges();
+                            }
+                        }
+                        if (regions.Count > 0)
+                        {
+                            foreach (var item in regions)
+                            {
+                                AdminRegion ar =  _context.AdminRegions.Where(r => r.AdminId == _viewAdminProfile.AdminId && r.RegionId == item).First();
+                                _context.AdminRegions.Remove(ar);
+                                 _context.SaveChanges();
+                            }
+                        }
                         return true;
                     }
                     else

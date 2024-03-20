@@ -5,58 +5,6 @@
     Layout = "_LayoutAdminDashboard";
     ViewData["Title"] = "View Notes";
 }
-@*<div class="body min-vh-100">
-    <div class="container">
-        <div class="d-flex justify-content-between mt-5 mb-5">
-            <div class="d-flex align-items-center">
-                <h3 class="pt-2">Notes</h3>
-            </div>
-           
-            <div class="backBtn">
-                <a asp-controller="Admin" asp-action="Index"><i class='fa fa-angle-left text-info p-2'>Back</i></a>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 rounded mb-4">
-                <div class="card d-flex flex-row justify-content-start p-3">
-                    <i class="fa-solid fa-arrow-right-arrow-left fa-2xl mt-4"></i>
-                    <div class="d-flex flex-column mx-4">
-                        <strong class="viewNotes">Transfer Notes</strong>
-                        <span>Admin Transfered to Dr. on 01/01/2024 at 00:00:00 AM</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 rounded mb-4">
-                <div class="card d-flex flex-row justify-content-start p-3">
-                    <i class="fa-solid fa-user-doctor fa-2xl mt-4"></i>
-                    <div class="d-flex flex-column mx-4">
-                        <strong class="viewNotes">Physician Notes</strong>
-                        <span>-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 rounded mb-4">
-                <div class="card d-flex flex-row justify-content-start p-3">
-                    <i class="fa-solid fa-user-tie fa-2xl mt-4"></i>
-                    <div class="d-flex flex-column mx-4">
-                        <strong class="viewNotes">Admin Notes</strong>
-                        <span>-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 rounded mb-4 p-3">
-            <div class="p-3">
-                <textarea class="form-control shadow-none" id="notes" rows="10" placeholder="Admin Notes"></textarea>
-            </div>
-        </div>
-        <div class="row px-3 d-flex justify-content-end">
-            <a id="save" class="col-1 btn btn-info text-white rounded p-2">Save</a>
-        </div>
-    </div>
-</div>*@
 @using HelloDocMVC.Entity.Models
 @using static HelloDocMVC.Entity.Models.Constant
 @model HelloDocMVC.Entity.Models.ViewNotesData
@@ -68,18 +16,14 @@
                     <h4 class="form-title fw-bold mt-2 mx-2">Notes</h4>
                 </div>
                 <div>
-                    <a asp-controller="Admin" asp-action="Index" class="btn border border-info shadow-none">
-                        <strong class="text-info">
-                            <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
-                        </strong>
-                    </a>
+                    <div class="border border-info rounded p-2 m-1">
+                        <a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+                    </div>
                 </div>
             </div>
-
         </div>
         <div class="card-body">
             <div class="row">
-                @* Admin Notes *@
                 <div class="col-sm-6 col-xs-12 mb-3" id="adminnotes">
                     <div class="d-flex p-2 bg-white shadow">
                         <div class="p-2">
@@ -93,7 +37,6 @@
                         </div>
                     </div>
                 </div>
-                @* Physician Notes *@
                 <div class="col-sm-6 col-xs-12 mb-3" id="phynotes">
                     <div class="d-flex p-2 bg-white shadow">
                         <div class="p-2">
@@ -138,7 +81,6 @@
                         </div>
                     </div>
                 }
-                @*Cancel By Physician Note*@
                 @foreach (var item in Model.cancelbyphysician)
                 {
                     <div class="col-sm-6 col-xs-12 mb-3">
@@ -153,7 +95,6 @@
                         </div>
                     </div>
                 }
-                @* Transfer Notes *@
                 @if (Model.transfernotes.Count > 0)
                 {
                     <div class="col-sm-6 col-xs-12 mb-3">
@@ -178,11 +119,10 @@
                     </div>
                 }
             </div>
-
             <div class="row">
                 <div class="col">
                     <div class="bg-white shadow p-2">
-                        <form method="post" asp-action="ChangeNotes" asp-controller="Admin">
+                        <form method="post" asp-action="ChangeNotes" asp-controller="Admin" asp-route-RequestID="@Model.Requestid">
                             <input type="hidden" name="RequestID" value="@Model.Requestid" />
                             <div class="col-12">
                                 <div class="form-floating mb-3">

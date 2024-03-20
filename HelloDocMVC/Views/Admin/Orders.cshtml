@@ -11,25 +11,14 @@
             <h3 class="mt-2"><b>Send Order</b></h3>
         </div>
         <div>
-            <div class="border border-info rounded p-1 m-1">
-                <a asp-controller="Admin" asp-action="Index" class=""><i class='fa fa-angle-left text-info p-2'>Back</i></a>
+            <div class="border border-info rounded p-2 m-1">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
             </div>
         </div>
     </div>
     <form class="bg-white container mt-5 sbox" method="post" >
         @*<input type="hidden" asp-for="UserId" />*@
         <h5><b>Patient Information</b></h5>
-        @*<div class="row">
-            <div class="form-group col-md-6 p-3 form-floating">
-                <input asp-for="FirstName" type="text" class="form-control" id="fname" placeholder="Your First Name">
-                <label class="text-secondary" for="fname">Your First Name</label>
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="col-md-6 p-3 form-floating">
-                <input asp-for="Business" type="text" class="form-control" id="business" placeholder="Business">
-                <label class="text-secondary" for="business">Business</label>
-            </div>
-        </div>*@
         <div class="row">
             <div class="col-md-6 p-3">
             <div class="form-floating">

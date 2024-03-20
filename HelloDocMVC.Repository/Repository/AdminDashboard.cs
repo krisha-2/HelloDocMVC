@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Http;
 using System.Collections;
 using Microsoft.AspNetCore.Components.Forms;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -338,6 +339,28 @@ namespace HelloDocMVC.Repository.Repository
                 _context.SaveChanges();
             }
         }
+        public async Task<bool> DeleteDocumentByRequest(string ids)
+        {
+            List<int> deletelist = ids.Split(',').Select(int.Parse).ToList();
+            foreach (int item in deletelist)
+            {
+                if (item > 0)
+                {
+                    var data = await _context.RequestWiseFiles.Where(e => e.RequestWiseFileId == item).FirstOrDefaultAsync();
+                    if (data != null)
+                    {
+                        data.IsDeleted[0] = true;
+                        _context.RequestWiseFiles.Update(data);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         public async Task<bool> Business(int RequestId, int ProviderId, string notes)
         {
 
@@ -373,6 +396,7 @@ namespace HelloDocMVC.Repository.Repository
                                where rs.RequestId == id && rs.Status == 2
                                select new TransferNotesData
                                {
+                                   
                                    TransPhysician = p.FirstName,
                                    Admin = a.FirstName,
                                    Physician = py.FirstName,
@@ -712,6 +736,186 @@ namespace HelloDocMVC.Repository.Repository
             }
 
         }
+        //public ViewEncounter ViewEncounter(int? id, int adminid)
+        //{
+
+        //    EncounterForm ef = new EncounterForm();
+        //    ef.AdminId = adminid;
+        //    ef.RequestId = id;
+        //    _context.EncounterForms.Add(ef);
+        //    _context.SaveChanges();
+        //    var n = _context.Requests.FirstOrDefault(E => E.RequestId == id);
+        //    var e = _context.EncounterForms.FirstOrDefault(E => E.RequestId == id);
+        //    var rc = _context.RequestClients.FirstOrDefault(R => R.RequestId == id);
+        //    ViewEncounter? requestforviewcase = new ViewEncounter
+        //    {
+        //        AdminId= adminid,
+        //        RequestId = id,
+        //        FirstName = n.RFirstName,
+        //        LastName = n.RLastName,
+        //        Mobile = n.PhoneNumber,
+        //        Email = n.Email,
+        //        Location = rc.Street + "," + rc.City + "," + rc.State,
+        //        //Bdate = new DateTime((int)rc.IntYear, DateTime.ParseExact(rc.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.IntDate),
+        //        DOS = n.CreatedDate,
+        //        Injury = e.HistoryOfPresentIllnessOrInjury,
+        //        History = e.MedicalHistory,
+        //        Medications = e.Medications,
+        //        Allergies = e.Allergies,
+        //        Temp = e.Temp,
+        //        HR = e.Hr,
+        //        RR = e.Rr,
+        //        Bp = e.BloodPressureSystolic,
+        //        Bpd = e.BloodPressureDiastolic,
+        //        O2 = e.O2,
+        //        Chest = e.Chest,
+        //        ABD = e.Abd,
+        //        Extr = e.Extremeties,
+        //        Skin = e.Skin,
+        //        Neuro = e.Neuro,
+        //        Other = e.Other,
+        //        Diagnosis = e.Diagnosis,
+        //        Treatment = e.TreatmentPlan,
+        //        MDispensed = e.MedicationsDispensed,
+        //        Procedures = e.Procedures,
+        //        Followup = e.FollowUp
+        //    };
+
+
+        //    return requestforviewcase;
+        //}
+        //public void EncounterinfoPost(ViewEncounter _viewencounterinfo, int adminid)
+        //{
+        //    var encform = new EncounterForm();
+        //    var isexist = _context.EncounterForms.FirstOrDefault(x => x.AdminId == _viewencounterinfo.AdminId);
+        //    if (isexist == null)
+        //    {
+        //        encform.HistoryOfPresentIllnessOrInjury = _viewencounterinfo.Injury;
+        //        encform.Rr = _viewencounterinfo.RR;
+        //        encform.Hr = _viewencounterinfo.HR;
+        //        encform.Skin = _viewencounterinfo.Skin;
+        //        encform.Other = _viewencounterinfo.Other;
+        //        encform.Procedures = _viewencounterinfo.Procedures;
+        //        encform.Neuro = _viewencounterinfo.Neuro;
+        //        encform.Cv = _viewencounterinfo.CV;
+        //        encform.Abd = _viewencounterinfo.ABD;
+        //        encform.AdminId = _viewencounterinfo.AdminId;
+        //        encform.RequestId = _viewencounterinfo.RequestId;
+        //        encform.PhysicianId = _viewencounterinfo.PhysicianId;
+        //        encform.Temp = _viewencounterinfo.Temp;
+        //        encform.BloodPressureDiastolic = _viewencounterinfo.Bpd;
+        //        encform.BloodPressureSystolic = _viewencounterinfo.Bp;
+        //        encform.Allergies = _viewencounterinfo.Allergies;
+        //        encform.Chest = _viewencounterinfo.Chest;
+        //        encform.Diagnosis = _viewencounterinfo.Diagnosis;
+        //        encform.FollowUp = _viewencounterinfo.Followup;
+        //        encform.TreatmentPlan = _viewencounterinfo.Treatment;
+        //        encform.Heent = _viewencounterinfo.Heent;
+        //        encform.Extremeties = _viewencounterinfo.Extr;
+        //        //encform.IsFinalize = _viewencounterinfo.finalizwe;
+        //        encform.MedicalHistory = _viewencounterinfo.History;
+        //        encform.Medications = _viewencounterinfo.Medications;
+        //        encform.MedicationsDispensed = _viewencounterinfo.MDispensed;
+        //        encform.O2 = _viewencounterinfo.O2;
+        //        encform.Pain = _viewencounterinfo.Pain;
+        //        //encform.Physician = _viewencounterinfo.physician;
+        //        //encform.Request = _viewencounterinfo.request;
+        //        _context.EncounterForms.Update(encform);
+        //        _context.SaveChanges();
+        //    }
+        //}
+        public ViewEncounter EncounterInfo(int id)
+        {
+            var encounter = (from rc in _context.RequestClients
+                             join en in _context.EncounterForms on rc.RequestId equals en.RequestId into renGroup
+                             from subEn in renGroup.DefaultIfEmpty()
+                             where rc.RequestId == id
+                             select new ViewEncounter
+                             {
+                                 RequestId = rc.RequestId,
+                                 FirstName = rc.RcFirstName,
+                                 LastName = rc.RcLastName,
+                                 Location = rc.Address,
+                                 DOB = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
+                                 //DOS = (DateTime)subEn.DateOfService,
+                                 Mobile = rc.PhoneNumber,
+                                 Email = rc.Email,
+                                 Injury = subEn.HistoryOfPresentIllnessOrInjury,
+                                 History = subEn.MedicalHistory,
+                                 Medications = subEn.Medications,
+                                 Allergies = subEn.Allergies,
+                                 Temp = subEn.Temp,
+                                 HR = subEn.Hr,
+                                 RR = subEn.Rr,
+                                 Bp = subEn.BloodPressureSystolic,
+                                 Bpd = subEn.BloodPressureDiastolic,
+                                 O2 = subEn.O2,
+                                 Pain = subEn.Pain,
+                                 Heent = subEn.Heent,
+                                 CV = subEn.Cv,
+                                 Chest = subEn.Chest,
+                                 ABD = subEn.Abd,
+                                 Extr = subEn.Extremeties,
+                                 Skin = subEn.Skin,
+                                 Neuro = subEn.Neuro,
+                                 Other = subEn.Other,
+                                 Diagnosis = subEn.Diagnosis,
+                                 Treatment = subEn.TreatmentPlan,
+                                 MDispensed = subEn.MedicationsDispensed,
+                                 Procedures = subEn.Procedures,
+                                 Followup = subEn.FollowUp
+                             }).FirstOrDefault();
+            return encounter;
+        }
+        public void EditEncounterinfo(ViewEncounter ve)
+        {
+            var RC = _context.RequestClients.FirstOrDefault(rc => rc.RequestId == ve.RequestId);
+
+            RC.RcFirstName = ve.FirstName;
+            RC.RcLastName = ve.LastName;
+            RC.Address = ve.Location;
+            RC.StrMonth = ve.DOB.Month.ToString();
+            RC.IntDate = ve.DOB.Day;
+            RC.IntYear = ve.DOB.Year;
+            RC.PhoneNumber = ve.Mobile;
+            RC.Email = ve.Email;
+            _context.Update(RC);
+            var E = _context.EncounterForms.FirstOrDefault(e => e.RequestId == ve.RequestId);
+            if (E == null)
+            {
+                E = new EncounterForm { RequestId = (int)ve.RequestId };
+                _context.EncounterForms.Add(E);
+            }
+
+            E.MedicalHistory = ve.History;
+            E.HistoryOfPresentIllnessOrInjury = ve.Injury;
+            E.Medications = ve.Medications;
+            E.Allergies = ve.Allergies;
+            E.Temp = ve.Temp;
+            E.Hr = ve.HR;
+            E.Rr = ve.RR;
+            E.BloodPressureSystolic = ve.Bp;
+            E.BloodPressureDiastolic = ve.Bpd;
+            E.O2 = ve.O2;
+            E.Pain = ve.Pain;
+            E.Heent = ve.Heent;
+            E.Cv = ve.CV;
+            E.Chest = ve.Chest;
+            E.Abd = ve.ABD;
+            E.Extremeties = ve.Extr;
+            E.Skin = ve.Skin;
+            E.Neuro = ve.Neuro;
+            E.Other = ve.Other;
+            E.Diagnosis = ve.Diagnosis;
+            E.TreatmentPlan = ve.Treatment;
+            E.MedicationsDispensed = ve.MDispensed;
+            E.Procedures = ve.Procedures;
+            E.FollowUp = ve.Followup;
+            _context.SaveChanges();
+
+
+        }
+
     }
 }
 

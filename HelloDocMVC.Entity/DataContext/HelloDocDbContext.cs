@@ -36,6 +36,8 @@ public partial class HelloDocDbContext : DbContext
 
     public virtual DbSet<EmailLog> EmailLogs { get; set; }
 
+    public virtual DbSet<EncounterForm> EncounterForms { get; set; }
+
     public virtual DbSet<HealthProfessional> HealthProfessionals { get; set; }
 
     public virtual DbSet<HealthProfessionalType> HealthProfessionalTypes { get; set; }
@@ -116,8 +118,6 @@ public partial class HelloDocDbContext : DbContext
         modelBuilder.Entity<AdminRegion>(entity =>
         {
             entity.HasKey(e => e.AdminRegionId).HasName("AdminRegion_pkey");
-
-            entity.Property(e => e.AdminRegionId).ValueGeneratedNever();
 
             entity.HasOne(d => d.Admin).WithMany(p => p.AdminRegions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -202,6 +202,17 @@ public partial class HelloDocDbContext : DbContext
             entity.HasOne(d => d.Request).WithMany(p => p.EmailLogs).HasConstraintName("EmailLog_RequestId_fkey");
 
             entity.HasOne(d => d.Role).WithMany(p => p.EmailLogs).HasConstraintName("EmailLog_RoleId _fkey");
+        });
+
+        modelBuilder.Entity<EncounterForm>(entity =>
+        {
+            entity.HasKey(e => e.EncounterFormId).HasName("EncounterForm_pkey");
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.EncounterForms).HasConstraintName("EncounterForm_AdminId_fkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.EncounterForms).HasConstraintName("EncounterForm_PhysicianId_fkey");
+
+            entity.HasOne(d => d.Request).WithMany(p => p.EncounterForms).HasConstraintName("EncounterForm_RequestId_fkey");
         });
 
         modelBuilder.Entity<HealthProfessional>(entity =>

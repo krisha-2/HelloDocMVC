@@ -22,26 +22,27 @@
         <input type="hidden" asp-for="UserId" />
         <h5><b>Patient Information</b></h5>
         <small>Confirmation Number</small>
-        <div class="form-group p-2">
+        <div class="form-group mb-3">
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Brief Details of Symptoms" disabled></textarea>
         </div>
         <div class="row">
-            <div class="form-group col-md-6 p-3 form-floating">
+            <div class="col-md-6 form-floating mb-3">
                 <input asp-for="FirstName" type="text" class="form-control" id="fname" placeholder="Your First Name" disabled>
-                <label for="fname">Your First Name</label>
+                <label for="fname" class="form-label">Your First Name</label>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
-            <div class="col-md-6 p-3 form-floating">
+           
+            <div class="col-md-6 form-floating mb-3">
                 <input asp-for="LastName" type="text" class="form-control" id="lname" placeholder="Your Last Name" disabled>
                 <label for="lname">Your Last Name</label>
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-6 p-3 form-floating">
+            <div class="form-group col-md-6 form-floating mb-3">
                 <input asp-for="DOB" type="date" class="form-control" id="name" placeholder="Name" disabled>
                 <label for="name">Date of Birth</label>
             </div>
-            <div class="form-group col-md-5 p-3 form-floating">
+            <div class="form-group col-md-5 form-floating mb-3">
                 <input asp-for="Mobile" type="tel" class="form-control shadow-none" id="phone" disabled>
                 <span asp-validation-for="Mobile" class="text-danger"></span>
             </div>
@@ -52,7 +53,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6 p-3 form-floating">
+            <div class="col-md-6 form-floating mb-3">
                 <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="Your Email" disabled>
                 <label for="Email">Your Email</label>
                 <span asp-validation-for="Email" class="text-danger"></span>
@@ -60,11 +61,11 @@
         </div>
         <h5><b>Patient Location</b></h5>
         <div class="row">
-            <div class="form-group col-md-6 p-3 form-floating">
+            <div class="form-group col-md-6 form-floating mb-3">
                 <input asp-for="Street" type="text" class="form-control" id="name" placeholder="Region" disabled>
                 <label for="name">Region</label>
             </div>
-            <div class="col-md-5 p-3 form-floating">
+            <div class="col-md-5 form-floating mb-3">
                 <input asp-for="City" type="text" class="form-control" id="naming" placeholder="Business Name/Address" disabled>
                 <label for="naming">Business Name/Adderess</label>
             </div>
@@ -75,7 +76,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-6 p-3 form-floating">
+            <div class="form-group col-md-6 form-floating mb-3">
                 <input asp-for="State" type="text" class="form-control" id="name" placeholder="Room #" disabled>
                 <label for="name">Room #</label>
             </div>

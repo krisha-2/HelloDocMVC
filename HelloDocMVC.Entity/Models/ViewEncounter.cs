@@ -8,7 +8,9 @@ namespace HelloDocMVC.Entity.Models
 {
     public class ViewEncounter
     {
-        public int RequestId { get; set; }
+        public int? RequestId { get; set; }
+        public int? AdminId { get; set; }
+        public int? PhysicianId { get; set; }
 
         public string FirstName { get; set; } = string.Empty;
 
@@ -39,6 +41,7 @@ namespace HelloDocMVC.Entity.Models
         public string? RR { get; set; }
 
         public string? Bp { get; set; }
+        public string? Bpd { get; set; }
 
         public string? O2 { get; set; }
 
@@ -69,6 +72,7 @@ namespace HelloDocMVC.Entity.Models
         public string? Procedures { get; set; }
 
         public string? Followup { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
 

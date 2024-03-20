@@ -27,36 +27,6 @@ namespace HelloDoc.Controllers
         {
             return View("../Login/Forgetpass");
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Validate(string Email, string PasswordHash)
-        //{
-        //    NpgsqlConnection connection = new NpgsqlConnection("Server=localhost;Database=HelloDoc;User Id=postgres;Password=Krisha@1357;Include Error Detail=True");
-        //    string Query = "SELECT * FROM  \"AspNetUsers\" where \"Email\"=@Email and \"PasswordHash\"=@PasswordHash";
-        //    connection.Open();
-        //    NpgsqlCommand command = new NpgsqlCommand(Query, connection);
-        //    command.Parameters.AddWithValue("@Email", Email);
-        //    command.Parameters.AddWithValue("@PasswordHash", PasswordHash);
-        //    NpgsqlDataReader reader = command.ExecuteReader();
-        //    DataTable dataTable = new DataTable();
-        //    dataTable.Load(reader);
-        //    int numRows = dataTable.Rows.Count;
-        //    if (numRows > 0)
-        //    {
-        //        foreach (DataRow row in dataTable.Rows)
-        //        {
-        //            HttpContext.Session.SetString("UserName", row["username"].ToString());
-        //            HttpContext.Session.SetString("UserID", row["Id"].ToString());
-        //        }
-        //        return RedirectToAction("Index", "Dashboard");
-        //    }
-        //    else
-        //    {
-        //        ViewData["error"] = "Invalid Id Pass";
-        //        return View("../Login/Index");
-        //    }
-        //}
         [HttpPost]
         public async Task<IActionResult> Index(string Email, string PasswordHash)
         {

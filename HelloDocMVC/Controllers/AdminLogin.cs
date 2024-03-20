@@ -45,7 +45,7 @@ namespace HelloDocMVC.Controllers
             }
         }
         #region end_session
-        public async Task<IActionResult> Logout()
+        public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
             return RedirectToAction("Index", "AdminLogin");

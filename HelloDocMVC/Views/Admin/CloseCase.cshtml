@@ -29,12 +29,11 @@
         <div class="d-flex align-self-center">
             <h4><strong>Close Case</strong></h4>
         </div>
-        <a asp-controller="Admin" asp-action="Index" class="btn border border-info bg-light rounded mt-3 mb-1">
-            <span class="text-info">
-                <i class="fa fa-angle-left align-middle"></i>
-                <b>&nbsp;&nbsp;Back</b>
-            </span>
-        </a>
+        <div>
+            <div class="border border-info rounded p-2 m-1">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+            </div>
+        </div>
     </div>
     <div class="bg-white rounded shadow mt-3">
         <div class="p-4">
@@ -92,8 +91,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <!--Mobile screen View-->
             <div class="d-block d-sm-none border-top my-2 t-tab">
                 @foreach (var item in Model.documentslist)
                 {
@@ -122,7 +119,6 @@
                     </div>
                 }
             </div>
-            @* data *@
             <div class="card-header  border-0 bg-transparent p-1 my-1">
                 <div class="text-start">
                     <h6 class="mt-2"><strong>Patient Information</strong></h6>
@@ -130,7 +126,6 @@
             </div>
             <form method="post" asp-controller="Admin" asp-action="EditForCloseCase" asp-route-RequestID="@Model.RequestID">
                 <input type="hidden" asp-for="RequestID" class="inputs" />
-                @*<div class="col-xl-12">*@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
@@ -154,7 +149,6 @@
                             <div class="mb-3 d-flex">
                                 <div class="form-floating h-100 w-100">
                                     <input asp-for="RC_PhoneNumber" type="tel" class="form-control shadow-none inputs" id="phone" autocomplete="off" placeholder="Phone Number">
-                                   @* <label for="phone">Phone Number</label>*@
                                 </div>
                                 <button class="btn border border-info text-info mx-2 " style="height:3.5rem;width:4rem">
                                     <i class="bi bi-telephone-fill"></i>
@@ -167,15 +161,10 @@
                                 <label for="Email">Email</label>
                             </div>
                         </div>
-
                     </div>
-                    @* Edit *@
                     <div class="d-flex justify-content-end">
                         <span id="edit" onclick="toggleFormElements('true')" class="btn btn-info text-white rounded me-2">Edit</span>
                         <input type="submit" value="Save" id="save" class="btn btn-info text-white rounded me-2">
-
-                    
-                @*</div>*@
             </form>
             <form asp-action="CloseCaseUnpaid" asp-controller="Admin" asp-route-id="@Model.RequestID">
                 <input type="hidden" name="RequestID" value="@Model.RequestID" class="inputs" />

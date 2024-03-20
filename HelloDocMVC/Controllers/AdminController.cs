@@ -46,11 +46,22 @@ namespace HelloDocMVC.Controllers
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
-        public IActionResult Encounter()
+        public IActionResult Encounter(int id)
         {
-            return View("../Admin/Encounter");
+            ViewEncounter ei = _IAdminDashboard.EncounterInfo(id);
+            return View(ei);
         }
+        [HttpPost]
+        public IActionResult EncounterPost(ViewEncounter _viewencounterinfo)
+        {
+            if (ModelState.IsValid)
+            {
+                _IAdminDashboard.EditEncounterinfo(_viewencounterinfo);
+                return RedirectToAction("Index", "Admin");
 
+            }
+            return View(_viewencounterinfo);
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(PaginatedViewModel data, String Status)
@@ -186,6 +197,18 @@ namespace HelloDocMVC.Controllers
         {
             _IAdminDashboard.UploadDoc(v, UploadFile);
             return ViewUpload(v.RequestId);
+        }
+        public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
+        {
+            if (await _IAdminDashboard.DeleteDocumentByRequest(deleteids))
+            {
+                _notyf.Success("All Selected File Deleted Successfully");
+            }
+            else
+            {
+                _notyf.Error("All Selected File Not Deleted");
+            }
+            return RedirectToAction("ViewUpload", "Home", new { id = Requestid });
         }
         public async Task<IActionResult> TransferProvider(int requestId, int ProviderId, string Notes)
         {
