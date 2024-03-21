@@ -21,8 +21,11 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public bool BlockCase(int RequestID, string Note);
         public Task<bool> AssignProvider(int RequestId, int ProviderId, string notes);
         public Task<bool> TransferProvider(int RequestId, int ProviderId, string notes);
-        public ViewDocument ViewUpload(int requestid);
-        public void UploadDoc(ViewDocument v, IFormFile? UploadFile);
+        //public ViewDocument ViewUpload(int requestid);
+        //public void UploadDoc(ViewDocument v, IFormFile? UploadFile, int RequestId);
+        //public Task<bool> DeleteDocumentByRequest(string ids);
+        public Task<ViewDocuments> GetDocumentByRequest(int? id);
+        public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<bool> DeleteDocumentByRequest(string ids);
         public bool ClearCase(int RequestID);
         //public bool Orders(Orders sm);
@@ -36,5 +39,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public bool CloseCase(int RequestID);
         public ViewEncounter EncounterInfo(int id);
         public void EditEncounterinfo(ViewEncounter ve);
+        List<AdminDashboardList> Export(string status);
     }
 }

@@ -18,7 +18,7 @@
             </div>
         </div>
     </div>
-    <form class="bg-white container mt-5 sbox" method="post" >
+    <form class="bg-white container mt-4 sbox p-4" method="post" >
         <input type="hidden" asp-for="UserId" />
         <h5><b>Patient Information</b></h5>
         <small>Confirmation Number</small>
@@ -46,7 +46,7 @@
                 <input asp-for="Mobile" type="tel" class="form-control shadow-none" id="phone" disabled>
                 <span asp-validation-for="Mobile" class="text-danger"></span>
             </div>
-            <div class="col-md-1 p-3 mt-3">
+            <div class="col-md-1 p-3">
                 <a class="border border-info rounded p-3 mt-1">
                     <i class="fa fa-phone p-1 fa-sm text-info"></i>
                 </a>
@@ -69,7 +69,7 @@
                 <input asp-for="City" type="text" class="form-control" id="naming" placeholder="Business Name/Address" disabled>
                 <label for="naming">Business Name/Adderess</label>
             </div>
-            <div class="col-md-1 p-3 mt-3">
+            <div class="col-md-1 p-3">
                 <a class="border border-info rounded p-3 mt-1">
                     <i class="fa fa-map-marker-alt p-1 fa-sm text-info"></i>
                 </a>

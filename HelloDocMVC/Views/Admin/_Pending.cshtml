@@ -99,7 +99,7 @@
                         <ul class="dropdown-menu">
 @*                            <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
 *@                            <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
-                            <li><a class="dropdown-item" asp-action="ViewUpload" asp-controller="Admin" asp-route-RequestId="@item.RequestId"><i class="bi bi-journals"></i> View Uploads</a></li>
+                            <li><a class="dropdown-item" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Uploads</a></li>
                             <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Notes</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#transfercase" data-bs-requestid="@item.RequestId" data-bs-patientname="@item.PatientName"><i class="bi bi-journal-text mx-1"></i>Transfer</a></li>
                             <li><a class="dropdown-item" onclick="model_Case(@index)" data-bs-toggle="modal" data-bs-target="#clearcase"><i class="bi bi-x-circle me-1"></i> Clear Case</a></li>
@@ -238,10 +238,10 @@
         var modeldata = @Html.Raw(Json.Serialize(Model.adl));
         document.getElementById('RequestID_Input_ModelTransferCase').value = modeldata[id].requestId;
         document.getElementById('RequestID_Input_ModelClearCase').value = modeldata[id].requestId;
-        document.getElementById('RequestID_sendAgreement').value = modeldata[id].requestId;
-        
-        document.getElementById("Phonenumber_sendAgreement").value = modeldata[id].phoneNumber;
+        document.getElementById("RequestID_sendAgreement").value = modeldata[id].requestId;
+        document.getElementById("Phonenumber_sendAgreement").value = modeldata[id].patientPhoneNumber;
         document.getElementById("Email_sendAgreement").value = modeldata[id].email;
+        document.getElementById("Patientname_sendAgreement").value = modeldata[id].patientName;
     }
 </script>
 <!--End Mobile Screen View of table-->

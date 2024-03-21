@@ -1,6 +1,21 @@
 ﻿﻿@{
     Layout = "_LayoutAdminLogin";
 }
+@model HelloDocMVC.Entity.Models.Patient
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/patient.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/css/patient.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</head>
+
 <div class="align-self-center w-sm-50">
     @* <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
     <strong class="text-info">
@@ -11,7 +26,7 @@
     <strong class="text-danger">@ViewData["error"]</strong>
     <form asp-action="Validate" asp-controller="AdminLogin" method="post">
         <div class="form-floating mb-4 email">
-            <input type="email" class="form-control shadow-none" name="Email" id="floatingInput" placeholder="name@example.com">
+            <input asp-for="Email" type="email" mailto:value="admin@gmail.com" class="form-control shadow-none" id="floatingInput" mailto:placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
             @* <button type="button" class="btn btn-light">
             <i class="icon fa-solid fa-user field-icon position-relative"></i>
@@ -19,7 +34,7 @@
             <span class="text-danger"></span>
         </div>
         <div class="form-floating mb-4 password">
-            <input type="password" class="form-control shadow-none eyehide" name="Passwordhash" id="floatingPassword" placeholder="Password">
+            <input asp-for="PasswordHash" type="password"  class="form-control shadow-none eyehide" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
             @* <button type="button" class="btn btn-light" onclick="passtoggle()">
             <i class="showImg fa fa-eye-slash"></i>
@@ -29,5 +44,5 @@
         </div>
         <button type="submit" class="btn btn-info text-white w-100 mb-4" role="button">Login</button>
     </form>
-    <a asp-controller="Home" asp-action="ResetPassword" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
+    <a asp-controller="Home" asp-action="ForgotPass" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
 </div>

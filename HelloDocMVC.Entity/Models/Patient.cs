@@ -7,15 +7,16 @@ namespace HelloDocMVC.Entity.Models
         public int Id { get; set; }
         public string UserName { get; set; }
         public string PassWord { get; set; }
+        //[Compare("PassWord", ErrorMessage = "Password doesn't match.")]
         public string PasswordHash { get; set; }
         [Required(ErrorMessage = "FirstName is required")]
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         public string? LastName { get; set; }
-        public string RFirstName { get; set; }
+        public string? RFirstName { get; set; }
         public string? RLastName { get; set; }
-        public string RcFirstName { get; set; }
+        public string? RcFirstName { get; set; }
         public string? RcLastName { get; set; }
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
         [Required(ErrorMessage = "PhoneNumber is required")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Mobile Number must be of 10 digits!")]
         [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Mobile Number must contain digits!")]

@@ -11,6 +11,7 @@ using HelloDocMVC.Models;
 using Microsoft.EntityFrameworkCore;
 using static HelloDocMVC.Entity.Models.Constant;
 using HelloDocMVC.Repository.Repository;
+using OfficeOpenXml;
 
 namespace HelloDocMVC.Controllers
 {
@@ -35,7 +36,7 @@ namespace HelloDocMVC.Controllers
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.Profession = _comboBox.Profession();
-            ViewBag.RegionComboBox =  _comboBox.RegionComboBox();
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
             PaginatedViewModel sm = _IAdminDashboard.IndexData();
             return View(sm);
@@ -187,17 +188,56 @@ namespace HelloDocMVC.Controllers
             return RedirectToAction("Index", "Admin", new { Status = "2" });
         }
         #endregion
-        public IActionResult ViewUpload(int RequestId)
+        //public IActionResult ViewUpload(int RequestId)
+        //{
+        //    var result = _IAdminDashboard.ViewUpload(RequestId);
+        //    return View(result);
+        //}
+        //[HttpPost]
+        //public IActionResult ViewUpload(ViewDocument v, IFormFile? UploadFile, int RequestId)
+        //{
+        //    _IAdminDashboard.UploadDoc(v, UploadFile, RequestId);
+        //    return ViewUpload(v.RequestId);
+        //}
+        #region View_Upload
+        public async Task<IActionResult> ViewUploads(int? id)
         {
-            var result = _IAdminDashboard.ViewUpload(RequestId);
-            return View(result);
+            ViewDocuments v = await _IAdminDashboard.GetDocumentByRequest(id);
+            return View("../Admin/ViewUploads", v);
         }
-        [HttpPost]
-        public IActionResult ViewUpload(ViewDocument v, IFormFile? UploadFile)
+        #endregion
+
+        #region UploadDoc_Files
+        public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
-            _IAdminDashboard.UploadDoc(v, UploadFile);
-            return ViewUpload(v.RequestId);
+            if (_IAdminDashboard.SaveDoc(Requestid, file))
+            {
+                _notyf.Success("File Uploaded Successfully");
+            }
+            else
+            {
+                _notyf.Error("File Not Uploaded");
+            }
+            return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
+        #endregion
+
+        #region DeleteOnesFile
+        public async Task<IActionResult> DeleteFile(int? id, int Requestid)
+        {
+            if (await _IAdminDashboard.DeleteDocumentByRequest(id.ToString()))
+            {
+                _notyf.Success("File Deleted Successfully");
+            }
+            else
+            {
+                _notyf.Error("File Not Deleted");
+            }
+            return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
+        }
+        #endregion
+
+        #region AllFilesDelete
         public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
         {
             if (await _IAdminDashboard.DeleteDocumentByRequest(deleteids))
@@ -208,8 +248,21 @@ namespace HelloDocMVC.Controllers
             {
                 _notyf.Error("All Selected File Not Deleted");
             }
-            return RedirectToAction("ViewUpload", "Home", new { id = Requestid });
+            return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
+        #endregion
+        //public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
+        //{
+        //    if (await _IAdminDashboard.DeleteDocumentByRequest(deleteids))
+        //    {
+        //        _notyf.Success("All Selected File Deleted Successfully");
+        //    }
+        //    else
+        //    {
+        //        _notyf.Error("All Selected File Not Deleted");
+        //    }
+        //    return RedirectToAction("ViewUpload", "Admin", new { id = Requestid });
+        //}
         public async Task<IActionResult> TransferProvider(int requestId, int ProviderId, string Notes)
         {
             if (await _IAdminDashboard.TransferProvider(requestId, ProviderId, Notes))
@@ -329,6 +382,48 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("CloseCase", new { sm.RequestID });
             }
 
+        }
+        public IActionResult Export(string status)
+        {
+            var requestData = _IAdminDashboard.Export(status);
+
+            ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+            using (ExcelPackage package = new ExcelPackage())
+            {
+                ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("RequestData");
+
+                worksheet.Cells[1, 1].Value = "Name";
+                worksheet.Cells[1, 2].Value = "Requestor";
+                worksheet.Cells[1, 3].Value = "Request Date";
+                worksheet.Cells[1, 4].Value = "Phone";
+                worksheet.Cells[1, 5].Value = "Address";
+                worksheet.Cells[1, 6].Value = "Notes";
+                worksheet.Cells[1, 7].Value = "Physician";
+                worksheet.Cells[1, 8].Value = "Birth Date";
+                worksheet.Cells[1, 9].Value = "RequestTypeId";
+                worksheet.Cells[1, 10].Value = "Email";
+                worksheet.Cells[1, 11].Value = "RequestId";
+
+                for (int i = 0; i < requestData.Count; i++)
+                {
+                    worksheet.Cells[i + 2, 1].Value = requestData[i].PatientName;
+                    worksheet.Cells[i + 2, 2].Value = requestData[i].Requestor;
+                    worksheet.Cells[i + 2, 3].Value = requestData[i].RequestedDate;
+                    worksheet.Cells[i + 2, 4].Value = requestData[i].PatientPhoneNumber;
+                    worksheet.Cells[i + 2, 5].Value = requestData[i].Address;
+                    worksheet.Cells[i + 2, 6].Value = requestData[i].Notes;
+                    worksheet.Cells[i + 2, 7].Value = requestData[i].ProviderName;
+                    worksheet.Cells[i + 2, 8].Value = requestData[i].DateOfBirth;
+                    worksheet.Cells[i + 2, 9].Value = requestData[i].RequestTypeId;
+                    worksheet.Cells[i + 2, 10].Value = requestData[i].Email;
+                    worksheet.Cells[i + 2, 11].Value = requestData[i].RequestId;
+                }
+
+                byte[] excelBytes = package.GetAsByteArray();
+
+                return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
         }
     }
 }

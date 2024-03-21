@@ -1,0 +1,41 @@
+﻿@{
+    ViewData["Title"] = "View";
+}
+@model HelloDocMVC.Entity.Models.Patient;
+<body class="backimg">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center heading">
+                <img src="~/images/Fig56._Patient_site_1-removebg-preview.png" alt="Patient">
+                <div class="Moon">
+                    <i class="fa fa-light fa-moon-o fa-2x text-info"></i>
+                </div>
+            </div>
+        </div>
+        <div class="patient text-center d-flex flex-column align-item-center justify-content-center">
+            <h3 class="my-4">Reset Your Password</h3>
+            <div class="text-center d-flex flex-column align-item-center justify-content-center">
+                <form class="d-flex align-items-center justify-content-center flex-column formBody" method="post" asp-action="SavePassword" asp-controller="Login">
+                    <input type="hidden" asp-for="Email" />
+                    <div class="col-md-6 col-lg-4 col-xl-3 form-floating mb-3 d-flex justify-content-center align-item-center" required>
+                        <input type="password" class="form-control" id="inputpass" placeholder="Password" asp-for="PassWord">
+                        <label for="inputpass">
+                            Password
+                        </label>
+                        <span asp-validation-for="PassWord" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-xl-3 form-floating mb-3 d-flex justify-content-center align-item-center" required>
+                        <input type="password" class="form-control" id="inputpass1" placeholder="Confirm Password" asp-for="PasswordHash">
+                        <label for="inputpass1">
+                            Confirm Password
+                        </label>
+                        <span asp-validation-for="PasswordHash" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6 col-lg-4 col-xl-3 d-flex justify-content-center align-items-center mb-3">
+                        <input type="submit" class="btn btn-info btn-block mb-4 form-control text-light" value="Reset Password">
+                    </div>
+                </form>
+            </div>
+        </div>
+</body>
+

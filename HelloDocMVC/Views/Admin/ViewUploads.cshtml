@@ -1,13 +1,25 @@
-﻿@{
+﻿﻿@* @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments *@
+@model HelloDocMVC.Entity.Models.ViewDocuments
+@{
     Layout = "_LayoutAdminDashboard";
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+    }
 }
-@using HelloDocMVC.Entity.Models
-@model ViewDocument;
-<div class="container mb-3">
+<div class="container">
     <div class="card bg-transparent border-0 p-2" style="border-radius: 15px;">
-        <div class="card-header d-flex justify-content-between  border-0  bg-transparent p-1  mt-3 mb-2">
-            <div class="text-start">
-                <h3 class="mt-2"><b> Document</b></h3>
+        <div class="col-xl-12 d-flex justify-content-between">
+            <div class="card-header  border-0 bg-transparent p-1 my-1">
+                <div class="text-start">
+
+                    <h4 class="mt-2 font-weight-bold"><strong>Documents</strong></h4>
+                </div>
             </div>
             <div>
                 <div class="border border-info rounded p-2 m-1">
@@ -15,214 +27,139 @@
                 </div>
             </div>
         </div>
-        <div class="card-body m-1 shadow" style="border-radius: 15px;">
-            <div class="doc-text-card">Patient name</div>
-            <span class="d-flex align-items-center">
-                <h5 class="text-info"><b>@Model.FirstName @Model.LastName </b></h5>
+        <div class="card-body bg-white m-1 shadow" style="border-radius: 15px;">
+            <p class="doc-text-card text-secondary">Patient name</p>
+            <div class="d-flex align-items-center">
+                <h5 class="text-info"><b>@Model.Firstname @Model.Lastname </b></h5>
                 <h6 class="doc-text-card mx-2 text-secondary">@Model.ConfirmationNumber</h6>
-            </span>
-            <div class="doc-text-card mt-2">
+            </div>
+            <div class="doc-text-card mt-2 text-secondary">
                 check here for any files that you or the
                 doctor of yours subsequents requestors have attached for yo to
                 review
             </div>
             <div class="col-md-12 mt-3">
-                <form method="post" asp-action="ViewUpload" asp-controller="Admin" asp-route-RequestId="@Model.RequestId" enctype="multipart/form-data">
-                        <div class="d-flex">
-                            <input class="form-control doc_uploder" id="formFileSm" name="UploadFile" type="file">
-                            @*<input type="hidden" name="RequestId" value="@item.RequestId" />*@
-                        <input type="submit" class="btn btn-info btn-submit" value="Upload" >
+                <form method="post" id="myForm" asp-action="UploadDoc" asp-controller="Admin" asp-route-id="@Model.RequestID" enctype="multipart/form-data">
+                    <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                        <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('file').click()">
+                            Select File
+                        </button>
+                        <input id="file" type="file" class="d-none form-control doc_uploder" name="file">
+                        <input type="hidden" name="Requestid" value="@Model.RequestID" />
+                        <div class="btn btn-info text-white py-2" value="Upload" id="fileupload">
+                            <i class="fa fa-cloud-upload"></i>
+                            <span class="d-none d-sm-inline">Upload</span>
                         </div>
-                    </form>
-                <div class="card-header-2 mt-3 d-flex justify-content-between  border-0  bg-transparent ">
+                    </div>
+                </form>
+                <div class="card-header-2 mt-3 d-flex justify-content-between border-0 bg-transparent ">
                     <div class="mt-2">
                         <h6> Document</h6>
                     </div>
-                    @*<div class="text-end">
-                        <a class="btn btn-outline-info btn-back text-end" onclick="Downlode_all()">Download all</a>
-                    </div>
-                    <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="Home" class="mt-0">
-                        <input type="hidden" id="deleteids" name="deleteids" />
-                        <input type="hidden" value="@Model.RequestId" name="Requestid" />
-                        <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
-                            <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
-                        </div>
-                    </form>
-                    <form method="post" id="sendmails">
-                        <input type="hidden" value="@Model.RequestId" name="Requestid" />
-                        <input type="hidden" id="mailids" name="mailids" />
-                        <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
-                            <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
-                        </div>
-                    </form>*@
                     <div class="text-end d-flex ">
-                        <div class="text-end">
-                            <a class="btn btn-outline-info btn-back text-end" onclick="Downlode_all()">Download all</a>
+                        <div id="downloadAll" class="btn btn-outline-info btn-back text-end d-flex mx-1">
+                            <i class="fa-solid fa-download me-1"></i><span class="d-none d-sm-block">Downlode all</span>
                         </div>
-                        <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="Admin" asp-route-Requestid="@Model.RequestId" class="mt-0">
+                        <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="Admin">
                             <input type="hidden" id="deleteids" name="deleteids" />
-                            <input type="hidden" value="@Model.RequestId" name="Requestid" />
+                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
                             <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
                                 <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
                             </div>
                         </form>
-                        @*<form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="Home">*@
-                        <input type="hidden" value="@Model.RequestId" name="Requestid" />
-                        <input type="hidden" id="mailids" name="mailids" />
-                        <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
-                            <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
-                        </div>
+                        @*<form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">*@
+                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
+                            <input type="hidden" id="mailids" name="mailids" />
+                            <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
+                                <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
+                            </div>
                         @*</form>*@
                     </div>
                 </div>
-                <div class="table-responsive mt-3 mb-0">
-                    <table class="table mb-0">
+                @* dashboard view *@
+                <div class="table-responsive mt-3 d-none d-sm-block">
+                    <table class="table">
                         <thead class="border-0">
                             <tr class="table-secondary">
                                 <th scope="col" class="table-text-header px-3">
                                     <div class="form-check">
-                                        <input class="form-check-input " type="checkbox" id="selectall" onchange="select_Desectall()">
+                                        <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
                                     </div>
                                 </th>
-                                <th scope="col" class="table-text-header px-3">Document Name</th>
-                                @*<th scope="col" class="table-text-header  px-3">Uploader</th>*@
-                                <th scope="col" class="table-text-header">Upload date</th>
-                                <th scope="col" class="table-text-header">Action</th>
+                                <th scope="col" class="table-text-header px-3">File Name</th>
+                                <th scope="col" class="table-text-header px-3">Uploder</th>
+                                <th scope="col" class="table-text-header ">uplode date</th>
+                                <th scope="col" class="table-text-header ">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item2 in Model.Files)
+                            @foreach (var item2 in Model.documentslist)
                             {
                                 <tr>
-                                    @*<td class="table-text px-3">
-                                        <div class="form-check">
-                                            <input class="form-check-input doc-checkbox" type="checkbox" value="" onclick="statusselectall()">
-                                        </div>
-                                    </td>*@
                                     <td class="table-text px-3">
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                                            <input class="form-check-input RequestwisefilesId" type="hidden" value="@item2.RequestWiseFileId">
+                                            <input class="form-check-input RequestwisefilesId" type="hidden" value="@item2.RequestwisefilesId">
                                         </div>
                                     </td>
-                                    <td class="table-text px-3">@item2.FileName</td>
-                                    @*<td class="table-text px-3">@item2.RFirstName</td>*@
-                                    <td class="table-text px-3">@item2.CreatedDate</td>
-                                    <td class="table-text ">
-                                        <a class="btn btn-sm btn-outline-info document-button" download href="@item2.FileName.Replace("~","")">
+                                    <td class="table-text  px-3 filename"> <span> @item2.Filename </span></td>
+                                    <td class="table-text  px-3">@item2.Uploader </td>
+                                    <td class="table-text  px-3">@item2.Createddate</td>
+                                    <td class="table-text text-center ">
+                                        <a class="btn btn-sm btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
                                             <i class="fa fa-cloud-download"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-outline-info " asp-action="DeleteFile" asp-controller="Admin" asp-route-id="@item2.RequestWiseFileId" asp-route-Requestid="@Model.RequestId">
+                                        <a class="btn btn-sm btn-outline-info " asp-action="DeleteFile" asp-controller="Admin" asp-route-id="@item2.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
                                             <i class="fa fa-trash" aria-hidden="true">  </i>
                                         </a>
+
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
                 </div>
+
+                <!--Mobile screen View-->
+                <div class="d-block d-sm-none border-top my-2 t-tab">
+                    @foreach (var item in Model.documentslist)
+                    {
+                        <div class="border-bottom">
+                            <div class="d-inline-flex my-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                    <input class="form-check-input RequestwisefilesId" type="hidden" value="@item.RequestwisefilesId">
+                                </div>
+                                <div>
+                                    <small>@item.Filename</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <label class="text-break"><small>@item.Uploader</small></label>
+                                <label><small>@item.Createddate</small></label>
+                            </div>
+                            <div class="mb-3">
+                                <a class="btn btn-sm download-link btn-outline-info document-button" download href="@item.Filename.Replace("~","")">
+                                    <i class="fa fa-cloud-download"></i>
+                                </a>
+                                <a class="btn btn-sm download-link btn-outline-info" asp-action="DeleteFile" asp-controller="Admin" asp-route-id="@item.RequestwisefilesId" asp-route-Requestid="@Model.RequestID">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!--End Mobile screen View-->
             </div>
         </div>
+
     </div>
 </div>
-<script>
-    function statusselectall() {
-        var selectAllCheckbox = document.getElementById('selectall');
-        var allCheckboxes = document.getElementsByClassName('doc-checkbox');
-        var temp = false;
-        var i = 0;
-        for (i = 0; i < allCheckboxes.length; i++) {
-            if (!allCheckboxes[i].checked) {
-                temp = true;
-                selectAllCheckbox.checked = false;
-                break;
-            }
-        }
-        if (i == allCheckboxes.length) {
-            selectAllCheckbox.checked = true;
-        }
-    }
-    function select_Desectall() {
-        var selectAllCheckbox = document.getElementById('selectall');
-        var allCheckboxes = document.getElementsByClassName('doc-checkbox');
-        for (var i = 0; i < allCheckboxes.length; i++) {
-            allCheckboxes[i].checked = selectAllCheckbox.checked;
-        }
-    }
-    function Downlode_all() {
-        var allcheckbox = document.getElementsByClassName('doc-checkbox');
-        var alllinks = document.getElementsByClassName('download-link');
-        console.log(alllinks.length);
-        console.log(allcheckbox.length);
-        for (var i = 0; i < allcheckbox.length; i++) {
-            if (allcheckbox[i].checked) {
-                console.log(alllinks[i]);
-                alllinks[i].click();
-            }
-        }
-    }
-</script>
-@*<script>
-    $('#delete').click(function () {
-        anyCheckboxSelected = false;
-        $('tbody tr').each(function () {
-            if ($(this).find('.form-check-input').prop('checked')) {
-                anyCheckboxSelected = true;
-                var downloadLink = $(this).find('.RequestwisefilesId').val();
-                var deleteids = $('#deleteids').val();
-                console.log(deleteids);
-                if (deleteids == '') {
-                    $('#deleteids').val(downloadLink);
-                } else {
-                    $('#deleteids').val(deleteids + ',' + downloadLink);
-                }
-                console.log($('#deleteids').val());
-            }
-        });
-        $('.t-tab > .border-bottom').each(function () {
-            if ($(this).find('.form-check-input').prop('checked')) {
-                anyCheckboxSelected = true;
-                var downloadLink = $(this).find('.RequestwisefilesId').val();
-                var deleteids = $('#deleteids').val();
-                console.log(deleteids);
-                if (deleteids == '') {
-                    $('#deleteids').val(downloadLink);
-                } else {
-                    $('#deleteids').val(deleteids + ',' + downloadLink);
-                }
-                console.log($('#deleteids').val());
-            }
-        });
-        if (anyCheckboxSelected) {
-            Swal.fire({
-                text: "Do you want to Delete That file ?",
-                showDenyButton: false,
-                showCancelButton: true,
-                confirmButtonText: "Yes",
-                denyButtonText: "Cancel"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $('#deleted').submit();
-                }
-            });
-        }
-        else {
-            swal.fire({
-                title: "Oops..",
-                text: "Oops! Please Select One File ",
-                icon: "error",
-                showCancelButton: true,
-                showConfirmButton: false,
-                cancelButtonText: "Okay",
-                cancelButtonColor: "#01BBE7",
-            })
-        }
-    });
-</script>*@
+
+    
 @section Scripts
     {
     <script type="text/javascript">
-
         $("#file").change(function () {
             filename = this.files[0].name;
             console.log(filename);
@@ -230,21 +167,6 @@
         });
 
         $(function () {
-
-            $('.filename').each(function () {
-                var fileName = $(this).text().trim();
-                if (fileName.endsWith('.pdf')) {
-                    $(this).prepend('<i class="fa-solid fa-file-pdf" style="color: #be2323;font-size:1rem"></i> ');
-                } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
-                    $(this).prepend('<i class="fa-solid fa-file-doc" style="color: #74C0FC;font-size:1rem"></i> ');
-                } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.svg')) {
-                    $(this).prepend('<i class="fa-solid fa-images" style="color: #B197FC;font-size:1rem"></i> ');
-                } else {
-                    $(this).prepend(' <i class="fa-solid fa-file" > </i>');
-                }
-
-            });
-
             $('#downloadAll').click(function () {
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
@@ -271,7 +193,6 @@
                     }
                 });
             });
-
             $('#sendmail').click(function () {
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
@@ -279,7 +200,6 @@
                         var deleteids = $('#mailids').val();
                         console.log(deleteids);
                         if (deleteids == '') {
-
                             $('#mailids').val(downloadLink);
                         } else {
                             $('#mailids').val(deleteids + ',' + downloadLink);
@@ -289,7 +209,6 @@
 
                     }
                 });
-
                 Swal.fire({
                     title: "Do you want to Send Mail That file ?",
                     showDenyButton: false,
@@ -301,7 +220,7 @@
                         $('#').submit();
                     }
                     console.log(result);
-                    /* Read more about isConfirmed, isDenied below */
+                    / Read more about isConfirmed, isDenied below /
                     if (result.isConfirmed) {
                         Swal.fire("Sending Mail!", "", "success");
                     } else if (result.isDenied) {
@@ -309,7 +228,6 @@
                     }
                 });
             });
-
             $('#delete').click(function () {
                 anyCheckboxSelected = false;
                 $('tbody tr').each(function () {
@@ -365,22 +283,18 @@
                     })
                 }
             });
-
             $("form").on("change", ".file-upload-field", function () {
                 $(this).parent(".file-upload-wrapper1").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
             });
-
             $('#topflexCheckDefault').change(function () {
                 $('.table tbody input[type="checkbox"]').prop('checked', $(this).is(':checked'));
             });
-
             // Uncheck main checkbox in header when any checkbox in table body is unchecked
             $('.table tbody input[type="checkbox"]').change(function () {
                 if (!$(this).is(':checked')) {
                     $('#topflexCheckDefault').prop('checked', false);
                 }
             });
-
             $("#fileupload").click(function (e) {
                 e.preventDefault();
                 if ($('#file')[0].files[0] == undefined) {
@@ -401,3 +315,4 @@
         });
     </script>
 }
+

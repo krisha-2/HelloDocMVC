@@ -8,15 +8,18 @@
                 <h5 class="modal-title fs-5" id="exampleModalLabel">Confirm Cancellation</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form asp-action="CancelCase" asp-controller="Admin"> 
+            <form asp-action="CancelCase" asp-controller="Admin" class="needs-validation" novalidate> 
                 <input type="hidden" id="RequestID_Input_ModelCancelCase" name="RequestId" />
                 <div class="modal-body">
                     <h3 class="modal-title fs-5" id="exampleModelLabel">Patient Name:<span class="text-info" id="PatientName_ModelCancelCase"> </span></h3>
                     <div class="col mb-3">
                     <div class="form-floating">
-                        <select class="form-select input-outline input-outline-select w-100" required name="CaseTag" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason">
+                        <select class="form-select input-outline input-outline-select w-100" required name="CaseTag" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason" required>
                             <option>Cancel Reason</option>
                         </select>
+                            <span class="invalid-feedback">
+                                Please select a valid state.
+                            </span>
                         <label for="region2">Reason For Cancellation</label>
                     </div>
                 </div>

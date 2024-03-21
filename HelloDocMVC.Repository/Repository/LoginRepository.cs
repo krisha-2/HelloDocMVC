@@ -1,4 +1,5 @@
-﻿using HelloDocMVC.Entity.DataContext;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
@@ -20,29 +21,33 @@ namespace HelloDocMVC.Repository.Repository
         #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly HelloDocDbContext _context;
-        public LoginRepository(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly INotyfService _notyf;
+        private readonly EmailConfiguration _emailConfig;
+        public LoginRepository(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, INotyfService notyf, EmailConfiguration emailConfig)
         {
             this.httpContextAccessor = httpContextAccessor;
             _context = context;
+            _notyf = notyf;
+            _emailConfig = emailConfig;
         }
         #endregion
 
         #region Constructor
         public async Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser)
         {
-            var user = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email);
+            var user = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email && u.PasswordHash == aspNetUser.PasswordHash);
             UserInfo admin = new UserInfo();
             if (user != null)
             {
                 var hasher = new PasswordHasher<string>();
-                PasswordVerificationResult result = hasher.VerifyHashedPassword(null, user.PasswordHash, aspNetUser.PasswordHash);
+                //PasswordVerificationResult result = hasher.VerifyHashedPassword(null, user.PasswordHash, aspNetUser.PasswordHash);
 
-                if (result != PasswordVerificationResult.Success)
-                {
-                    return null;
-                }
-                else
-                {
+                //if (result != PasswordVerificationResult.Success)
+                //{
+                //    return null;
+                //}
+                //else
+                //{
                     var data = _context.AspNetUserRoles.FirstOrDefault(E => E.UserId == user.Id);
                     var datarole = _context.AspNetRoles.FirstOrDefault(e => e.Id == data.RoleId);
                     admin.Username = user.UserName;
@@ -65,7 +70,7 @@ namespace HelloDocMVC.Repository.Repository
                         admin.UserId = admindata.PhysicianId;
                     }
                     return admin;
-                }
+                //}
             }
             else
             {
@@ -73,6 +78,12 @@ namespace HelloDocMVC.Repository.Repository
             }
         }
         #endregion
+        public bool SendResetLink(String Email)
+        {
+            var agreementUrl = "https://localhost:44338/Login/Resetpass?Email=" + Email;
+            _emailConfig.SendMail(Email, "Reset your password", $"To reset your password <a href='{agreementUrl}'>Click here..</a>");
+            return true;
+        }
     }
 
 }

@@ -7,17 +7,25 @@ using System.Net.Mail;
 using System.Net;
 using System.Text.RegularExpressions;
 using HelloDocMVC.Entity.DataContext;
+using AspNetCoreHero.ToastNotification.Abstractions;
+using HelloDocMVC.Repository.Repository.Interface;
+using HelloDocMVC.Repository.Repository;
+using HelloDocMVC.Entity.Models;
 
 namespace HelloDoc.Controllers
 {
     public class LoginController : Controller
     {
+        private readonly ILoginRepository _ILoginRepository;
         private readonly HelloDocDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public LoginController(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor)
+        private readonly INotyfService _notyf;
+        public LoginController(ILoginRepository loginRepository,HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, INotyfService notyf)
         {
+            _ILoginRepository = loginRepository;
             _context = context;
             _httpContextAccessor = httpContextAccessor;
+            _notyf = notyf;
         }
         public IActionResult Index()
         {
@@ -48,128 +56,57 @@ namespace HelloDoc.Controllers
                 return RedirectToAction("Index", "PatientDashboard");
             }
         }
-            public IActionResult Logout()
+        public IActionResult ForgotPass()
         {
+            return View();
+        }
+        public IActionResult ResetEmail(string Email)
+        {
+            if (_ILoginRepository.SendResetLink(Email))
+            {
+                _notyf.Success("Mail Send  Successfully..!");
+            }
+            return RedirectToAction("Forgetpass", "Login");
+
+        }
+        [HttpGet]
+        public IActionResult ResetPass(string email, string datetime)
+        {
+            TempData["email"] = email;
+            //TimeSpan time = DateTime.Now - DateTime.Parse(datetime);
+            //if (time.TotalHours > 24)
+            //{
+            //    return View("LinkExpired");
+            //}
+            //else
+            //{
+                return View();
+            //}
+        }
+        [HttpPost]
+        public IActionResult SavePassword(Patient viewPatientReq)
+        {
+            var aspnetuser = _context.AspNetUsers.FirstOrDefault(m => m.Email == viewPatientReq.Email);
+            if (aspnetuser != null)
+            {
+                aspnetuser.PasswordHash = viewPatientReq.PassWord;
+                _context.AspNetUsers.Update(aspnetuser);
+                _context.SaveChangesAsync();
+
+                TempData["emailmessage"] = "Your password is changed!!";
+                return RedirectToAction("Index", "Login");
+            }
+            else
+            {
+                TempData["emailmessage"] = "Email is not registered!!";
+                return View("ResetPass");
+            }
+        }
+        public IActionResult Logout()
+            {
             HttpContext.Session.Clear();
             return RedirectToAction("Index");
-        }
-        //[HttpGet]
-        //public IActionResult Resetpass(string email, string datetime)
-        //{
-        //    //Encyptdecypt en = new Encyptdecypt();
-        //    TempData["email"] = email;
-        //    TimeSpan time = DateTime.Now - DateTime.Parse(datetime);
-        //    if (time.TotalHours > 24)
-        //    {
-        //        return View("LinkExpired");
-        //    }
-        //    else
-        //    {
-        //        return View();
-        //    }
-        //}
-        //[HttpPost]
-        //public IActionResult SavePassword(string email, string Password)
-        //{
-        //    //var hasher = new PasswordHasher<string>();
-        //    //string hashedPassword = hasher.HashPassword(null, Password);
-        //    var aspnetuser = _context.AspNetUsers.FirstOrDefault(m => m.Email == email);
-        //    if (aspnetuser != null)
-        //    {
-        //        aspnetuser.PasswordHash = Password;
-        //        _context.AspNetUsers.Update(aspnetuser);
-        //        _context.SaveChangesAsync();
-        //        TempData["emailmessage"] = "Your password is changed!!";
-        //        return RedirectToAction("Index", "Login");
-        //    }
-        //    else
-        //    {
-        //        TempData["emailmessage"] = "Email is not registered!!";
-        //        return View("Resetpass");
-        //    }
-        //}
-        //public async Task<IActionResult> resetEmail(string Email)
-        //{
-        //    if (await CheckregisterdAsync(Email))
-        //    {
-        //        var aspnetuser = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Email == Email);
-        //        aspnetuser.PasswordHash = generatepass();
-        //        aspnetuser.ModifiedDate = DateTime.Now;
-        //        try
-        //        {
-        //            _context.Update(aspnetuser);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!AspnetuserExists(aspnetuser.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
-        //        string email = Email;
-        //        DateTime dateTime = DateTime.Now;
-        //        string datetime = dateTime.ToString();
-        //        string resetLink = $"https://localhost:44398/Login/Resetpass?email={email}&datetime={datetime}";
-        //        //send mail
-        //        MailMessage MM = new();
-        //        MM.From = new MailAddress(_emailConfig.From);
-        //        MM.Subject = "Change PassWord";
-        //        MM.To.Add(new MailAddress(Email));
-        //        MM.Body = $@"
-        //        <html>
-        //        <body>
-        //            <p>We received a request to reset your password.</p>
-        //            <p>To reset your password, click the following link:</p>
-        //            <p><a href=""{resetLink}"">Reset Password</a></p>
-        //            <p>If you didn't request a password reset, you can ignore this email.</p>
-        //        </body>
-        //        </html>";
-        //        MM.IsBodyHtml = true;
-        //        using (var smtpClient = new SmtpClient(_emailConfig.SmtpServer))
-        //        {
-        //            smtpClient.Port = _emailConfig.Port;
-        //            smtpClient.Credentials = new NetworkCredential(_emailConfig.UserName, _emailConfig.Password);
-        //            smtpClient.EnableSsl = true;
-        //            smtpClient.Send(MM);
-        //        }
-        //        ViewData["EmailCheck"] = "Your ID Pass Send In Your Mail";
-        //    }
-        //    else
-        //    {
-        //        ViewData["EmailCheck"] = "Your Email Is not registered";
-        //        return View("Resetpass");
-        //    }
-        //    return RedirectToAction("Index", "Login");
-        //}
-        //private bool AspnetuserExists(string id)
-        //{
-        //    return (_context.AspNetUsers?.Any(e => e.Id == id)).GetValueOrDefault();
-        //}
-        //public async Task<bool> CheckregisterdAsync(string email)
-        //{
-        //    string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
-        //    if (!string.IsNullOrEmpty(email) && Regex.IsMatch(email, pattern))
-        //    {
-        //        var U = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Email == email);
-        //        if (U != null)
-        //        {
-        //            return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-        //private static Random random = new Random();
-        //public static string generatepass()
-        //{
-        //    const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        //    return new string(Enumerable.Repeat(chars, 8)
-        //        .Select(s => s[random.Next(s.Length)]).ToArray());
-        //}
+            }
+
     }
 }

@@ -11,5 +11,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
     public interface ILoginRepository
     {
         Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser);
+        public bool SendResetLink(String Email);
     }
 }
