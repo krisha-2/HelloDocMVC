@@ -1,25 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HelloDocMVC.Entity.Models;
+﻿using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using System.Net.NetworkInformation;
-using System.Net;
-using static HelloDocMVC.Entity.Models.Constant;
-using System.Reflection;
 using Microsoft.AspNetCore.Http;
 using System.Collections;
-using Microsoft.AspNetCore.Components.Forms;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.IO;
 using static HelloDocMVC.Entity.Models.ViewDocuments;
+using Org.BouncyCastle.Ocsp;
+using System.Linq.Expressions;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -45,7 +33,6 @@ namespace HelloDocMVC.Repository.Repository
                            RequestId = req.Request.RequestId,
                            PatientName = req.Requestclient.RcFirstName + " " + req.Requestclient.RcLastName,
                            Email = req.Requestclient.Email,
-                           //DateOfBirth = new DateTime((int)req.Requestclient.IntYear, Convert.ToInt32(req.Requestclient.StrMonth.Trim()), (int)req.Requestclient.IntDate),
                            RequestTypeId = req.Request.RequestTypeId,
                            Requestor = req.Request.RFirstName + " " + req.Request.RLastName,
                            RequestedDate = req.Request.CreatedDate,
@@ -120,17 +107,13 @@ namespace HelloDocMVC.Repository.Repository
                                                          p.FirstName.Contains(data.SearchInput) || p.LastName.Contains(data.SearchInput) ||
                                                          rg.Name.Contains(data.SearchInput)) && (data.RegionId == null || rc.RegionId == data.RegionId)
                                                          && (data.RequestType == null || req.RequestTypeId == data.RequestType)
-                                                orderby req.CreatedDate descending
+                                               // orderby req.CreatedDate descending
                                                 select new AdminDashboardList
                                                 {
-
                                                     RequestId = req.RequestId,
                                                     RequestTypeId = req.RequestTypeId,
                                                     Requestor = req.RFirstName + " " + req.RLastName,
                                                     PatientName = rc.RcFirstName + " " + rc.RcLastName,
-                                                    //DateOfBirth = new DateOnly((int)rc.IntYear, DateTime.ParseExact(rc.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.IntDate),
-                                                    //DateOfBirth = new DateTime((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate),
-                                                    //DateOfBirth = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
                                                     IntYear = rc.IntYear,
                                                     StrMonth = rc.StrMonth,
                                                     IntDate = rc.IntDate,
@@ -141,9 +124,32 @@ namespace HelloDocMVC.Repository.Repository
                                                     PatientPhoneNumber = rc.PhoneNumber,
                                                     Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                                                     Notes = rc.Notes,
-                                                    //ProviderId = req.PhysicianId,
                                                     RequestorPhoneNumber = req.PhoneNumber
                                                 }).ToList();
+            if (data.IsAscending == true)
+            {
+                allData = data.SortedColumn switch
+                {
+                    "PatientName" => allData.OrderBy(x => x.PatientName).ToList(),
+                    "Requestor" => allData.OrderBy(x => x.Requestor).ToList(),
+                    "Dob" => allData.OrderBy(x => x.DateOfBirth).ToList(),
+                    "Address" => allData.OrderBy(x => x.Address).ToList(),
+                    "RequestedDate" => allData.OrderBy(x => x.RequestedDate).ToList(),
+                    _ => allData.OrderBy(x => x.RequestedDate).ToList()
+                };
+            }
+            else
+            {
+                allData = data.SortedColumn switch
+                {
+                    "PatientName" => allData.OrderByDescending(x => x.PatientName).ToList(),
+                    "Requestor" => allData.OrderByDescending(x => x.Requestor).ToList(),
+                    "Dob" => allData.OrderByDescending(x => x.DateOfBirth).ToList(),
+                    "Address" => allData.OrderByDescending(x => x.Address).ToList(),
+                    "RequestedDate" => allData.OrderByDescending(x => x.RequestedDate).ToList(),
+                    _ => allData.OrderByDescending(x => x.RequestedDate).ToList()
+                };
+            }
             int totalItemCount = allData.Count();
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)data.PageSize);
             List<AdminDashboardList> list1 = allData.Skip((data.CurrentPage - 1) * data.PageSize).Take(data.PageSize).ToList();
@@ -154,10 +160,11 @@ namespace HelloDocMVC.Repository.Repository
                 CurrentPage = data.CurrentPage,
                 TotalPages = totalPages,
                 PageSize = data.PageSize,
-                SearchInput = data.SearchInput
+                SearchInput = data.SearchInput,
+                SortedColumn = data.SortedColumn,
+                IsAscending = data.IsAscending
             };
             return paginatedViewModel;
-           
         }
         public bool CancelCase(int RequestID, string Note, string CaseTag)
         {
@@ -223,23 +230,19 @@ namespace HelloDocMVC.Repository.Repository
         }
         public async Task<bool> AssignProvider(int RequestId, int ProviderId, string notes)
         {
-
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
             request.PhysicianId = ProviderId;
             request.Status = 2;
             _context.Requests.Update(request);
             _context.SaveChanges();
-
             RequestStatusLog rsl = new RequestStatusLog();
             rsl.RequestId = RequestId;
             rsl.PhysicianId = ProviderId;
             rsl.Notes = notes;
-
             rsl.CreatedDate = DateTime.Now;
             rsl.Status = 2;
             _context.RequestStatusLogs.Update(rsl);
             _context.SaveChanges();
-
             return true;
         }
         public async Task<bool> TransferProvider(int RequestId, int ProviderId, string notes)
@@ -255,7 +258,6 @@ namespace HelloDocMVC.Repository.Repository
             rsl.Status = 2;
             _context.RequestStatusLogs.Update(rsl);
             _context.SaveChanges();
-
             request.PhysicianId = ProviderId;
             request.Status = 2;
             _context.Requests.Update(request);
@@ -289,80 +291,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        //public ViewDocument ViewUpload(int requestid)
-        //{
-        //    ViewDocument? items = _context.RequestClients.Include(rc => rc.Request)
-        //                          .Where(rc => rc.RequestId == requestid)
-        //                            .Select(rc => new ViewDocument()
-        //                            {
-        //                                FirstName = rc.RcFirstName,
-        //                                LastName = rc.RcLastName,
-        //                                ConfirmationNumber = rc.Request.ConfirmationNumber
-
-        //                            }).FirstOrDefault();
-        //    List<RequestWiseFile> list = _context.RequestWiseFiles
-        //              .Where(r => r.RequestId == requestid && r.IsDeleted == new BitArray(1))
-        //              .OrderByDescending(x => x.CreatedDate)
-        //              .Select(r => new RequestWiseFile
-        //              {
-        //                  CreatedDate = r.CreatedDate,
-        //                  FileName = r.FileName,
-        //                  RequestWiseFileId = r.RequestWiseFileId,
-        //                  RequestId = r.RequestId,
-        //                  IsDeleted = new BitArray(1)
-
-        //              }).ToList();
-        //    items.Files = list;
-        //    return items;
-        //}
-        //public void UploadDoc(ViewDocument vp, IFormFile? UploadFile, int RequestId)
-        //{
-        //    string UploadImage;
-        //    if (UploadFile != null)
-        //    {
-        //        string FilePath = "wwwroot\\Upload";
-        //        string path = Path.Combine(Directory.GetCurrentDirectory(), FilePath);
-        //        if (!Directory.Exists(path))
-        //            Directory.CreateDirectory(path);
-        //        string fileNameWithPath = Path.Combine(path, UploadFile.FileName);
-        //        UploadImage = "~" + FilePath.Replace("wwwroot\\", "/") + "/" + UploadFile.FileName;
-        //        using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
-        //        {
-        //            UploadFile.CopyTo(stream);
-        //        }
-        //        var requestwisefile = new RequestWiseFile
-        //        {
-        //            RequestId = vp.RequestId,
-        //            FileName = UploadFile.FileName,
-        //            CreatedDate = DateTime.Now,
-        //            IsDeleted = new BitArray(1)
-        //        };
-        //        _context.RequestWiseFiles.Add(requestwisefile);
-        //        _context.SaveChanges();
-        //    }
-        //}
-        //public async Task<bool> DeleteDocumentByRequest(string ids)
-        //{
-        //    List<int> deletelist = ids.Split(',').Select(int.Parse).ToList();
-        //    foreach (int item in deletelist)
-        //    {
-        //        if (item > 0)
-        //        {
-        //            var data = await _context.RequestWiseFiles.Where(e => e.RequestWiseFileId == item).FirstOrDefaultAsync();
-        //            if (data != null)
-        //            {
-        //                data.IsDeleted[0] = true;
-        //                _context.RequestWiseFiles.Update(data);
-        //                _context.SaveChanges();
-        //            }
-        //            else
-        //            {
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //    return true;
-        //}
         #region GetDocumentByRequest
         public async Task<ViewDocuments> GetDocumentByRequest(int? id)
         {
@@ -372,7 +300,6 @@ namespace HelloDocMVC.Repository.Repository
             doc.Firstname = req.RFirstName;
             doc.Lastname = req.RLastName;
             doc.RequestID = req.RequestId;
-
             var result = from requestWiseFile in _context.RequestWiseFiles
                          join request in _context.Requests on requestWiseFile.RequestId equals request.RequestId
                          join physician in _context.Physicians on request.PhysicianId equals physician.PhysicianId into physicianGroup
@@ -423,7 +350,6 @@ namespace HelloDocMVC.Repository.Repository
             return true;
         }
         #endregion
-
         #region DeleteDocumentByRequest
         public async Task<bool> DeleteDocumentByRequest(string ids)
         {
@@ -450,23 +376,19 @@ namespace HelloDocMVC.Repository.Repository
         #endregion
         public async Task<bool> Business(int RequestId, int ProviderId, string notes)
         {
-
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
             request.PhysicianId = ProviderId;
             request.Status = 2;
             _context.Requests.Update(request);
             _context.SaveChanges();
-
             RequestStatusLog rsl = new RequestStatusLog();
             rsl.RequestId = RequestId;
             rsl.PhysicianId = ProviderId;
             rsl.Notes = notes;
-
             rsl.CreatedDate = DateTime.Now;
             rsl.Status = 2;
             _context.RequestStatusLogs.Update(rsl);
             _context.SaveChanges();
-
             return true;
         }
         public ViewNotesData getNotesByID(int id)
@@ -483,7 +405,6 @@ namespace HelloDocMVC.Repository.Repository
                                where rs.RequestId == id && rs.Status == 2
                                select new TransferNotesData
                                {
-                                   
                                    TransPhysician = p.FirstName,
                                    Admin = a.FirstName,
                                    Physician = py.FirstName,
@@ -567,7 +488,6 @@ namespace HelloDocMVC.Repository.Repository
                 });
             }
             allData.cancel = cancelrq;
-
             return allData;
         }
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID)
@@ -632,21 +552,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        //public void SendOrder()
-        //{
-
-        //    OrderDetails od = new OrderDetails();
-
-        //    //var isexist = _context.Users.FirstOrDefault(x => x.Email == viewdata.Email);
-        //    //AspNetUser
-        //        od.
-        //        //A.UserName = viewdata.FirstName + " " + viewdata.LastName;
-        //        //A.Email = viewdata.Email;
-        //        //A.PhoneNumber = viewdata.PhoneNumber;
-        //        //A.CreatedDate = DateTime.Now;
-        //        _context.Add(od);
-        //        _context.SaveChanges();
-        //}
         #region SendAgreement
         public bool SendAgreement(int requestid)
         {
@@ -656,7 +561,6 @@ namespace HelloDocMVC.Repository.Repository
             return true;
         }
         #endregion
-
         #region SendAgreement_accept
         public bool SendAgreement_accept(int RequestID)
         {
@@ -666,17 +570,12 @@ namespace HelloDocMVC.Repository.Repository
                 request.Status = 4;
                 _context.Requests.Update(request);
                 _context.SaveChanges();
-
                 RequestStatusLog rsl = new RequestStatusLog();
                 rsl.RequestId = RequestID;
-
                 rsl.Status = 4;
-
                 rsl.CreatedDate = DateTime.Now;
-
                 _context.RequestStatusLogs.Add(rsl);
                 _context.SaveChanges();
-
             }
             return true;
         }
@@ -691,27 +590,20 @@ namespace HelloDocMVC.Repository.Repository
                 request.Status = 7;
                 _context.Requests.Update(request);
                 _context.SaveChanges();
-
                 RequestStatusLog rsl = new RequestStatusLog();
                 rsl.RequestId = RequestID;
-
                 rsl.Status = 7;
                 rsl.Notes = Notes;
-
                 rsl.CreatedDate = DateTime.Now;
-
                 _context.RequestStatusLogs.Add(rsl);
                 _context.SaveChanges();
-
             }
             return true;
         }
         #endregion
-
         public ViewCloseCase CloseCaseData(int RequestID)
         {
             ViewCloseCase alldata = new ViewCloseCase();
-
             var result = from requestWiseFile in _context.RequestWiseFiles
                          join request in _context.Requests on requestWiseFile.RequestId equals request.RequestId
                          join physician in _context.Physicians on request.PhysicianId equals physician.PhysicianId into physicianGroup
@@ -740,25 +632,16 @@ namespace HelloDocMVC.Repository.Repository
                     RequestWiseFileId = item.RequestWiseFileId
 
                 });
-
             }
             alldata.documentslist = doc;
             Request req = _context.Requests.FirstOrDefault(r => r.RequestId == RequestID);
-
             alldata.Firstname = req.RFirstName;
             alldata.RequestID = req.RequestId;
             alldata.ConfirmationNumber = req.ConfirmationNumber;
             alldata.Lastname = req.RLastName;
-
             var reqcl = _context.RequestClients.FirstOrDefault(e => e.RequestId == RequestID);
-
             alldata.RC_Email = reqcl.Email;
-            //alldata.RC_Dob = new DateTime((int)reqcl.IntYear, DateTime.ParseExact(reqcl.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)reqcl.IntDate);
             alldata.RC_FirstName = reqcl.RcFirstName;
-            //DOB = new DateTime((int)req.Requestclient.IntYear, Convert.ToInt32(req.Requestclient.StrMonth.Trim()), (int)req.Requestclient.IntDate),
-            //alldata.IntYear = rc.IntYear,
-            //StrMonth = rc.StrMonth,
-            //IntDate = rc.IntDate,
             alldata.RC_LastName = reqcl.RcLastName;
             alldata.RC_PhoneNumber = reqcl.PhoneNumber;
             return alldata;
@@ -795,13 +678,10 @@ namespace HelloDocMVC.Repository.Repository
                 var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == RequestID);
                 if (requestData != null)
                 {
-
                     requestData.Status = 9;
                     requestData.ModifiedDate = DateTime.Now;
-
                     _context.Requests.Update(requestData);
                     _context.SaveChanges();
-
                     RequestStatusLog rsl = new RequestStatusLog
                     {
                         RequestId = RequestID,
@@ -821,7 +701,6 @@ namespace HelloDocMVC.Repository.Repository
             {
                 return false;
             }
-
         }
         public ViewEncounter EncounterInfo(int id)
         {
@@ -885,7 +764,6 @@ namespace HelloDocMVC.Repository.Repository
                 E = new EncounterForm { RequestId = (int)ve.RequestId };
                 _context.EncounterForms.Add(E);
             }
-
             E.MedicalHistory = ve.History;
             E.HistoryOfPresentIllnessOrInjury = ve.Injury;
             E.Medications = ve.Medications;
@@ -911,8 +789,6 @@ namespace HelloDocMVC.Repository.Repository
             E.Procedures = ve.Procedures;
             E.FollowUp = ve.Followup;
             _context.SaveChanges();
-
-
         }
         public List<AdminDashboardList> Export(string status)
         {
@@ -935,9 +811,6 @@ namespace HelloDocMVC.Repository.Repository
                                                     RequestTypeId = req.RequestTypeId,
                                                     Requestor = req.RFirstName + " " + req.RLastName,
                                                     PatientName = rc.RcFirstName + " " + rc.RcLastName,
-                                                    //DateOfBirth = new DateOnly((int)rc.IntYear, DateTime.ParseExact(rc.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)rc.IntDate),
-                                                    //DateOfBirth = new DateTime((int)rc.IntYear, int.Parse(rc.StrMonth), (int)rc.IntDate),
-                                                    //DateOfBirth = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
                                                     IntYear = rc.IntYear,
                                                     StrMonth = rc.StrMonth,
                                                     IntDate = rc.IntDate,
@@ -948,13 +821,98 @@ namespace HelloDocMVC.Repository.Repository
                                                     PatientPhoneNumber = rc.PhoneNumber,
                                                     Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                                                     Notes = rc.Notes,
-                                                    //ProviderId = req.PhysicianId,
                                                     RequestorPhoneNumber = req.PhoneNumber
                                                 }).ToList();
             return allData;
         }
-
+        public Boolean SendLink(string FirstName, string LastName, string Email)
+        {
+            var agreementUrl = "https://localhost:44348/Forms/Index?Name=" + FirstName + " " + LastName + "&Email=" + Email;
+            _emailConfig.SendMail(Email, "Link to Request", $"<a href='{agreementUrl}'>Request Page Link</a>");
+            return true;
         }
+        #region CreateRequest
+        public void CreateRequest(Patient vdcp)
+        {
+            AspNetUser A = new();
+            User U = new();
+            Entity.DataModels.Request R = new();
+            RequestClient RC = new();
+            var isexist = _context.Users.FirstOrDefault(x => x.Email == vdcp.Email);
+            if (isexist == null)
+            {
+                //AspNetUser Table
+                Guid g = Guid.NewGuid();
+                A.Id = g.ToString();
+                A.UserName = vdcp.UserName;
+                A.PasswordHash = vdcp.PassWord;
+                A.Email = vdcp.Email;
+                A.PhoneNumber = vdcp.Mobile;
+                A.CreatedDate = DateTime.Now;
+                _context.Add(A);
+                _context.SaveChanges();
+                //User Table
+                U.AspNetUserId = A.Id;
+                U.FirstName = vdcp.FirstName;
+                U.LastName = vdcp.LastName;
+                U.Email = vdcp.Email;
+                U.Mobile = vdcp.Mobile;
+                U.Street = vdcp.Street;
+                U.City = vdcp.City;
+                U.State = vdcp.State;
+                U.ZipCode = vdcp.ZipCode;
+                U.StrMonth = (vdcp.DOB.Month).ToString();
+                U.IntDate = vdcp.DOB.Day;
+                U.IntYear = vdcp.DOB.Year;
+                U.CreatedBy = A.Id;
+                U.CreatedDate = DateTime.Now;
+                _context.Add(U);
+                _context.SaveChanges();
+            }
+
+            if (isexist == null)
+            {
+                R.UserId = U.UserId;
+            }
+            else
+            {
+                R.UserId = isexist.UserId;
+            }
+            U.Status = 1;
+            //Request Table
+            R.RequestTypeId = 2; // 2 stands for patient in RequestType table
+            R.CreatedDate = DateTime.Now;
+            R.RFirstName = vdcp.FirstName;
+            R.RLastName = vdcp.LastName;
+            R.Email = vdcp.Email;
+            R.PhoneNumber = vdcp.Mobile;
+            R.Status = (short)U.Status;
+            R.ConfirmationNumber = R.PhoneNumber;
+            R.CreatedUserId = U.UserId;
+            _context.Add(R);
+            _context.SaveChanges();
+            //RequestClient Table
+            RC.RequestId = R.RequestId;
+            RC.RcFirstName = vdcp.FirstName;
+            RC.RcLastName = vdcp.LastName;
+            RC.PhoneNumber = vdcp.Mobile;
+            RC.Address = vdcp.Street + ", " + vdcp.City + ", " + vdcp.State + ", " + vdcp.ZipCode;
+            RC.NotiMobile = R.PhoneNumber;
+            RC.NotiEmail = R.Email;
+            RC.Notes = vdcp.Symptoms;
+            RC.Email = vdcp.Email;
+            RC.StrMonth = (vdcp.DOB.Month).ToString();
+            RC.IntDate = vdcp.DOB.Day;
+            RC.IntYear = vdcp.DOB.Year;
+            RC.Street = vdcp.Street;
+            RC.City = vdcp.City;
+            RC.State = vdcp.State;
+            RC.ZipCode = vdcp.ZipCode;
+            _context.Add(RC);
+            _context.SaveChanges();
+        }
+        #endregion
+    }
 }
 
 

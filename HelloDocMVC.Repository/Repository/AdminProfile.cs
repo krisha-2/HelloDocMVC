@@ -3,13 +3,7 @@ using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static HelloDocMVC.Entity.Models.ViewAdminProfileData;
 
 namespace HelloDocMVC.Repository.Repository
@@ -63,7 +57,6 @@ namespace HelloDocMVC.Repository.Repository
             return v;
         }
         #endregion
-
         #region EditPassword
         public async Task<bool> EditPassword(string password, int adminId)
         {
@@ -81,7 +74,6 @@ namespace HelloDocMVC.Repository.Repository
             return false;
         }
         #endregion
-
         #region EditAdministratorInfo
         public bool EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
         {
@@ -140,7 +132,6 @@ namespace HelloDocMVC.Repository.Repository
             }
         }
         #endregion
-
         #region BillingInfoEdit
         public async Task<bool> BillingInfoEdit(ViewAdminProfileData _viewAdminProfile)
         {

@@ -81,7 +81,9 @@ namespace HelloDocMVC.Repository.Repository
         public bool SendResetLink(String Email)
         {
             var agreementUrl = "https://localhost:44338/Login/Resetpass?Email=" + Email;
-            _emailConfig.SendMail(Email, "Reset your password", $"To reset your password <a href='{agreementUrl}'>Click here..</a>");
+            _emailConfig.SendMail(Email, "Reset your password", $" Forgot your password? " +
+                $"We received a request to reset the password of your account." +
+                $"To reset your password,click on the below link <a href='{agreementUrl}'>Reset Password..</a>");
             return true;
         }
     }

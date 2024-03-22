@@ -251,18 +251,6 @@ namespace HelloDocMVC.Controllers
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
         #endregion
-        //public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
-        //{
-        //    if (await _IAdminDashboard.DeleteDocumentByRequest(deleteids))
-        //    {
-        //        _notyf.Success("All Selected File Deleted Successfully");
-        //    }
-        //    else
-        //    {
-        //        _notyf.Error("All Selected File Not Deleted");
-        //    }
-        //    return RedirectToAction("ViewUpload", "Admin", new { id = Requestid });
-        //}
         public async Task<IActionResult> TransferProvider(int requestId, int ProviderId, string Notes)
         {
             if (await _IAdminDashboard.TransferProvider(requestId, ProviderId, Notes))
@@ -424,6 +412,26 @@ namespace HelloDocMVC.Controllers
 
                 return File(excelBytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
             }
+        }
+        [HttpPost]
+        public IActionResult SendLink(string FirstName, string LastName, string Email)
+        {
+            if (_IAdminDashboard.SendLink(FirstName, LastName, Email))
+            {
+                _notyf.Success("Mail Send  Successfully..!");
+            }
+            return RedirectToAction("Index", "Admin");
+        }
+        public IActionResult CreateRequest()
+        {
+            return View("./CreateRequest");
+        }
+
+        [HttpPost]
+        public IActionResult CreateRequest(Patient vdcp)
+        {
+            _IAdminDashboard.CreateRequest(vdcp);
+            return RedirectToAction("Index", "Admin");
         }
     }
 }

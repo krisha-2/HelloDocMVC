@@ -17,32 +17,20 @@
 </head>
 
 <div class="align-self-center w-sm-50">
-    @* <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
-    <strong class="text-info">
-    <i class="fa fa-chevron-left" aria-hidden="true"></i> Back
-    </strong>
-    </a> *@
     <h3 class="py-3">Login To Your Account</h3>
     <strong class="text-danger">@ViewData["error"]</strong>
     <form asp-action="Validate" asp-controller="AdminLogin" method="post">
         <div class="form-floating mb-4 email">
-            <input asp-for="Email" type="email" mailto:value="admin@gmail.com" class="form-control shadow-none" id="floatingInput" mailto:placeholder="name@example.com">
+            <input asp-for="Email" type="email" class="form-control shadow-none" id="floatingInput" placeholder="name@example.com">
             <label class="bg-transparent" for="floatingInput">Email</label>
-            @* <button type="button" class="btn btn-light">
-            <i class="icon fa-solid fa-user field-icon position-relative"></i>
-            </button> *@
             <span class="text-danger"></span>
         </div>
         <div class="form-floating mb-4 password">
             <input asp-for="PasswordHash" type="password"  class="form-control shadow-none eyehide" id="floatingPassword" placeholder="Password">
             <label for="floatingPassword">Password</label>
-            @* <button type="button" class="btn btn-light" onclick="passtoggle()">
-            <i class="showImg fa fa-eye-slash"></i>
-            <i class="fa fa-eye"></i>
-            </button> *@
             <span class="text-danger"></span>
         </div>
         <button type="submit" class="btn btn-info text-white w-100 mb-4" role="button">Login</button>
     </form>
-    <a asp-controller="Home" asp-action="ForgotPass" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
+    <a asp-controller="Login" asp-action="Forgetpass" class="text-decoration-none d-flex justify-content-center"><strong class="text-info">Forgot Password?</strong></a>
 </div>

@@ -40,5 +40,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public ViewEncounter EncounterInfo(int id);
         public void EditEncounterinfo(ViewEncounter ve);
         List<AdminDashboardList> Export(string status);
+        public void CreateRequest(Patient vdcp);
+        public Boolean SendLink(string FirstName, string LastName, string Email);
     }
 }

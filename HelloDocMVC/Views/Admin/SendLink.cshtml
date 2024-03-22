@@ -1,0 +1,56 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+﻿<div class="modal fade" id="sendLink" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Send Link</h1>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <form asp-action="SendLink" asp-controller="Admin" method="post" class="mt-0 needs-validation" novalidate>
+                <div class="modal-body">
+                    <div class="col my-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control shadow-none" id="fName" name="FirstName" placeholder="FirstName" required>
+                            <label for="fName" class="form-label">First Name</label>
+                            <div class="invalid-feedback">
+                                Please provide firstname.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating">
+                            <input type="text" class="form-control shadow-none" id="lName" name="LastName" placeholder="LastName" required>
+                            <label for="lName" class="form-label">Last Name</label>
+                            <div class="invalid-feedback">
+                                Please provide lastname.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating">
+                            <input class="form-control shadow-none" id="phone">
+                            <div class="invalid-feedback">
+                                Please provide mobile number.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col mb-3">
+                        <div class="form-floating">
+                            <input type="email" class="form-control shadow-none" id="email" name="Email" placeholder="Email" required>
+                            <label for="email" class="form-label">Email</label>
+                            <div class="invalid-feedback">
+                                Please provide email.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class=" btn btn-info text-white" value="Assign">Send</button>
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

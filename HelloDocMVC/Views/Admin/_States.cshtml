@@ -78,18 +78,18 @@
             <strong class="fs-6">Patients</strong> <small>(Status)</small>
         </div>
         <div>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            <button class="btn btn-info text-white shadow-none mb-2" data-bs-toggle="modal" data-bs-target="#sendLink">
                 <small>
                     <i class="bi bi-send"></i>
                     <span class="adminIcon">Send Link</span>
                 </small>
             </button>
-            <button class="btn btn-info text-white shadow-none mb-2">
+            <a class="btn btn-info text-white shadow-none mb-2" asp-controller="Admin" asp-action="CreateRequest">
                 <small>
                     <i class="bi bi-file-earmark-plus"></i>
                     <span class="adminIcon">Create Requests</span>
                 </small>
-            </button>
+            </a>
             <button class="btn btn-info text-white shadow-none mb-2" onclick="Export(@CV.CurrentStatus())">
                 <small>
                     <i class="fa-solid fa-share"></i>
@@ -127,6 +127,25 @@
                         <option>All Region</option>
                     </select>
                 </div>
+                <div class="search m-1  d-flex justify-content-between">
+                    <span class="pagesize">Page Size</span>
+                    <select class="form-select pagesizeselect" asp-for="PageSize" aria-label="Phone" data-allow-clear="true" tabindex="-1" id="pagesizedropdown" data-control="select2" data-placeholder="Page Sizel">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
+                @*<div class="search m-1 d-flex justify-content-between form-floating">
+                    <span class="pagesize">Page Size</span>
+                    <select class="form-select pagesizeselect" asp-for="PageSize" data-allow-clear="true" tabindex="-1" id="pagesizedropdown" data-control="select2" data-placeholder="Select Level">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                    <label for="pagesizedropdown">Page Size</label>
+                </div>*@
             </div>
             <div class="requestType t-filter">
                 <input type="hidden" asp-for="RequestType" id="requesttypevalue" class="form-control" placeholder="Search Patients">
@@ -152,7 +171,10 @@
             </div>
         </div>
     </div>
+    <input type="hidden" asp-for="IsAscending" id="sortcol" />
+    <input type="hidden" asp-for="SortedColumn" id="issort" />
 </form>
+<partial name="../Admin/SendLink.cshtml" />
 <script>
     function subsubmit() {
         $('#filterForm').submit();
@@ -202,4 +224,10 @@
             }
         });
     }
+    $(function () {
+        $('#pagesizedropdown').on('change', function () {
+            console.log("abc");
+            $('#filterForm').submit();
+        });
+    });
 </script>

@@ -28,6 +28,7 @@ namespace HelloDocMVC.Entity.Models
         public string? RelationName { get; set; }
         public string? PatientDetails { get; set; }
         public string? Symptoms { get; set; }
+        public short? Status { get; set; }
         public DateTime DOB { get; set; }
         public string? Contact { get; set; }
         public string? Street { get; set; }

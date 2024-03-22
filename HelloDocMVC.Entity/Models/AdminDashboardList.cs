@@ -48,6 +48,8 @@ namespace HelloDocMVC.Entity.Models
         public int ConcludeRequest { get; set; }
         public int ToCloseRequest { get; set; }
         public int UnpaidRequest { get; set; }
+        public bool? IsAscending { get; set; } = true;
+        public string? SortedColumn { get; set; } = "RequestedDate";
 
     }
 }

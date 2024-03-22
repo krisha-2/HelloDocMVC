@@ -3,18 +3,12 @@ using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Repository.Repository.Interface;
 using HelloDocMVC.Entity.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HelloDocMVC.Repository.Repository
 {
     public class ComboBox : IComboBox
     {
         private readonly HelloDocDbContext _context;
-
         public ComboBox(HelloDocDbContext context)
         {
             _context = context;
@@ -44,7 +38,6 @@ namespace HelloDocMVC.Repository.Repository
                         .Where(r => r.RegionId == regionid)
                         .OrderByDescending(x => x.CreatedDate)
                         .ToList();
-
             return result;
         }
         #endregion
@@ -62,15 +55,12 @@ namespace HelloDocMVC.Repository.Repository
                         .Where(r => r.Profession == profession)
                         .OrderByDescending(x => x.CreatedDate)
                         .ToList();
-
             return result;
         }
         public HealthProfessional OrderData(int vendorid)
         {
             var result = _context.HealthProfessionals
                         .FirstOrDefault(r => r.VendorId == vendorid);
-                        
-
             return result;
         }
     }
