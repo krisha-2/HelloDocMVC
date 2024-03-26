@@ -14,5 +14,6 @@ namespace HelloDocMVC.Entity.Models
         public int? Fax_Number { get; set; }
         public string? FirstName { get; set; }
         public string Email { get; set; }
+        public string select_profession { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿﻿@* @model AdminHalloDoc.Entities.ViewModel.AdminViewModel.ViewDocuments *@
-@model HelloDocMVC.Entity.Models.ViewDocuments
+﻿@model HelloDocMVC.Entity.Models.ViewDocuments;
+@using static HelloDocMVC.Entity.Models.Constant
 @{
     Layout = "_LayoutAdminDashboard";
     var status = "null";
@@ -58,38 +58,78 @@
                     </div>
                     <div class="text-end d-flex ">
                         <div id="downloadAll" class="btn btn-outline-info btn-back text-end d-flex mx-1">
-                            <i class="fa-solid fa-download me-1"></i><span class="d-none d-sm-block">Downlode all</span>
+                            <i class="fa-solid fa-download me-1 mt-1"></i><span class="d-none d-sm-block">Download all</span>
                         </div>
                         <form method="post" id="deleted" asp-action="AllFilesDelete" asp-controller="Admin">
                             <input type="hidden" id="deleteids" name="deleteids" />
                             <input type="hidden" value="@Model.RequestID" name="Requestid" />
                             <div id="delete" class="btn btn-outline-info d-flex btn-back text-end mx-1">
-                                <i class="fa fa-trash me-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
+                                <i class="fa fa-trash me-1 mt-1" aria-hidden="true"></i><span class="d-none d-sm-inline">Delete all</span>
                             </div>
                         </form>
-                        @*<form method="post" id="sendmails" asp-action="SendFilEmail" asp-controller="ViewAction">*@
-                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
-                            <input type="hidden" id="mailids" name="mailids" />
-                            <div id="sendmail" class="btn btn-outline-info btn-back d-flex text-end mx-1">
-                                <i class="fa fa-envelope me-1"></i><span class="d-none d-sm-block">Send Mail</span>
+                        <button id="sendmailmodel" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-outline-info btn-back d-flex text-end mx-1">
+                            <i class="fa-regular fa-envelope me-1 mt-1"></i>
+                            <span class="d-none d-sm-block">
+                                Send Mail
+                            </span>
+                        </button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-info text-white">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Email Files</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form method="post" id="sendmails" asp-action="SendFileEmail" asp-controller="Admin" class="mt-0">
+                                        <div class="modal-body">
+                                            <input type="hidden" value="@Model.RequestID" name="Requestid" />
+                                            <input type="hidden" id="mailids" name="mailids" />
+                                            <div class="form-floating mb-3">
+                                                <input type="text" class="form-control shadow-none" name="email" id="recipient-name" placeholder="Email">
+                                                <label for="recipient-name" class="form-label">Email</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <div id="sendmail" class="btn btn-outline-info btn-back text-end mx-1">
+                                                <i class="fa-regular fa-envelope me-1 mt-1"></i> Send Mail
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                        @*</form>*@
+                        </div>
                     </div>
                 </div>
                 @* dashboard view *@
                 <div class="table-responsive mt-3 d-none d-sm-block">
-                    <table class="table">
+                    <table class="table dataTable">
                         <thead class="border-0">
                             <tr class="table-secondary">
-                                <th scope="col" class="table-text-header px-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
-                                    </div>
-                                </th>
-                                <th scope="col" class="table-text-header px-3">File Name</th>
-                                <th scope="col" class="table-text-header px-3">Uploder</th>
-                                <th scope="col" class="table-text-header ">uplode date</th>
-                                <th scope="col" class="table-text-header ">Action</th>
+                                @{
+                                    var i1 = @Model.SortedColumn;
+                                    var J1 = @Model.IsAscending;
+                                    <th scope="col" class="table-text-header px-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
+                                        </div>
+                                    </th>
+                                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "FileName" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('FileName')">
+                                        <small>File Name</small>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "Uploader" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Uploader')">
+                                        <small>Uploader</small>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc @(i1 == "CreatedDate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('CreatedDate')">
+                                        <small>Upload Date</small>
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col">
+                                        <small>Action</small>
+                                    </th>
+                                }
                             </tr>
                         </thead>
                         <tbody>
@@ -151,12 +191,63 @@
                 </div>
                 <!--End Mobile screen View-->
             </div>
+            <div class="m-2 d-flex justify-content-between">
+                <form id="documentformPagesize" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@Model.RequestID" novalidate="novalidate" class="d-flex mt-0">
+                    <div class="search m-1 d-flex justify-content-between">
+                        <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+                        <span class="pagesize">Page Size</span>
+                        <select class="form-select pagesizeselect" asp-for="PageSize" data-allow-clear="true" tabindex="-1" id="pagesizedropdowndocument" data-control="select2" data-placeholder="Select Level">
+                            <option value="5" selected>5</option>
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </form>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination pagination-container">
+                        @{
+                            int i;
+                            <form id="documentform" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@Model.RequestID" novalidate="novalidate" class="d-flex mt-0">
+                                <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+                                <input type="hidden" asp-for="CurrentPage" id="currentpagevaluedocument" />
+                                <input type="hidden" asp-for="SortedColumn" />
+                                <input type="hidden" asp-for="IsAscending" />
+                                <input type="hidden" asp-for="PageSize" />
+                                @if (@Model.CurrentPage > 1)
+                                {
+                                <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
+                                }
+                                else
+                                {
+                                <li class="me-2 page-item"><a class="disabled btn">&lt;</a></li>
+                                }
+                                @for (i = 1; i <= @Model.TotalPages; i++)
+                                {
+                                <li class="page-item me-2"><button class="@(i == @Model.CurrentPage ? "activepagebtn" : "") btn shadow-none" onclick="setpagenumber(@i)">@i</button></li>
+                                }
+                                @if (@Model.TotalPages > @Model.CurrentPage)
+                                {
+                                <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('next')">&gt;</button></li>
+                                }
+                                else
+                                {
+                                <li class="me-2 page-item"><a class="btn disabled">&gt;</a></li>
+                                }
+                            </form>
+                        }
+                    </ul>
+                </nav>
+            </div>
         </div>
-
     </div>
-</div>
-
-    
+</div>  
+<form class="sortingform"
+      asp-action="ViewUploads" asp-controller="Admin" novalidate="novalidate">
+    <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
+    <input type="hidden" asp-for="IsAscending" id="isAsc" />
+    <input type="hidden" asp-for="PageSize" />
+</form>
 @section Scripts
     {
     <script type="text/javascript">
@@ -193,9 +284,46 @@
                     }
                 });
             });
+            //$('#sendmail').click(function () {
+            //    $('tbody tr').each(function () {
+            //        if ($(this).find('.form-check-input').prop('checked')) {
+            //            var downloadLink = $(this).find('.RequestwisefilesId').val();
+            //            var deleteids = $('#mailids').val();
+            //            console.log(deleteids);
+            //            if (deleteids == '') {
+            //                $('#mailids').val(downloadLink);
+            //            } else {
+            //                $('#mailids').val(deleteids + ',' + downloadLink);
+
+            //            }
+            //            console.log($('#mailids').val());
+
+            //        }
+            //    });
+            //    Swal.fire({
+            //        title: "Do you want to Send Mail That file ?",
+            //        showDenyButton: false,
+            //        showCancelButton: true,
+            //        confirmButtonText: "Yes",
+            //        denyButtonText: `Don't save`
+            //    }).then((result) => {
+            //        if (result.isConfirmed) {
+            //            $('#').submit();
+            //        }
+            //        console.log(result);
+            //        / Read more about isConfirmed, isDenied below /
+            //        if (result.isConfirmed) {
+            //            Swal.fire("Sending Mail!", "", "success");
+            //        } else if (result.isDenied) {
+            //            Swal.fire("Changes are not saved", "", "info");
+            //        }
+            //    });
+            //});
             $('#sendmail').click(function () {
+                anyCheckboxSelected = false;
                 $('tbody tr').each(function () {
                     if ($(this).find('.form-check-input').prop('checked')) {
+                        anyCheckboxSelected = true;
                         var downloadLink = $(this).find('.RequestwisefilesId').val();
                         var deleteids = $('#mailids').val();
                         console.log(deleteids);
@@ -203,30 +331,35 @@
                             $('#mailids').val(downloadLink);
                         } else {
                             $('#mailids').val(deleteids + ',' + downloadLink);
-
                         }
                         console.log($('#mailids').val());
-
                     }
                 });
-                Swal.fire({
-                    title: "Do you want to Send Mail That file ?",
-                    showDenyButton: false,
-                    showCancelButton: true,
-                    confirmButtonText: "Yes",
-                    denyButtonText: `Don't save`
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $('#').submit();
-                    }
-                    console.log(result);
-                    / Read more about isConfirmed, isDenied below /
-                    if (result.isConfirmed) {
-                        Swal.fire("Sending Mail!", "", "success");
-                    } else if (result.isDenied) {
-                        Swal.fire("Changes are not saved", "", "info");
-                    }
-                });
+                if (anyCheckboxSelected) {
+                    Swal.fire({
+                        title: "Do you want to Send Mail That file ?",
+                        showDenyButton: false,
+                        showCancelButton: true,
+                        confirmButtonText: "Yes",
+                        denyButtonText: `Don't save`
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $('#sendmails').submit();
+                        }
+                        console.log(result);
+                    });
+                }
+                else {
+                    swal.fire({
+                        title: "Oops..",
+                        text: "Oops! Please Select One File ",
+                        icon: "error",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Okay",
+                        cancelButtonColor: "#01BBE7",
+                    })
+                }
             });
             $('#delete').click(function () {
                 anyCheckboxSelected = false;
@@ -312,6 +445,52 @@
                     $('#myForm').submit();
                 }
             })
+            $(function () {
+                $('#pagesizedropdowndocument').on('change', function () {
+                    $('#documentformPagesize').submit();
+                });
+            });
+        });
+    </script>
+    <script>
+        function setpagenumber(e) {
+            console.log(e)
+            if (e == 'previous') {
+                var cp = @Model.CurrentPage-1;
+                $('#currentpagevaluedocument').val(cp);
+            }
+            else if (e == 'next') {
+                var cp = @Model.CurrentPage + 1;
+                $('#currentpagevaluedocument').val(cp);
+            }
+            else {
+                $('#currentpagevaluedocument').val(e);
+            }
+            $("#documentform").submit();
+        }
+        function SetColumValue(e) {
+            var modeldata = @Html.Raw(Json.Serialize(Model));
+            console.log(modeldata)
+            if (modeldata.sortedColumn === e) {
+                if (modeldata.isAscending == true) {
+                    document.getElementById('isAsc').value = false;
+                }
+                else {
+                    document.getElementById('isAsc').value = true;
+                }
+                console.log(document.getElementById('isAsc').value);
+            }
+            else {
+                document.getElementById('sortedcol').value = e;
+                document.getElementById('isAsc').value = true;
+            }
+            $(".sortingform").submit();
+        }
+        $(function () {
+            $(".dataTable > thead > tr > .dt-orderable-asc").on('click', function () {
+                $(".dataTable > thead > tr > .dt-orderable-asc").removeClass("dt-ordering-asc");
+                $(".dataTable > thead > tr > .dt-orderable-asc").removeClass("dt-ordering-desc");
+            });
         });
     </script>
 }

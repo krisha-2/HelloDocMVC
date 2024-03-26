@@ -39,7 +39,7 @@ namespace HelloDocMVC.Controllers
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
             PaginatedViewModel sm = _IAdminDashboard.IndexData();
-            return View(sm);
+            return View("../Admin/Index",sm);
         }
         public IActionResult ViewCase(int? id)
         {
@@ -200,9 +200,9 @@ namespace HelloDocMVC.Controllers
         //    return ViewUpload(v.RequestId);
         //}
         #region View_Upload
-        public async Task<IActionResult> ViewUploads(int? id)
+        public async Task<IActionResult> ViewUploads(ViewDocuments viewDocument, int? id)
         {
-            ViewDocuments v = await _IAdminDashboard.GetDocumentByRequest(id);
+            ViewDocuments v = await _IAdminDashboard.GetDocumentByRequest(viewDocument, id);
             return View("../Admin/ViewUploads", v);
         }
         #endregion
@@ -433,6 +433,21 @@ namespace HelloDocMVC.Controllers
             _IAdminDashboard.CreateRequest(vdcp);
             return RedirectToAction("Index", "Admin");
         }
+        #region SendFilEmail
+        public async Task<IActionResult> SendFileEmail(string mailids, int Requestid, string email)
+        {
+            if (await _IAdminDashboard.SendFileEmail(mailids, Requestid, email))
+            {
+
+                _notyf.Success("Mail Send successfully");
+            }
+            else
+            {
+                _notyf.Error("Mail is not send successfully");
+            }
+            return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
+        }
+        #endregion
     }
 }
     

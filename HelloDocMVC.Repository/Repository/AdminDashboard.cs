@@ -292,22 +292,22 @@ namespace HelloDocMVC.Repository.Repository
             }
         }
         #region GetDocumentByRequest
-        public async Task<ViewDocuments> GetDocumentByRequest(int? id)
+        public async Task<ViewDocuments> GetDocumentByRequest(ViewDocuments viewDocument,int? id)
         {
             var req = _context.Requests.FirstOrDefault(r => r.RequestId == id);
-            ViewDocuments doc = new ViewDocuments();
-            doc.ConfirmationNumber = req.ConfirmationNumber;
-            doc.Firstname = req.RFirstName;
-            doc.Lastname = req.RLastName;
-            doc.RequestID = req.RequestId;
-            var result = from requestWiseFile in _context.RequestWiseFiles
+            //ViewDocuments doc = new ViewDocuments();
+            //doc.ConfirmationNumber = req.ConfirmationNumber;
+            //doc.Firstname = req.RFirstName;
+            //doc.Lastname = req.RLastName;
+            //doc.RequestID = req.RequestId;
+            var result = (from requestWiseFile in _context.RequestWiseFiles
                          join request in _context.Requests on requestWiseFile.RequestId equals request.RequestId
                          join physician in _context.Physicians on request.PhysicianId equals physician.PhysicianId into physicianGroup
                          from phys in physicianGroup.DefaultIfEmpty()
                          join admin in _context.Admins on requestWiseFile.AdminId equals admin.AdminId into adminGroup
                          from adm in adminGroup.DefaultIfEmpty()
                          where request.RequestId == id && requestWiseFile.IsDeleted == new BitArray(1)
-                         select new
+                         select new Documents
                          {
                              Uploader = requestWiseFile.PhysicianId != null ? phys.FirstName : (requestWiseFile.AdminId != null ? adm.FirstName : request.RFirstName),
                              isDeleted = requestWiseFile.IsDeleted.ToString(),
@@ -315,26 +315,63 @@ namespace HelloDocMVC.Repository.Repository
                              Status = requestWiseFile.DocType,
                              Createddate = requestWiseFile.CreatedDate,
                              Filename = requestWiseFile.FileName
-                         };
-            List<Documents> doclist = new List<Documents>();
-            foreach (var item in result)
+                         }).ToList();
+            //List<Documents> doclist = new List<Documents>();
+            //foreach (var item in result)
+            //{
+            //    doclist.Add(new Documents
+            //    {
+            //        Uploader = item.Uploader,
+            //        isDeleted = item.isDeleted,
+            //        RequestwisefilesId = item.RequestwisefilesId,
+            //        Status = item.Status,
+            //        Createddate = item.Createddate,
+            //        Filename = item.Filename
+            //    });
+            //}
+            //doc.documentslist = doclist;
+            //return doc;
+            if (viewDocument.IsAscending == true)
             {
-                doclist.Add(new Documents
+                result = viewDocument.SortedColumn switch
                 {
-                    Uploader = item.Uploader,
-                    isDeleted = item.isDeleted,
-                    RequestwisefilesId = item.RequestwisefilesId,
-                    Status = item.Status,
-                    Createddate = item.Createddate,
-                    Filename = item.Filename
-                });
+                    "Createddate" => result.OrderBy(x => x.Createddate).ToList(),
+                    "Uploader" => result.OrderBy(x => x.Uploader).ToList(),
+                    "Filename" => result.OrderBy(x => x.Filename).ToList(),
+                    _ => result.OrderBy(x => x.Createddate).ToList()
+                };
             }
-            doc.documentslist = doclist;
-            return doc;
-        }
-        #endregion
-        #region Save_Document
-        public bool SaveDoc(int Requestid, IFormFile file)
+            else
+            {
+                result = viewDocument.SortedColumn switch
+                {
+                    "Createddate" => result.OrderByDescending(x => x.Createddate).ToList(),
+                    "Uploader" => result.OrderByDescending(x => x.Uploader).ToList(),
+                    "Filename" => result.OrderByDescending(x => x.Filename).ToList(),
+                    _ => result.OrderByDescending(x => x.Createddate).ToList()
+                };
+            }
+            int totalItemCount = result.Count();
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)viewDocument.PageSize);
+            List<Documents> list1 = result.Skip((viewDocument.CurrentPage - 1) * viewDocument.PageSize).Take(viewDocument.PageSize).ToList();
+            ViewDocuments vd = new()
+            {
+                documentslist = list1,
+                CurrentPage = viewDocument.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = viewDocument.PageSize,
+                IsAscending = viewDocument.IsAscending,
+                SortedColumn = viewDocument.SortedColumn,
+                Firstname = req.RFirstName,
+                Lastname = req.RLastName,
+                //ConfirmationNumber = req.City.Substring(0, 2) + req.IntDate.ToString() + req.StrMonth + req.IntYear.ToString() + req.LastName.Substring(0, 2) + req.FirstName.Substring(0, 2) + "002",
+                RequestID = req.RequestId
+            };
+            return vd;
+    }
+#endregion
+    #region Save_Document
+    public bool SaveDoc(int Requestid, IFormFile file)
         {
             string UploadDoc = FileSave.UploadDoc(file, Requestid);
             var requestwisefile = new RequestWiseFile
@@ -910,6 +947,55 @@ namespace HelloDocMVC.Repository.Repository
             RC.ZipCode = vdcp.ZipCode;
             _context.Add(RC);
             _context.SaveChanges();
+        }
+        #endregion
+        #region SendFilEmail
+        public async Task<bool> SendFileEmail(string ids, int Requestid, string email)
+        {
+            var v = await GetRequestDetails(Requestid);
+            List<int> priceList = ids.Split(',').Select(int.Parse).ToList();
+            List<string> files = new();
+            foreach (int price in priceList)
+            {
+                if (price > 0)
+                {
+                    var data = await _context.RequestWiseFiles.Where(e => e.RequestWiseFileId == price).FirstOrDefaultAsync();
+                    files.Add(Directory.GetCurrentDirectory() + "\\wwwroot\\Upload" + data.FileName.Replace("Upload/", "").Replace("/", "\\"));
+                }
+            }
+
+            if (await _emailConfig.SendMailAsync(email, "All Document Of Your Request " + v.PatientName, "Heeyy " + v.PatientName + " Kindly Check your Attachments", files))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+        #endregion
+        #region GetRequestDetails
+        public async Task<ViewActions> GetRequestDetails(int? id)
+        {
+
+            return await (from req in _context.Requests
+                          join reqClient in _context.RequestClients
+                          on req.RequestId equals reqClient.RequestId into reqClientGroup
+                          from rc in reqClientGroup.DefaultIfEmpty()
+                          join phys in _context.Physicians
+                        on req.PhysicianId equals phys.PhysicianId into physGroup
+                          from p in physGroup.DefaultIfEmpty()
+                          where req.RequestId == id
+                          select new ViewActions
+                          {
+                              PhoneNumber = rc.PhoneNumber,
+                              ProviderId = p.PhysicianId,
+                              PatientName = rc.RcFirstName + rc.RcLastName,
+                              RequestID = req.RequestId,
+                              Email = rc.Email
+
+                          }).FirstAsync();
         }
         #endregion
     }

@@ -24,7 +24,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
         //public ViewDocument ViewUpload(int requestid);
         //public void UploadDoc(ViewDocument v, IFormFile? UploadFile, int RequestId);
         //public Task<bool> DeleteDocumentByRequest(string ids);
-        public Task<ViewDocuments> GetDocumentByRequest(int? id);
+        //public Task<ViewDocuments> GetDocumentByRequest(int? id);
+        public Task<ViewDocuments> GetDocumentByRequest(ViewDocuments viewDocument, int? id);
         public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<bool> DeleteDocumentByRequest(string ids);
         public bool ClearCase(int RequestID);
@@ -42,5 +43,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
         List<AdminDashboardList> Export(string status);
         public void CreateRequest(Patient vdcp);
         public Boolean SendLink(string FirstName, string LastName, string Email);
+        public Task<bool> SendFileEmail(string ids, int Requestid, string email);
+
+
     }
 }
