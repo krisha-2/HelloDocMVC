@@ -20,8 +20,15 @@
                 <li class="nav-item">
                     <a class="nav-link px-3 text-dark @(path.StartsWith("/AdminProfile") ? "activesbnav" : "")" asp-action="Index" asp-controller="AdminProfile">My Profile</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link px-3 text-dark " asp-action="Index" asp-controller="Home">Providers</a>
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown px-2 text-dark" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Providers
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item @(path.StartsWith("/Provider") ? "activesbnav" : "")" asp-action="Index" asp-controller="Provider">Provider</a>
+                        <a class="dropdown-item" href="#">Scheduling</a>
+                        <a class="dropdown-item" href="#"> Invoicing</a>
+                    </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link px-3 text-dark " asp-action="Index" asp-controller="Admin">Partners</a>

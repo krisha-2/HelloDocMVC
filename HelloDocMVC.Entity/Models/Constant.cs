@@ -31,5 +31,16 @@ namespace HelloDocMVC.Entity.Models
             Block
 
         }
+        public enum AdminStatus
+        {
+            Active = 1,
+            Pending,
+            NotActive
+        }
+        public enum OnCallStatus
+        {
+            Unavailable = 0,
+            Available
+        }
     }
 }

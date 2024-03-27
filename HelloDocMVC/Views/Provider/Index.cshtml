@@ -1,0 +1,140 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using static HelloDocMVC.Entity.Models.Constant;
+@model List<HelloDocMVC.Entity.Models.ViewProvider>;
+@{
+    Layout = "_LayoutAdminDashboard";
+}
+<div class="container">
+    @* heading *@
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>Provider Information</strong></h4>
+        </div>
+        <div>
+            <div class="border border-info rounded p-2 m-1">
+                <a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+            </div>
+        </div>
+    </div>
+    <div class="bg-white rounded shadow mt-3">
+        <div class="d-flex justify-content-between align-self-center p-3">
+            <div class="search m-1">
+                <a id="regionicon">
+                    <i class="fa fa-search"></i>
+                </a>
+                <select class="form-select" data-allow-clear="true" tabindex="-1" id="regiondropdown" onchange="abcdefg()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                    <option>All Region</option>
+                </select>
+            </div>
+            <div class="d-flex">
+                <form asp-action="ChangeNotificationPhysician" class="me-2" id="saveChangesForm" asp-controller="Provider">
+                    <input type="hidden" id="changedValuesInput" name="changedValues">
+                    <a class="btn text-info m-1 border border-info align-self-center" style="display:none;" id="saveChangesButton"> Save Changes </a>
+                </form>
+                <a class="btn bg-info text-white m-1 align-self-center">
+                    Create Provider Account
+                </a>
+            </div>
+        </div>
+        <div>
+            <table class="table table-responsive mt-3 mb-0 dataTable">
+                <thead class="theadbg">
+                    <tr>
+                        @{
+                            // var J1 = @Model.IsAscending;
+                            <th scope="col">Stop Notifications</th>
+                            <th scope="col" style="position:relative;" class="dt-orderable-asc dt-orderable-desc " onclick="SetColumValue('createdDate')">
+                                Provider Name
+                                <span class="dt-column-order"></span>
+                            </th>
+                            <th scope="col">Role</th>
+                            <th scope="col">On Call Status</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Actions</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td scope="row" class="text-center">
+                                @{
+                                    var check = false;
+                                    if (item.notification != null)
+                                    {
+                                        check = item.notification[0];
+                                    }
+                                    <input class="form-check-input form-check-inputs" id="@item.Physicianid" type="checkbox" value="" @(check ? "checked" : "")>
+                                }
+
+                                <input class="NotificationId" type="hidden" value="@item.Physicianid">
+                            </td>
+                            <td>@item.Firstname  @item.Lastname</td>
+                            <td>@item.role</td>
+                            <td>@item.Isnondisclosuredoc</td>
+                            <td>@Enum.GetName(typeof(AdminStatus), item.Status)</td>
+                            <td class="d-flex">
+                                <button data-bs-toggle="modal" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    Contact
+                                </button>
+                                <a asp-action="Edit" asp-controller="Provider" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<partial name="Contact.cshtml" />
+<script>
+    function abcdefg() {
+        var region = $("#regiondropdown").val();
+        $.ajax({
+            method: "POST",
+            url: "/Providers/IndexAsync?region=" + region,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                location.reload();
+            },
+            error: function () {
+                alert("Error while Loading data.");
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#saveChangesButton').click(function () {
+            $('#saveChangesForm').submit();
+        });
+        // Initialize an object to track the initial state of each checkbox
+        var initialState = {};
+        // Store the initial state of each checkbox when the page loads
+        $('.form-check-inputs').each(function () {
+            initialState[this.id] = this.checked;
+        });
+        $('.form-check-inputs').change(function () {
+            var changedValues = {};
+            // Check each checkbox for changes
+            $('.form-check-inputs').each(function () {
+                if (this.checked !== initialState[this.id]) {
+                    changedValues[this.id] = this.checked;
+                }
+            });
+            // Update the hidden input with the changed values
+            $('#changedValuesInput').val(JSON.stringify(changedValues));
+            console.log(changedValues);
+            // Show or hide the "Save Changes" button based on whether there are any changes
+            if (Object.keys(changedValues).length > 0) {
+                $('#saveChangesButton').show();
+            } else {
+                $('#saveChangesButton').hide();
+            }
+        });
+    });
+</script> 

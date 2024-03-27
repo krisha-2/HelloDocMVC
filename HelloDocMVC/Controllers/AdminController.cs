@@ -377,7 +377,7 @@ namespace HelloDocMVC.Controllers
 
             ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
 
-            using (ExcelPackage package = new ExcelPackage())
+            using (ExcelPackage package = new())
             {
                 ExcelWorksheet worksheet = package.Workbook.Worksheets.Add("RequestData");
 
