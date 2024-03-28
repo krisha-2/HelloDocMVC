@@ -291,7 +291,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #region GetDocumentByRequest
         public async Task<ViewDocuments> GetDocumentByRequest(ViewDocuments viewDocument,int? id)
         {
             var req = _context.Requests.FirstOrDefault(r => r.RequestId == id);
@@ -369,9 +368,7 @@ namespace HelloDocMVC.Repository.Repository
             };
             return vd;
     }
-#endregion
-    #region Save_Document
-    public bool SaveDoc(int Requestid, IFormFile file)
+        public bool SaveDoc(int Requestid, IFormFile file)
         {
             string UploadDoc = FileSave.UploadDoc(file, Requestid);
             var requestwisefile = new RequestWiseFile
@@ -386,8 +383,6 @@ namespace HelloDocMVC.Repository.Repository
             _context.SaveChanges();
             return true;
         }
-        #endregion
-        #region DeleteDocumentByRequest
         public async Task<bool> DeleteDocumentByRequest(string ids)
         {
             List<int> deletelist = ids.Split(',').Select(int.Parse).ToList();
@@ -410,7 +405,6 @@ namespace HelloDocMVC.Repository.Repository
             }
             return true;
         }
-        #endregion
         public async Task<bool> Business(int RequestId, int ProviderId, string notes)
         {
             var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
@@ -589,7 +583,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #region SendAgreement
         public bool SendAgreement(int requestid)
         {
             var res = _context.RequestClients.FirstOrDefault(e => e.RequestId == requestid);
@@ -597,8 +590,6 @@ namespace HelloDocMVC.Repository.Repository
             _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
             return true;
         }
-        #endregion
-        #region SendAgreement_accept
         public bool SendAgreement_accept(int RequestID)
         {
             var request = _context.Requests.Find(RequestID);
@@ -616,9 +607,6 @@ namespace HelloDocMVC.Repository.Repository
             }
             return true;
         }
-        #endregion
-
-        #region SendAgreement_Reject
         public bool SendAgreement_Reject(int RequestID, string Notes)
         {
             var request = _context.Requests.Find(RequestID);
@@ -637,7 +625,6 @@ namespace HelloDocMVC.Repository.Repository
             }
             return true;
         }
-        #endregion
         public ViewCloseCase CloseCaseData(int RequestID)
         {
             ViewCloseCase alldata = new ViewCloseCase();
@@ -868,7 +855,6 @@ namespace HelloDocMVC.Repository.Repository
             _emailConfig.SendMail(Email, "Link to Request", $"<a href='{agreementUrl}'>Request Page Link</a>");
             return true;
         }
-        #region CreateRequest
         public void CreateRequest(Patient vdcp)
         {
             AspNetUser A = new();
@@ -948,8 +934,6 @@ namespace HelloDocMVC.Repository.Repository
             _context.Add(RC);
             _context.SaveChanges();
         }
-        #endregion
-        #region SendFilEmail
         public async Task<bool> SendFileEmail(string ids, int Requestid, string email)
         {
             var v = await GetRequestDetails(Requestid);
@@ -974,8 +958,6 @@ namespace HelloDocMVC.Repository.Repository
             }
 
         }
-        #endregion
-        #region GetRequestDetails
         public async Task<ViewActions> GetRequestDetails(int? id)
         {
 
@@ -997,7 +979,7 @@ namespace HelloDocMVC.Repository.Repository
 
                           }).FirstAsync();
         }
-        #endregion
+        
     }
 }
 

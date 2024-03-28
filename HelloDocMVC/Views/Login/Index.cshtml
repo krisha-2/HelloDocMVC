@@ -20,7 +20,7 @@
         @ViewData["error"]
         @TempData["emailmessage"]
         @ViewData["EmailCheck"]
-        <form asp-action="Validate" method="post" class="text-center d-flex flex-column align-item-center justify-content-center">
+        <form asp-action="Index" asp-controller="Login" method="post" class="text-center d-flex flex-column align-item-center justify-content-center">
                 <div class="d-flex align-items-center justify-content-center flex-column formBody"> 
                     <div class="col-md-6 col-lg-4 col-xl-3 form-floating mb-3 d-flex justify-content-center align-item-center">
                     <input name="Email" asp-for="Email" type="email" class="form-control" id="floatingInput" name="Email" placeholder="name@example.com">

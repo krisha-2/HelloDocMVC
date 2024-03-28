@@ -11,7 +11,7 @@ function displayFilename() {
 }
 
 
-Contact field in forms
+//Contact field in forms
 
 const phoneInputField = document.querySelector("#phone");
 const phoneInput = window.intlTelInput(phoneInputField, {

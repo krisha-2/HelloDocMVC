@@ -29,7 +29,6 @@ namespace HelloDocMVC.Entity.Models
             Unassigne = 1,
             Accepted, Cancelled, MDEnRoute, MDONSite, Conclude, CancelledByPatients, Closed, Unpaid, Clear,
             Block
-
         }
         public enum AdminStatus
         {

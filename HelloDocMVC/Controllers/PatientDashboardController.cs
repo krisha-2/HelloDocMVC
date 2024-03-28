@@ -35,7 +35,7 @@ namespace HallodocMVC.Controllers
         public IActionResult Document(int RequestId, IFormFile? UploadFile)
         {
              _patientDashboard.UploadDoc(RequestId, UploadFile);
-            return RedirectToAction("Document", new { id = RequestId });
+            return RedirectToAction("Document", new { RequestId = RequestId });
         }
         public IActionResult PatientProfile()
         {

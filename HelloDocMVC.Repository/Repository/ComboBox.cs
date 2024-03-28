@@ -63,5 +63,13 @@ namespace HelloDocMVC.Repository.Repository
                         .FirstOrDefault(r => r.VendorId == vendorid);
             return result;
         }
+        public async Task<List<RoleComboBox>> UserRoleComboBox()
+        {
+            return await _context.AspNetRoles.Select(req => new RoleComboBox()
+            {
+                RoleId = req.Id,
+                RoleName = req.Name
+            }).ToListAsync();
+        }
     }
 }

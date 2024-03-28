@@ -27,11 +27,6 @@ namespace HelloDocMVC.Controllers
             _comboBox = comboBox;
             _notyf = notyf;
         }
-        //public IActionResult Index()
-        //{
-        //    var Data = _IAdminDashboard.IndexData();
-        //    return View(Data);
-        //}
         [CheckProviderAccess("Admin")]
         public async Task<IActionResult> IndexAsync()
         {

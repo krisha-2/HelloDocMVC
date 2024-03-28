@@ -10,6 +10,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
     public interface IProvider
     {
         public Task<List<ViewProvider>> PhysicianAll();
+        public Task<List<ViewProvider>> PhysicianByRegion(int? region);
         public Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict);
+        public Task<bool> PhysicianAddEdit(ViewProvider physiciandata, string AdminId);
     }
 }

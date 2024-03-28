@@ -15,14 +15,12 @@ namespace HelloDocMVC.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILoginRepository _loginRepository;
         private readonly IJwtSession _jwtSession;
-        private readonly EmailConfiguration _emailConfiguration;
-        public AdminLogin(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, ILoginRepository loginRepository, IJwtSession jwtSession, EmailConfiguration emailConfiguration)
+        public AdminLogin(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, ILoginRepository loginRepository, IJwtSession jwtSession)
         {
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _loginRepository = loginRepository;
             _jwtSession = jwtSession;
-            _emailConfiguration = emailConfiguration;
         }
         public IActionResult Index()
         {

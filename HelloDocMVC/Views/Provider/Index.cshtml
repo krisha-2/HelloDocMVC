@@ -24,7 +24,7 @@
                 <a id="regionicon">
                     <i class="fa fa-search"></i>
                 </a>
-                <select class="form-select" data-allow-clear="true" tabindex="-1" id="regiondropdown" onchange="abcdefg()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                <select class="form-select" data-allow-clear="true" tabindex="-1" id="regiondropdown" onchange="getdatabyregion()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                     <option>All Region</option>
                 </select>
             </div>
@@ -56,7 +56,7 @@
                         }
                     </tr>
                 </thead>
-                <tbody class="table-group-divider">
+                <tbody class="table-group-divider" id="providerbody">
                     @foreach (var item in Model)
                     {
                         <tr>
@@ -77,7 +77,7 @@
                             <td>@item.Isnondisclosuredoc</td>
                             <td>@Enum.GetName(typeof(AdminStatus), item.Status)</td>
                             <td class="d-flex">
-                                <button data-bs-toggle="modal" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <button data-bs-toggle="modal" onclick="assignemail('@item.Email')" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Contact
                                 </button>
                                 <a asp-action="Edit" asp-controller="Provider" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
@@ -91,17 +91,76 @@
         </div>
     </div>
 </div>
-<partial name="Contact.cshtml" />
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header  bg-info text-white">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> Contact Your Provide </h1>
+                <i class="fa-solid fa-xmark" data-bs-dismiss="modal"></i>
+            </div>
+            <form asp-action="SendMessage" asp-controller="Provider" class="needs-validation" novalidate>
+                <div class="modal-body">
+                    <small class="text-secondary fs-6" id="exampleModalLabel"> Choose Comunication to send message  <span class="text-info" id="patientname"> </span></small>
+                    <input type="hidden" name="email" id="emailforcontact" />
+                    <input type="hidden" name="id" id="id" />
+                    <div class="mx-4 mt-4">
+                        <div class="form-check p-2 fs-6">
+                            <input class="form-check-input" value="1" type="radio" name="way" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                SMS
+                            </label>
+                        </div>
+                        <div class="form-check p-2 fs-6">
+                            <input class="form-check-input" value="2" type="radio" name="way" id="flexRadioDefault2" checked>
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Email
+                            </label>
+                        </div>
+                        <div class="form-check p-2 fs-6">
+                            <input class="form-check-input" value="3" type="radio" name="way" id="flexRadioDefault3">
+                            <label class="form-check-label" for="flexRadioDefault2">
+                                Both
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-4 form-floating ">
+                        <textarea required rows="4" name="msg" id="msgid" class="input-outline w-100 h-100 fs-6 form-control shadow-none" type="text"></textarea>
+                        <label class="inputs-lable inputs-lable fs-6" for="msgid">Message</label>
+                        <div class="invalid-feedback">
+                            Please Enter Message.
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" class=" btn btn-info text-white" value="Send" style="display:block !important">
+                    <button type="button" class="btn btn-outline-info" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
-    function abcdefg() {
+    function assignemail(e) {
+        console.log(e);
+        document.getElementById('emailforcontact').value = e;
+    }
+
+    function getdatabyregion() {
         var region = $("#regiondropdown").val();
+        if (region == '-1') {
+            region = null;
+            location.reload();
+        }
         $.ajax({
-            method: "POST",
-            url: "/Providers/IndexAsync?region=" + region,
+            type: "GET",
+            url: '@Url.Action("Index", "Provider")?region=' + region,
             cache: false,
             success: function (response) {
-                console.log(response);
-                location.reload();
+                console.log(response)
+                var bodyContent = $(response).find('tbody').html();
+                console.log(bodyContent)
+                $('#providerbody').html(bodyContent);
             },
             error: function () {
                 alert("Error while Loading data.");
@@ -112,24 +171,19 @@
         $('#saveChangesButton').click(function () {
             $('#saveChangesForm').submit();
         });
-        // Initialize an object to track the initial state of each checkbox
         var initialState = {};
-        // Store the initial state of each checkbox when the page loads
         $('.form-check-inputs').each(function () {
             initialState[this.id] = this.checked;
         });
         $('.form-check-inputs').change(function () {
             var changedValues = {};
-            // Check each checkbox for changes
             $('.form-check-inputs').each(function () {
                 if (this.checked !== initialState[this.id]) {
                     changedValues[this.id] = this.checked;
                 }
             });
-            // Update the hidden input with the changed values
             $('#changedValuesInput').val(JSON.stringify(changedValues));
             console.log(changedValues);
-            // Show or hide the "Save Changes" button based on whether there are any changes
             if (Object.keys(changedValues).length > 0) {
                 $('#saveChangesButton').show();
             } else {
