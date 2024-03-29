@@ -24,7 +24,6 @@ namespace HelloDocMVC.Repository.Repository
             _context = context;
             _emailConfig = emailConfig;
         }
-        #region PhysicianAll
         public async Task<List<ViewProvider>> PhysicianAll()
         {
             List<ViewProvider> data = await (from r in _context.Physicians
@@ -57,7 +56,6 @@ namespace HelloDocMVC.Repository.Repository
                                         .ToListAsync();
             return data;
         }
-        #endregion
         public async Task<List<ViewProvider>> PhysicianByRegion(int? region)
         {
             List<ViewProvider> data = await (
@@ -94,7 +92,6 @@ namespace HelloDocMVC.Repository.Repository
                                         .ToListAsync();
             return data;
         }
-        #region Change_Notification_Physician
         public async Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict)
         {
             try
@@ -132,8 +129,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region Physician_Add
         public async Task<bool> PhysicianAddEdit(ViewProvider physiciandata, string AdminId)
         {
             try
@@ -238,6 +233,5 @@ namespace HelloDocMVC.Repository.Repository
             }
             return false;
         }
-        #endregion
     }
 }
