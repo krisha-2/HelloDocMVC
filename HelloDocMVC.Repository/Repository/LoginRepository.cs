@@ -54,6 +54,7 @@ namespace HelloDocMVC.Repository.Repository
                     admin.FirstName = admin.FirstName ?? string.Empty;
                     admin.LastName = admin.LastName ?? string.Empty;
                     admin.Role = datarole.Name;
+                admin.AspNetUserId = user.Id;
                     if (admin.Role == "Admin")
                     {
                         var admindata = _context.Admins.FirstOrDefault(u => u.AspNetUserId == user.Id);

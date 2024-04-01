@@ -6,6 +6,12 @@
 @{
     Layout = "_LayoutAdminDashboard";
 }
+@*<style>
+    .was-validated .form-check-input:valid ~ .form-check-label, .form-check-input:valid {
+        color: black !important;
+        border-color: #0dcaf0 !important;
+    }
+</style>*@
 <div class="container">
     @* heading *@
     <div class="d-flex justify-content-between">
@@ -33,7 +39,7 @@
                     <input type="hidden" id="changedValuesInput" name="changedValues">
                     <a class="btn text-info m-1 border border-info align-self-center" style="display:none;" id="saveChangesButton"> Save Changes </a>
                 </form>
-                <a class="btn bg-info text-white m-1 align-self-center">
+                <a class="btn bg-info text-white m-1 align-self-center" asp-action="PhysicianProfile" asp-controller="Provider">
                     Create Provider Account
                 </a>
             </div>
@@ -80,7 +86,7 @@
                                 <button data-bs-toggle="modal" onclick="assignemail('@item.Email')" data-bs-id="@item.Physicianid" data-bs-email="@item.Email" data-bs-target="#myModal" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Contact
                                 </button>
-                                <a asp-action="Edit" asp-controller="Provider" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="@item.Physicianid" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Edit
                                 </a>
                             </td>
@@ -130,7 +136,6 @@
                             Please Enter Message.
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <input type="submit" class=" btn btn-info text-white" value="Send" style="display:block !important">

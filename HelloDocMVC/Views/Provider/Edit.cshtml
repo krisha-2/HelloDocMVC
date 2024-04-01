@@ -1,1 +1,597 @@
-﻿
+﻿﻿@{
+    Layout = "_LayoutAdminDashboard";
+}
+@using static HelloDocMVC.Entity.Models.Constant;
+@model HelloDocMVC.Entity.Models.ViewProvider;
+
+@{
+    var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+}
+
+<div class="container mb-3">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>@ViewData["PhysicianAccount"] Physician Account</strong></h4>
+        </div>
+        <div>
+            <div class="border border-info rounded p-2 m-1">
+                <a asp-controller="Provider" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+            </div>
+        </div>
+    </div>
+    @* Profile Information *@
+    <div class="bg-white rounded shadow mt-3 pb-3">
+        <form method="post" asp-controller="Provider" asp-action="PhysicianAddEdit" id="addedit" enctype="multipart/form-data">
+            <div class="p-4 border border-bottom">
+                @* Account Information *@
+                <h5><strong>Account Information</strong></h5>
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="UserName" placeholder=Suchtext />
+                                <label for="UserName">User Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
+                                <label for="PassWord">PassWord</label>
+                                @* <span asp-validation-for="Password"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
+                                </select>
+                                <label for="Status">Status</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
+                                </select>
+                                <label for="Roleid">Role</label>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" id="edit0" class="btn btn-info text-white me-2" onclick="toggleFormElements0()" />
+                            <button type="submit" id="save0" class="btn btn-info text-white me-2" asp-action="EditAccountInfo" asp-controller="Provider">Save</button>
+                            <button class="btn border border-info text-info " asp-action="ResetPassAdmin" asp-controller="Provider" id="resetpassbtn">Reset Password</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                @* Administrator Information *@
+
+                <h5><strong>Physician Information</strong></h5>
+                <input type="hidden" asp-for="Physicianid" />
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
+                                <label for="Firstname">First Name</label>
+                                @* <span asp-validation-for="Firstname" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Lastname" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
+                                <label for="lname1">Last Name</label>
+                                @* <span asp-validation-for="Lastname" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="Email" placeholder="Date Of Birth">
+                                <label for="Email">Email</label>
+                                @* <span asp-validation-for="Email" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="text" asp-for="Mobile" class="form-control shadow-none input1" id="Mobile" autocomplete="off" placeholder="Phone Number">
+                                <label for="Mobile">Phone Number</label>
+                                @* <span asp-validation-for="Mobile" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="Medicallicense" class="form-control shadow-none input1" id="Medicallicense" autocomplete="off" placeholder="Phone Number">
+                                <label for="Medicallicense">Medical License#</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="Npinumber" class="form-control shadow-none input1" id="Npinumber" autocomplete="off" placeholder="Phone Number">
+                                <label for="Npinumber">NPI Number</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="Syncemailaddress" class="form-control shadow-none input1" id="Syncemailaddress" autocomplete="off" placeholder="Phone Number">
+                                <label for="Syncemailaddress">Synchronization Email Address</label>
+                            </div>
+                        </div>
+                        <input asp-for="Regionsid" type="hidden" id="regionids" />
+                        <div class="col-md-6 d-flex pb-3" style="flex-wrap: wrap;">
+                            @foreach (var cb in ViewBag.RegionComboBox)
+                            {
+                                @if (Model != null && Model.Regionids.Count > 0 && Model.Regionids.Exists(id => id.regionid == cb.RegionId))
+                                {
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input region-check" value="@cb.RegionId" type="checkbox" name="Region" checked>
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            @cb.RegionName
+                                        </label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input region-check" value="@cb.RegionId" type="checkbox" name="Region">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            @cb.RegionName
+                                        </label>
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleFormElements1()" />
+                            <button type="submit" id="save1" class="btn btn-info text-white" asp-action="EditPhysicianInfo" asp-controller="Provider">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                @* Mailing/Billing Information *@
+
+                <h5><strong>Mailing/Billing Information</strong></h5>
+                <input type="hidden" asp-for="Physicianid" />
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1" autocomplete="off" placeholder="Phone Number">
+                                <label for="Address1">Address 1</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="text" asp-for="Address2" class="form-control shadow-none input2" id="Address2" autocomplete="off" placeholder="Phone Number">
+                                <label for="Address2">Address 2</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="text" asp-for="City" class="form-control shadow-none input2" id="City" autocomplete="off" placeholder="Phone Number">
+                                <label for="City">City</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
+                                <label for="State">State</label>
+                                @* <span asp-validation-for="State" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zipcode" placeholder=Suchtext autocomplete=off>
+                                <label for="Zipcode">Zip</label>
+                                @* <span asp-validation-for="State" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete="off">
+                                <label for="phone">Phone Number</label>
+                                @* <span asp-validation-for="Altphone" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleFormElements2()" />
+                            <button type="submit" id="save2" class="btn btn-info text-white" asp-action="EditMailBillingInfo" asp-controller="Provider">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                @* Provider Profile *@
+
+                <h5><strong>Provider Profile</strong></h5>
+                <input type="hidden" asp-for="Physicianid" />
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Businessname" class="form-control shadow-none input3" id="Businessname" placeholder=Suchtext>
+                                <label for="Businessname">Business Name</label>
+                                @* <span asp-validation-for="Address1" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Businesswebsite" class="form-control shadow-none input3" id="Businesswebsite" placeholder=Suchtext>
+                                <label for="Businesswebsite">Business Website</label>
+                                @* <span asp-validation-for="Address2" class="text-danger"></span> *@
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                                <button type="button" id="choosenfile" class="col btn text-start text-secondary input3">
+                                    Select Photo
+                                </button>
+                                <input id="file" type="file" class="d-none form-control doc_uploder input3" asp-for="PhotoFile">
+                                <div class="btn btn-info text-white py-2 input3" value="Upload" onclick="document.getElementById('file').click()">
+                                    <i class="fa fa-cloud-upload"></i>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 pb-3">
+                            <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                                <button type="button" id="choosenfile1" class="col btn text-start text-secondary input3">
+                                    Select Signature
+                                </button>
+                                <input id="file1" type="file" class="d-none form-control doc_uploder input3" asp-for="SignatureFile">
+                                <div class="btn btn-info text-white py-2 input3" value="Upload" onclick="document.getElementById('file1').click()">
+                                    <i class="fa fa-cloud-upload"></i>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 pb-3 p-0">
+                            @* <div class="d-flex justify-content-between bg-light border border-secondary rounded"> *@
+                            <div class="btn btn-info text-white py-2 px-1 input3">
+                                <i class="fa fa-pen"></i>
+                                <span class="d-none d-sm-inline">Create</span>
+                            </div>
+                            @* </div> *@
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            @if (Model != null && Model.Photo != null)
+                            {
+                                <span> Photo  </span>
+                                <img class="img-fluid border border-1 h-100 w-25 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Photo" alt="Photo" />
+                            }
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            @if (Model != null && Model.Photo != null)
+                            {
+                                <span> Photo  </span>
+                                <img class="img-fluid border border-1 h-100 w-25 mx-2" src="~/Upload/Physician/@Model.Physicianid/@Model.Signature" alt="Photo" />
+                            }
+                        </div>
+                        <div class="col-md-12 pb-3">
+
+                            <div class="form-floating">
+                                <textarea id="Adminnotes" asp-for="Adminnotes" required class="input-outline w-100 fs-6 form-control shadow-none input3" type="text" style=" height:100px;"></textarea>
+                                <label class="inputs-lable inputs-lable-textarea fs-6" for="Adminnotes">Admin Notes</label>
+                            </div>
+
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="button" value="Edit" id="edit3" class="btn btn-info text-white" onclick="toggleFormElements3()" />
+                            <button type="submit" id="save3" class="btn btn-info text-white" asp-action="EditProviderProfile" asp-controller="Provider">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="p-4">
+                <h5><strong>Onboarding</strong></h5>
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-check mx-2">
+                                <input class="form-check-input agreement-checkbox " asp-for="Isagreementdoc" name="Isagreementdoc" type="checkbox" id="flexCheckDefault" disabled>
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    Independent Contractor Agreement
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div>
+                                @{
+                                    var isChecked = Model != null ? Model.Islicensedoc : false;
+                                }
+
+                                <input id="filebtn1" type="file" class="d-none form-control doc_uploder file " asp-for="Agreementdoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn1').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
+                            </div>
+                            @{
+                                if (Model != null && Model.Isagreementdoc)
+                                {
+                                    <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
+                                }
+                            }
+                            <a class="btn btn-info mx-2 text-white view-button" style="display:none;">View</a>
+
+                            <!-- Display uploaded file details -->
+                            <div class="file-details" style="display:none;">
+                                <p><span class="file-name"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-check mx-2">
+                                <input class="form-check-input agreement-checkbox" asp-for="Isbackgrounddoc" type="checkbox" id="Isbackgrounddoc">
+                                <label class="form-check-label" for="Isbackgrounddoc">
+                                    Background Check
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div>
+                                @{
+                                    isChecked = Model != null ? Model.Islicensedoc : false;
+                                }
+                                <input id="filebtn2" type="file" class="d-none form-control doc_uploder file" asp-for="BackGrounddoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn2').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
+                            </div>
+                            @{
+                                if (Model != null && Model.Isbackgrounddoc)
+                                {
+                                    <a href="~/Upload/Physician/@Model.Physicianid/BackGrounddoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
+                                }
+                            }
+                            <!-- Display uploaded file details -->
+                            <div class="file-details" style="display:none;">
+                                <p><span class="file-name"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-check mx-2">
+                                <input class="form-check-input agreement-checkbox" asp-for="Istrainingdoc" type="checkbox" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    HIPAA Compliance
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div>
+                                @{
+                                    isChecked = Model != null ? Model.Islicensedoc : false;
+                                }
+                                <input id="filebtn3" type="file" class="d-none form-control doc_uploder file" asp-for="Trainingdoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button me-2" value="Upload" onclick="document.getElementById('filebtn3').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
+
+                                @{
+                                    if (Model != null && Model.Istrainingdoc)
+                                    {
+                                        <a href="~/Upload/Physician/@Model.Physicianid/Trainingdoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
+                                    }
+                                }
+                            </div>
+
+                            <!-- Display uploaded file details -->
+                            <div class="file-details" style="display:none;">
+                                <p><span class="file-name"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-check mx-2">
+                                <input class="form-check-input agreement-checkbox" asp-for="Isnondisclosuredoc" type="checkbox" id="Isnondisclosuredoc">
+                                <label class="form-check-label" for="Isnondisclosuredoc">
+                                    Non-disclosure Agreement
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div>
+                                @{
+                                    isChecked = Model != null ? Model.Islicensedoc : false;
+                                }
+                                <input id="filebtn4" type="file" class="d-none form-control doc_uploder file" asp-for="NonDisclosuredoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn4').click()" disabled>
+                                    <span class="d-none d-sm-inline">Upload</span>
+                                </button>
+                            </div>
+                            @{
+                                if (Model != null && Model.Isnondisclosuredoc)
+                                {
+                                    <a href="~/Upload/Physician/@Model.Physicianid/NonDisclosuredoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
+                                }
+                            }
+                            <!-- Display uploaded file details -->
+                            <div class="file-details" style="display:none;">
+                                <p><span class="file-name"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12 mb-2">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-check mx-2">
+                                <input class="form-check-input agreement-checkbox" asp-for="Islicensedoc" type="checkbox" id="Islicensedoc">
+                                <label class="form-check-label" for="Islicensedoc">
+                                    License Document
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-5 d-flex">
+                            <div>
+                                @{
+                                    isChecked = Model != null ? Model.Islicensedoc : false;
+                                }
+                                <input id="filebtn5" type="file" class="d-none form-control doc_uploder file" asp-for="Licensedoc" disabled>
+                                <button type="button" class="btn btn-info text-white upload-button" value="Upload" onclick="document.getElementById('filebtn5').click()" disabled>
+                                    Upload
+                                </button>
+
+                                @{
+                                    if (Model != null && Model.Islicensedoc)
+                                    {
+                                        <a href="~/Upload/Physician/@Model.Physicianid/Agreementdoc.pdf" target="_blank" class="btn btn-info text-white">View</a>
+                                    }
+                                }
+                            </div>
+                            <!-- Display uploaded file details -->
+                            <div class="file-details" style="display:none;">
+                                <p><span class="file-name"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div class="text-end mt-2 edits">
+                    <button type="submit" asp-action="EditProviderOnbording" asp-controller="Physician" id="formsave" class="btn text-white btn-info btn-submit mx-2 ">
+                        save
+                    </button>
+                    <a asp-action="DeletePhysician" asp-controller="Physician" asp-route-PhysicianID="@(Model!= null?Model.Physicianid:null)" id="deleteaccount" class="btn  btn-danger ">
+                        Delete Account
+                    </a>
+                    <input type="button" class="btn btn-success text-white" id="add" value="Create Physician" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    if ("@ViewData["PhysicianAccount"]" == "Edit") {
+        window.onload = function (e) {
+            toggleFormElements0('true')
+            toggleFormElements1('true')
+            toggleFormElements2('true')
+            toggleFormElements3('true')
+            $(".region-check").prop("disabled", true);
+            $('#add').css("display", "none");
+        }
+    }
+    $(document).ready(function () {
+
+        if ("@ViewData["PhysicianAccount"]" == "Add") {
+            $('#save0,#save1,#save2,#save3,#edit0,#edit1,#edit2,#edit3,#deleteaccount,#formsave').css("display", "none");
+        }
+    });
+    $("#file").change(function () {
+        filename = this.files[0].name;
+        $("#choosenfile").text(filename);
+    });
+    $("#file1").change(function () {
+        filename2 = this.files[0].name;
+        $("#choosenfile1").text(filename2);
+    });
+
+    function toggleFormElements0(bDisabled) {
+        var inputs0 = document.getElementsByClassName("input0");
+        var submit0 = document.getElementById("save0");
+        var editprofile0 = document.getElementById("edit0");
+        for (var i = 0; i < inputs0.length; i++) {
+            inputs0[i].disabled = !inputs0[i].disabled;
+        }
+        if (inputs0[0].disabled) {
+            submit0.style.display = "none";
+            editprofile0.style.display = "block";
+        } else {
+            submit0.style.display = "block";
+            editprofile0.style.display = "none";
+        }
+    }
+
+    function toggleFormElements1(bDisabled) {
+        var inputs = document.getElementsByClassName("input1");
+        var submit = document.getElementById("save1");
+        var editprofile = document.getElementById("edit1");
+        for (var i = 0; i < inputs.length; i++) {
+            inputs[i].disabled = !inputs[i].disabled;
+        }
+        $(".region-check").prop("disabled", false);
+        if (inputs[0].disabled) {
+            submit.style.display = "none";
+            editprofile.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            editprofile.style.display = "none";
+        }
+    }
+
+    function toggleFormElements2(bDisabled) {
+        var inputs2 = document.getElementsByClassName("input2");
+        var submit2 = document.getElementById("save2");
+        var editprofile2 = document.getElementById("edit2");
+        for (var i = 0; i < inputs2.length; i++) {
+            inputs2[i].disabled = !inputs2[i].disabled;
+        }
+        if (inputs2[0].disabled) {
+            submit2.style.display = "none";
+            editprofile2.style.display = "block";
+        } else {
+            submit2.style.display = "block";
+            editprofile2.style.display = "none";
+        }
+    }
+
+    function toggleFormElements3(bDisabled) {
+        var inputs3 = document.getElementsByClassName("input3");
+        var submit3 = document.getElementById("save3");
+        var editprofile3 = document.getElementById("edit3");
+        for (var i = 0; i < inputs3.length; i++) {
+            inputs3[i].disabled = !inputs3[i].disabled;
+        }
+        if (inputs3[0].disabled) {
+            submit3.style.display = "none";
+            editprofile3.style.display = "block";
+        } else {
+            submit3.style.display = "block";
+            editprofile3.style.display = "none";
+        }
+    }
+
+    $(function () {
+        $('#add').on('click', function () {
+            let checkboxes = document.querySelectorAll('input[name="Region"]:checked');
+            let regionIds = [];
+            checkboxes.forEach((checkbox) => {
+                regionIds.push(checkbox.value);
+            });
+            document.querySelector('#regionids').value = regionIds.join(',');
+            $('#addedit').submit();
+        });
+    });
+
+    $(document).ready(function () {
+        $(document).on('change', '.agreement-checkbox', function () {
+            var checkbox = $(this);
+            var row = checkbox.closest('.row');
+            console.log("123")
+            var uploadBtn = row.find('.upload-button');
+            var doc_uploder = row.find('.doc_uploder');
+            uploadBtn.prop('disabled', !checkbox.prop('checked'));
+            doc_uploder.prop('disabled', !checkbox.prop('checked'));
+        });
+    });
+
+</script>
