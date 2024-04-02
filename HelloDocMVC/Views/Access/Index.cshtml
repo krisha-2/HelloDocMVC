@@ -1,0 +1,75 @@
+﻿@{
+	Layout = "_LayoutAdminDashboard";
+}
+@using static HelloDocMVC.Entity.Models.Constant;
+@model List<HelloDocMVC.Entity.DataModels.Role>;
+<div class="container">
+	<div class="d-flex justify-content-between">
+		<div class="d-flex align-self-center">
+			<h4><strong>Account Access</strong></h4>
+		</div>
+		<div>
+			<div class="border border-info rounded p-2 m-1">
+				<a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+			</div>
+		</div>
+	</div>
+	<div class="bg-white rounded shadow mt-3">
+		<div class="d-flex justify-content-end align-self-center p-3">
+			<a class="btn btn-outline-info m-1 align-self-center" asp-action="CreateRoleAccess" asp-controller="Access">
+				Create Access
+			</a>
+		</div>
+		<div class="table-responsive m-2">
+			<table class="table table-responsive mt-3 mb-0 dataTable">
+				<thead class="theadbg table-secondary">
+					<tr>
+						@{
+							// var J1 = @Model.IsAscending;
+							<th scope="col" class="text-start ps-2">Name</th>
+							<th scope="col">Account Type</th>
+							<th scope="col" class="text-end pe-2">Actions</th>
+						}
+					</tr>
+				</thead>
+				<tbody class="table-group-divider" id="providerbody">
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td class="text-start ps-2">@item.Name</td>
+							<td>@Enum.GetName(typeof(AccountType), item.AccountType)</td>
+							<td class="d-flex justify-content-end me-2">
+								<a asp-action="CreateRoleAccess" asp-controller="Access" asp-route-id="@item.RoleId" class="btn btn-outline-info btn-sm document-button mx-1">
+									Edit
+								</a>
+								<a class="btn btn-outline-info btn-sm document-button mx-1 deletebtn">
+									Delete
+								</a>
+								<form id="deleteroleform" asp-action="DeleteRole" asp-controller="Access" asp-route-roleid="@item.RoleId">
+								</form>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+</div>
+<script>
+	$(function () {
+		$('.deletebtn').on('click', function () {
+			Swal.fire({
+				title: "Do you want to delete role ?",
+				showDenyButton: false,
+				showCancelButton: true,
+				confirmButtonText: "Yes",
+				denyButtonText: `Cancel`
+			}).then((result) => {
+				if (result.isConfirmed) {
+					$('#deleteroleform').submit();
+				}
+			});
+		});
+	});
+</script>

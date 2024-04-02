@@ -24,6 +24,7 @@ builder.Services.AddScoped<IJwtSession, JwtSession>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IAdminProfile, AdminProfile>();
 builder.Services.AddScoped<IProvider, Provider>();
+builder.Services.AddScoped<IAccessRole, AccessRole>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();

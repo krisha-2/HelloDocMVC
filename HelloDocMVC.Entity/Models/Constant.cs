@@ -41,5 +41,12 @@ namespace HelloDocMVC.Entity.Models
             Unavailable = 0,
             Available
         }
+        public enum AccountType
+        {
+            All = 0,
+            Admin,
+            Physician,
+            Patient
+        }
     }
 }
