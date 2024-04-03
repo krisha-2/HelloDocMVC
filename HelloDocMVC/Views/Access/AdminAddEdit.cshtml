@@ -1,0 +1,182 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+﻿@{
+    Layout = "_LayoutAdminDashboard";
+}
+@using static HelloDocMVC.Entity.Models.Constant;
+@model HelloDocMVC.Entity.Models.ViewAdminProfileData;
+
+@{
+    var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>Create Admin Account</strong></h4>
+        </div>
+        <a asp-controller="Access" asp-action="UserRole" class="btn border border-info bg-light rounded mt-3 mb-1">
+            <span class="text-info">
+                <i class="fa fa-angle-left align-middle"></i>
+                <b>&nbsp;&nbsp;Back</b>
+            </span>
+        </a>
+    </div>
+    @* Profile Information *@
+    <div class="bg-white rounded shadow mt-3">
+        <div class="p-4">
+            @* Account Information *@
+            <form method="post" asp-controller="Access" asp-action="AdminAdd" id="resetpassform">
+                <h5><strong>Account Information</strong></h5>
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-4 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="uname" placeholder="First Name" />
+                                <label for="uname">User Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Password" class="form-control shadow-none" id="pass" placeholder="Last Name" />
+                                <label for="pass">PassWord</label>
+                                <span asp-validation-for="Password"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4 pb-3">
+                            <div class="form-floating">
+                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
+                                </select>
+                                <label for="role">Role</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h5><strong>Administrator Information</strong></h5>
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="FirstName" class="form-control shadow-none input1" id="fname1" placeholder="First Name">
+                                <label for="fname1">First Name</label>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="LastName" class="form-control shadow-none input1" id="lname1" placeholder="Last Name">
+                                <label for="lname1">Last Name</label>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="dob1" placeholder="Date Of Birth">
+                                <label for="dob1">Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="email1" placeholder="Date Of Birth">
+                                <label for="email1">Confirm Email</label>
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
+                                <label for="phone1">Phone Number</label>
+                                <span asp-validation-for="Mobile" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <input asp-for="Regionsid" type="hidden" id="regionidlist" />
+                        <div class="col-md-6 d-flex pb-3">
+                            @foreach (var cb in ViewBag.RegionComboBox)
+                            {
+                                <div class="form-check mx-2">
+                                    <input class="form-check-input" value="@cb.RegionId" type="checkbox" name="Region">
+                                    <label class="form-check-label" for="flexCheckDefault">
+                                        @cb.RegionName
+                                    </label>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+                </div>
+                <h5><strong>Mailing/Billing Information</strong></h5>
+                <div class="col-xl-12">
+                    <div class="row pb-4">
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Address1" class="form-control shadow-none" id="Address1" placeholder="Address1">
+                                <label for="Address1">Address 1</label>
+                                <span asp-validation-for="Address1" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Address2" class="form-control shadow-none" id="Address2" placeholder="Address2">
+                                <label for="Address2">Address 2</label>
+                                <span asp-validation-for="Address2" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="City" class="form-control shadow-none" id="City" placeholder="City">
+                                <label for="City">City</label>
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="State" class="form-control shadow-none" id="State" placeholder="State" autocomplete=off>
+                                <label for="State">State</label>
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating">
+                                <input type="text" asp-for="Zip" class="form-control shadow-none" id="Zip" placeholder="Zipcode">
+                                <label for="Zip">Zip</label>
+                                <span asp-validation-for="Zip" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 pb-3">
+                            <div class="form-floating h-100 w-100">
+                                <input type="tel" asp-for="AltMobile" class="form-control shadow-none" id="phone" autocomplete="off" placeholder="phone">
+                                <label for="phone">Phone Number</label>
+                                <span asp-validation-for="AltMobile" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <input type="submit" value="Save" id="save" class="btn btn-info text-white me-2" />
+                            <a asp-controller="Access" asp-action="UserAccess" class="btn border border-info bg-light rounded">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $('#save').on('click', function () {
+            let checkboxes = document.querySelectorAll('input[name="Region"]:checked');
+            let regionIds = [];
+            checkboxes.forEach((checkbox) => {
+                regionIds.push(checkbox.value);
+            });
+            document.querySelector('#regionidlist').value = regionIds.join(',');
+        });
+    });
+</script>
+

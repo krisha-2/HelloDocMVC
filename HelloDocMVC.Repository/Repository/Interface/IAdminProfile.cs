@@ -13,5 +13,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> EditPassword(string password, int adminId);
         public bool EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile);
         public Task<bool> BillingInfoEdit(ViewAdminProfileData _viewAdminProfile);
+        public Task<bool> SaveAdminInfo(ViewAdminProfileData vm);
+        public Task<bool> AdminPost(ViewAdminProfileData admindata, string AdminId);
     }
 }

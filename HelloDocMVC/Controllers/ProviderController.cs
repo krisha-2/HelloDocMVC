@@ -121,7 +121,7 @@ namespace HelloDocMVC.Controllers
         #endregion
         #region Physician_Add
         [HttpPost]
-        public async Task<IActionResult> PhysicianAddEdit(ViewProvider physicians)
+        public async Task<IActionResult> PhysicianAdd(ViewProvider physicians)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();

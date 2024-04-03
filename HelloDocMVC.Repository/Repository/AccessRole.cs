@@ -21,14 +21,11 @@ namespace HelloDocMVC.Repository.Repository
 			_context = context;
 			_emailConfig = emailConfig;
 		}
-		#region GetRoleAccessDetails
 		public async Task<List<Role>> GetRoleAccessDetails()
 		{
             List<Role> v = await _context.Roles.Where(r => r.IsDeleted == new BitArray(1)).ToListAsync();
             return v;
 		}
-        #endregion
-        #region GetAllUserDetails
         public async Task<List<ViewUser>> GetAllUserDetails(int? User)
         {
             IQueryable<ViewUser> query =
@@ -47,7 +44,7 @@ namespace HelloDocMVC.Repository.Repository
                     FirstName = admin != null ? admin.FirstName : (physician != null ? physician.FirstName : null),
                     isAdmin = admin != null,
                     UserID = admin != null ? admin.AdminId : (physician != null ? physician.PhysicianId : null),
-                    accounttype = admin != null ? 2 : (physician != null ? 3 : null),
+                    accounttype = admin != null ? 1 : (physician != null ? 3 : null),
                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
                     Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
                 };
@@ -56,19 +53,19 @@ namespace HelloDocMVC.Repository.Repository
             {
                 switch (User.Value)
                 {
-                    case 2: // Admin data
+                    case 1: // Admin data
                         query = query.Where(u => u.isAdmin);
                         break;
-                    case 3: // Provider data
+                    case 2: // Provider data
                         query = query.Where(u => !u.isAdmin);
+                        break;
+                    case 3:
+                        query = query.Where(u => !u.isAdmin && u.isAdmin);
                         break;
                 }
             }
             return await query.ToListAsync();
         }
-        #endregion
-
-        #region GetRoleByMenus
         public async Task<ViewRole> GetRoleByMenus(int roleid)
         {
             var r = await _context.Roles
@@ -84,14 +81,10 @@ namespace HelloDocMVC.Repository.Repository
                         .FirstOrDefaultAsync();
             return r;
         }
-        #endregion
-        #region GetMenusByAccount
         public async Task<List<HelloDocMVC.Entity.DataModels.Menu>> GetMenusByAccount(short Accounttype)
         {
             return await _context.Menus.Where(r => r.AccountType == Accounttype).ToListAsync();
         }
-        #endregion
-        #region CheckMenuByRole
         public async Task<List<int>> CheckMenuByRole(int roleid)
         {
             return await _context.RoleMenus
@@ -99,8 +92,6 @@ namespace HelloDocMVC.Repository.Repository
                         .Select(r => r.MenuId)
                         .ToListAsync();
         }
-        #endregion
-        #region PostRoleMenu
         public async Task<bool> PostRoleMenu(ViewRole role, string Menusid, string ID)
         {
             try
@@ -139,9 +130,6 @@ namespace HelloDocMVC.Repository.Repository
             }
 
         }
-        #endregion
-
-        #region PutRoleMenu
         public async Task<bool> PutRoleMenu(ViewRole role, string Menusid, string ID)
         {
             try
@@ -194,9 +182,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-
-        #region DeletePhysician
         public async Task<bool> DeleteRoles(int roleid, string AdminID)
         {
             try
@@ -233,6 +218,5 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
     }
 }

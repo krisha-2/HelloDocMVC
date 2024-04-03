@@ -16,15 +16,20 @@ namespace HelloDocMVC.Controllers
         private readonly IComboBox _comboBox;
         private readonly ILogger<AdminController> _logger;
         private readonly EmailConfiguration _emailConfig;
+        private readonly IAdminProfile _IAdminProfile;
+        private readonly IProvider _IProvider;
 
-        public AccessController(ILogger<AdminController> logger, IAccessRole IRoleAccessRepository, INotyfService notyf, IComboBox comboBox, EmailConfiguration emailConfiguration)
+        public AccessController(ILogger<AdminController> logger, IAccessRole IRoleAccessRepository, INotyfService notyf, IComboBox comboBox, EmailConfiguration emailConfiguration, IAdminProfile IMyProfileRepository, IProvider IProvider)
         {
             _IAccessRole = IRoleAccessRepository;
             _notyf = notyf;
             _logger = logger;
             _comboBox = comboBox;
             _emailConfig = emailConfiguration;
+            _IAdminProfile = IMyProfileRepository;
+            _IProvider = IProvider;
         }
+
         #endregion
         #region Index
         public async Task<IActionResult> Index()
@@ -32,19 +37,18 @@ namespace HelloDocMVC.Controllers
             List<Role> v = await _IAccessRole.GetRoleAccessDetails();
             return View("../Access/Index", v);
         }
-		#endregion
-		#region User_Access
-		public async Task<IActionResult> UserAccess(int? User)
-		{
-			List<ViewUser> data = await _IAccessRole.GetAllUserDetails(User);
-			if (User != null)
-			{
-				return Json(data);
-			}
-			return View("../Access/UserAccess", data);
+        #endregion
+        #region User_Access
+        public async Task<IActionResult> UserRole(int? role)
+        {
+            List<ViewUser> data = await _IAccessRole.GetAllUserDetails(role);
+            if (role != null)
+            {
+                data = await _IAccessRole.GetAllUserDetails(role);
+            }
+            return View("../Access/UserRole", data);
 		}
 		#endregion
-
 		#region Create_Role_Access-ADDEdit
 		public async Task<IActionResult> CreateRoleAccess(int? id)
 		{
@@ -59,7 +63,6 @@ namespace HelloDocMVC.Controllers
 			return View("../Access/CreateRole");
 		}
 		#endregion
-
 		#region GetMenusByAccount
 		public async Task<IActionResult> GetMenusByAccount(short Accounttype, int roleid)
 		{
@@ -104,11 +107,11 @@ namespace HelloDocMVC.Controllers
 			{
 				if (await _IAccessRole.PostRoleMenu(role, Menusid, CV.ID()))
 				{
-					_notyf.Success("Role Add Successfully...");
+					_notyf.Success("Role Added Successfully...");
 				}
 				else
 				{
-					_notyf.Error("Role not Add...");
+					_notyf.Error("Role not Added...");
 				}
 			}
 			else
@@ -141,6 +144,142 @@ namespace HelloDocMVC.Controllers
 				return RedirectToAction("Index");
 			}
 		}
-		#endregion
-	}
+        #endregion
+        #region AddEdit_Profile
+        public async Task<IActionResult> PhysicianAddEdit(int? id)
+        {
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
+            ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["PhysicianAccount"] = "Add";
+            }
+            else
+            {
+                ViewData["PhysicianAccount"] = "Edit";
+                ViewProvider v = await _IProvider.GetPhysicianById((int)id);
+                return View("../Provider/Edit", v);
+            }
+            return View("../Provider/Edit");
+        }
+        #endregion
+
+        #region AdminAdd
+
+        public async Task<IActionResult> AdminAddEdit(int? id)
+        {
+
+
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
+            ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
+            if (id == null)
+            {
+                ViewData["AdminAccount"] = "Add Admin";
+            }
+            return View("../Access/AdminAddEdit");
+        }
+        #endregion
+
+        #region AdminEdit
+        public async Task<IActionResult> AdminEdit(int? id)
+        {
+            ViewAdminProfileData p = await _IAdminProfile.GetProfileDetails((id != null ? (int)id : Convert.ToInt32(CV.UserID())));
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
+            ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
+            return View("../AdminProfile/Index", p);
+        }
+        #endregion
+
+        #region Create_Admin
+        [HttpPost]
+        public async Task<IActionResult> AdminAdd(ViewAdminProfileData vm)
+        {
+            //TempData["Status"] = TempData["Status"];
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
+            ViewBag.UserRolecombobox = await _comboBox.AdminRoleComboBox();
+            // bool b = physicians.Isagreementdoc[0];
+
+            /*if (ModelState.IsValid)
+            {*/
+            if (await _IAdminProfile.AdminPost(vm, CV.ID()))
+            {
+                _notyf.Success("Admin Added Successfully..!");
+            }
+            else
+            {
+                _notyf.Error("Admin not Added Successfully..!");
+                return View("../Access/AdminAddEdit", vm);
+            }
+            /*else
+            {
+                return View("../Admin/Access/AdminAddEdit", vm);
+            }*/
+            return RedirectToAction("UserRole");
+        }
+        #endregion
+        #region SaveAdminInfo
+        public async Task<IActionResult> SaveAdminInfo(ViewAdminProfileData vm)
+        {
+            bool data = await _IAdminProfile.SaveAdminInfo(vm);
+            if (data)
+            {
+                _notyf.Success("Admin Information Changed successfully...");
+            }
+            else
+            {
+                _notyf.Error("Admin Information not Changed successfully...");
+            }
+            return RedirectToAction("AdminEdit", new { id = vm.AdminId });
+        }
+        #endregion
+
+        #region SaveAdministrationinfo
+        public async Task<IActionResult> EditAdministratorInfo(ViewAdminProfileData vm)
+        {
+            //bool data = await _IAdminProfile.EditAdministratorInfo(vm);
+            //if (data)
+            //{
+            //    _notyf.Success("Administration Information Changed successfully...");
+            //}
+            //else
+            //{
+            //    _notyf.Error("Administration Information not Changed successfully...");
+            //}
+            return RedirectToAction("AdminEdit", new { id = vm.AdminId });
+        }
+        #endregion
+
+        #region EditBillingInfo
+        public async Task<IActionResult> BillingInfoEdit(ViewAdminProfileData vm)
+        {
+            bool data = await _IAdminProfile.BillingInfoEdit(vm);
+            if (data)
+            {
+                _notyf.Success("Billing Information Changed successfully...");
+            }
+            else
+            {
+                _notyf.Error("Billing Information not Changed successfully...");
+            }
+            return RedirectToAction("AdminEdit", new { id = vm.AdminId });
+        }
+        #endregion
+
+        #region ResetPassAdmin
+        public async Task<IActionResult> EditPassword(string password, int AdminId)
+        {
+            bool data = await _IAdminProfile.EditPassword(password, AdminId);
+            if (data)
+            {
+                _notyf.Success("Password changed Successfully...");
+            }
+            else
+            {
+                _notyf.Error("Password not Changed Successfully...");
+            }
+            return RedirectToAction("AdminEdit", new { id = AdminId });
+        }
+        #endregion
+    }
 }

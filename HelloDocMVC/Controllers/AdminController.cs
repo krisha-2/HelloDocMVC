@@ -183,17 +183,6 @@ namespace HelloDocMVC.Controllers
             return RedirectToAction("Index", "Admin", new { Status = "2" });
         }
         #endregion
-        //public IActionResult ViewUpload(int RequestId)
-        //{
-        //    var result = _IAdminDashboard.ViewUpload(RequestId);
-        //    return View(result);
-        //}
-        //[HttpPost]
-        //public IActionResult ViewUpload(ViewDocument v, IFormFile? UploadFile, int RequestId)
-        //{
-        //    _IAdminDashboard.UploadDoc(v, UploadFile, RequestId);
-        //    return ViewUpload(v.RequestId);
-        //}
         #region View_Upload
         public async Task<IActionResult> ViewUploads(ViewDocuments viewDocument, int? id)
         {

@@ -4,6 +4,7 @@ using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 using static HelloDocMVC.Entity.Models.ViewAdminProfileData;
 
 namespace HelloDocMVC.Repository.Repository
@@ -161,6 +162,115 @@ namespace HelloDocMVC.Repository.Repository
                 }
             }
             catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+        #region SavePhysicianInfo
+        public async Task<bool> SaveAdminInfo(ViewAdminProfileData vm)
+        {
+            try
+            {
+                if (vm == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var DataForChange = await _context.Admins
+                        .Where(W => W.AdminId == vm.AdminId)
+                        .FirstOrDefaultAsync();
+                    AspNetUser U = await _context.AspNetUsers.FirstOrDefaultAsync(m => m.Id == DataForChange.AspNetUserId);
+
+                    if (DataForChange != null)
+                    {
+                        U.UserName = vm.UserName;
+                        DataForChange.Status = (short?)vm.Status;
+                        DataForChange.RoleId = vm.Roleid;
+                        _context.Admins.Update(DataForChange);
+                        _context.AspNetUsers.Update(U);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region Admin_Add
+        public async Task<bool> AdminPost(ViewAdminProfileData admindata, string AdminId)
+        {
+            try
+            {
+                if (admindata.UserName != null && admindata.Password != null)
+                {
+                    //Aspnet_user
+                    var Aspnetuser = new AspNetUser();
+                    var hasher = new PasswordHasher<string>();
+                    Aspnetuser.Id = Guid.NewGuid().ToString();
+                    Aspnetuser.UserName = admindata.UserName;
+                    Aspnetuser.PasswordHash = hasher.HashPassword(null, admindata.Password);
+                    Aspnetuser.Email = admindata.Email;
+                    Aspnetuser.CreatedDate = DateTime.Now;
+                    _context.AspNetUsers.Add(Aspnetuser);
+                    _context.SaveChanges();
+
+                    //aspnet_user_roles
+                    var aspnetuserroles = new AspNetUserRole();
+                    aspnetuserroles.UserId = Aspnetuser.Id;
+                    aspnetuserroles.RoleId = "Admin";
+                    _context.AspNetUserRoles.Add(aspnetuserroles);
+                    _context.SaveChanges();
+
+                    //Admin
+                    var Admin = new HelloDocMVC.Entity.DataModels.Admin();
+                    Admin.AspNetUserId = Aspnetuser.Id;
+                    Admin.FirstName = admindata.FirstName;
+                    Admin.LastName = admindata.LastName;
+                    Admin.Status = 1;
+                    Admin.RoleId = admindata.Roleid;
+                    Admin.Email = admindata.Email;
+                    Admin.Mobile = admindata.Mobile;
+                    Admin.IsDeleted = new BitArray(1);
+                    Admin.IsDeleted[0] = false;
+                    Admin.Address1 = admindata.Address1;
+                    Admin.Address2 = admindata.Address2;
+                    Admin.City = admindata.City;
+                    Admin.Zip = admindata.Zip;
+                    Admin.AltPhone = admindata.AltMobile;
+                    Admin.CreatedDate = DateTime.Now;
+                    Admin.CreatedBy = AdminId;
+                    Admin.RegionId = admindata.Regionid;
+                    _context.Admins.Add(Admin);
+                    _context.SaveChanges();
+
+                    //Admin_region
+                    List<int> priceList = admindata.Regionsid.Split(',').Select(int.Parse).ToList();
+                    foreach (var item in priceList)
+                    {
+                        AdminRegion ar = new AdminRegion();
+                        ar.RegionId = item;
+                        ar.AdminId = (int)Admin.AdminId;
+                        _context.AdminRegions.Add(ar);
+                        _context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (Exception e)
             {
                 return false;
             }

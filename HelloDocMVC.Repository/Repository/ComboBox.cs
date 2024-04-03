@@ -71,5 +71,21 @@ namespace HelloDocMVC.Repository.Repository
                 RoleName = req.Name
             }).ToListAsync();
         }
+        public async Task<List<RoleComboBox>> PhysicianRoleComboBox()
+        {
+            return await _context.Roles.Where(r => r.AccountType == 2).Select(role => new RoleComboBox()
+            {
+                RoleId = (role.RoleId).ToString(),
+                RoleName = role.Name
+            }).ToListAsync();
+        }
+        public async Task<List<RoleComboBox>> AdminRoleComboBox()
+        {
+            return await _context.Roles.Where(r => r.AccountType == 1).Select(role => new RoleComboBox()
+            {
+                RoleId = (role.RoleId).ToString(),
+                RoleName = role.Name
+            }).ToListAsync();
+        }
     }
 }

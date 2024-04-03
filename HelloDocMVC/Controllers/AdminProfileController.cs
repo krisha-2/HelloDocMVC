@@ -26,7 +26,7 @@ namespace HelloDocMVC.Controllers
         {
             ViewAdminProfileData p = await _IAdminProfile.GetProfileDetails((id != null ? (int)id : Convert.ToInt32(CV.UserID())));
             ViewBag.RegionComboBox = _combobox.RegionComboBox();
-            //ViewBag.userrolecombobox = await _combobox.UserRoleComboBox();
+            ViewBag.userrolecombobox = await _combobox.AdminRoleComboBox();
             return View("../AdminProfile/Index", p);
         }
         #endregion
@@ -62,7 +62,7 @@ namespace HelloDocMVC.Controllers
         }
         #endregion
 
-        #region EditAdministratorInfo
+        #region BillingInfoEdit
         [HttpPost]
         public async Task<IActionResult> BillingInfoEdit(ViewAdminProfileData _viewAdminProfile)
         {

@@ -18,6 +18,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public List<HealthProfessional> Business(int profession);
         public HealthProfessional OrderData(int vendorid);
         public Task<List<RoleComboBox>> UserRoleComboBox();
+        public Task<List<RoleComboBox>> PhysicianRoleComboBox();
+        public Task<List<RoleComboBox>> AdminRoleComboBox();
 
     }
 }
