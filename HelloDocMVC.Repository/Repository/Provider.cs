@@ -607,5 +607,22 @@ namespace HelloDocMVC.Repository.Repository
             }
         }
         #endregion
+        #region Find_Location_Physician
+        public List<PhysicianLocation> FindPhysicianLocation()
+        {
+            List<PhysicianLocation> pl = _context.PhysicianLocations
+                                    .OrderByDescending(x => x.PhysicianName)
+                        .Select(r => new PhysicianLocation
+                        {
+                            LocationId = r.LocationId,
+                            Longitude = r.Longitude,
+                            Latitude = r.Latitude,
+                            PhysicianName = r.PhysicianName
+
+                        }).ToList();
+            return pl;
+
+        }
+        #endregion
     }
 }

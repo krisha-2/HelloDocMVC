@@ -254,5 +254,10 @@ namespace HelloDocMVC.Controllers
             }
         }
         #endregion
+        public async Task<IActionResult> Location()
+        {
+            ViewBag.Log = _IProvider.FindPhysicianLocation();
+            return View();
+        }
     }
 }

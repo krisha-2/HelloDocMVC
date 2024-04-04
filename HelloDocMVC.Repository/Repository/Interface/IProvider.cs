@@ -1,4 +1,5 @@
-﻿using HelloDocMVC.Entity.Models;
+﻿using HelloDocMVC.Entity.DataModels;
+using HelloDocMVC.Entity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> EditProviderProfile(ViewProvider vm, string AdminId);
         public Task<bool> EditProviderOnbording(ViewProvider vm, string AdminId);
         public Task<bool> DeletePhysician(int PhysicianID, string AdminID);
+        public List<PhysicianLocation> FindPhysicianLocation();
     }
 }
