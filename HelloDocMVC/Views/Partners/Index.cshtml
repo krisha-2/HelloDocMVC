@@ -1,0 +1,117 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_LayoutAdminDashboard";
+}
+@{
+    var enumData = from AccountType e in Enum.GetValues(typeof(AccountType))
+                   select new
+                   {
+                       ID = (int)e,
+                       Name = e.ToString()
+                   };
+}
+@using static HelloDocMVC.Entity.Models.Constant;
+@model List<HelloDocMVC.Entity.DataModels.HealthProfessional>;
+<style>
+    .was-validated .form-check-input:valid ~ .form-check-label, .form-check-input:valid {
+        color: black !important;
+        border-color: #0dcaf0 !important;
+    }
+</style>
+<div class="container-fluid px-5">
+    @* heading *@
+    <div class="d-flex justify-content-between">
+        <div class="d-flex align-self-center">
+            <h4><strong>Vender(s)</strong></h4>
+        </div>
+    </div>
+
+    <div class="bg-white rounded shadow mt-3">
+        <div class="d-flex justify-content-between align-self-center p-3">
+            <div class="d-flex">
+                <div class="search m-1">
+                    <a id="searchicon">
+                        <i class="fa fa-search"></i>
+                    </a>
+                    <input type="text" id="searchInput"  class="form-control" onkeydown="subsubmit()" placeholder="Search Vendors">
+                </div>
+                <div class="search m-1">
+                    <a id="regionicon">
+                        <i class="fa fa-search"></i>
+                    </a>
+                    <select class="form-select" data-allow-clear="true" tabindex="-1" id="roledropdown" onchange="getdatabyrole()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                        <option value="">All Region</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <a class="btn btn-outline-info m-1 align-self-center" asp-action="PhysicianAddEdit" asp-controller="Access">
+                    <i class="fa fa-plus me-1"></i>Add Business
+                </a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-responsive mt-3 mb-0 dataTable">
+                <thead class="theadbg">
+                    <tr>
+                        @{
+                            <th scope="col">Profession</th>
+                            <th scope="col">BusinessName</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Fax Number</th>
+                            <th scope="col">Phone Number</th>
+							<th scope="col">Business Contact</th>
+                            <th scope="col" class="text-center">Actions</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider" id="rolebody">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.VendorName</td>
+                            <td>@item.</td>
+                            <td>@item.Email</td>
+                            <td>@item.FaxNumber</td>
+                            <td>@item.PhoneNumber</td>
+                            <td>@item.BusinessContact</td>
+                            <td class="d-flex justify-content-center">
+                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.VendorId" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    Edit
+                                </a>
+                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.VendorId" class="btn btn-outline-info btn-sm document-button mx-1">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    function getdatabyrole() {
+        var role = $("#roledropdown").val();
+        if (role == '-1') {
+            role = null;
+            location.reload();
+        }
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UserRole", "Access")?role=' + role,
+            cache: false,
+            success: function (response) {
+                console.log(response);
+                var bodyContent = $(response).find('tbody').html();
+                $('#rolebody').html(bodyContent);
+            },
+            error: function () {
+                alert("Error while Loading data.");
+            }
+        });
+    }
+</script> 
