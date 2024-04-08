@@ -249,7 +249,7 @@ namespace HelloDocMVC.Repository.Repository
                     Admin.AltPhone = admindata.AltMobile;
                     Admin.CreatedDate = DateTime.Now;
                     Admin.CreatedBy = AdminId;
-                    Admin.RegionId = admindata.Regionid;
+                    //Admin.RegionId = admindata.Regionid;
                     _context.Admins.Add(Admin);
                     _context.SaveChanges();
 

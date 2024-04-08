@@ -44,7 +44,7 @@ namespace HelloDocMVC.Repository.Repository
                     FirstName = admin != null ? admin.FirstName : (physician != null ? physician.FirstName : null),
                     isAdmin = admin != null ? true : false,
                     UserID = admin != null ? admin.AdminId : (physician != null ? physician.PhysicianId : null),
-                    accounttype = admin != null ? 1 : (physician != null ? 3 : null),
+                    accounttype = admin != null ? 1 : (physician != null ? 2 : null),
                     status = admin != null ? admin.Status : (physician != null ? physician.Status : null),
                     Mobile = admin != null ? admin.Mobile : (physician != null ? physician.Mobile : null),
                 };

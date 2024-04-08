@@ -12,5 +12,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public void AddShift(SchedulingData model, List<string?>? chk, string adminId);
         public void ViewShift(int shiftdetailid);
         public void ViewShiftreturn(SchedulingData modal);
+        public bool ViewShiftSave(SchedulingData modal, string id);
+        public bool ViewShiftDelete(SchedulingData modal, string id);
     }
 }

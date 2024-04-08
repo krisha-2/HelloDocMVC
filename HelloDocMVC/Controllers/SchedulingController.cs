@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HelloDocMVC.Repository.Repository.Interface;
-
+using System.Collections;
 
 namespace HelloDocMVC.Controllers
 {
@@ -55,17 +55,19 @@ namespace HelloDocMVC.Controllers
             {
                 physician = _context.Physicians.ToList();
             }
-
             switch (PartialName)
             {
-
                 case "_DayWise":
                     DayWiseScheduling day = new DayWiseScheduling
                     {
                         date = currentDate,
                         physicians = physician,
-                        shiftdetails = _context.ShiftDetails.Include(u => u.Shift).ToList()
+                        shiftdetails = _context.ShiftDetailRegions.Include(u => u.ShiftDetail).ThenInclude(u => u.Shift).Where(u => u.RegionId == regionid && u.IsDeleted == new BitArray(new[] { false })).Select(u => u.ShiftDetail).ToList()
                     };
+                    if (regionid == 0)
+                    {
+                        day.shiftdetails = _context.ShiftDetails.Include(u => u.Shift).Where(u => u.IsDeleted == new BitArray(new[] { false })).ToList();
+                    }
                     return PartialView("../Scheduling/_DayWise", day);
 
                 case "_WeekWise":
@@ -73,16 +75,24 @@ namespace HelloDocMVC.Controllers
                     {
                         date = currentDate,
                         physicians = physician,
-                        shiftdetails = _context.ShiftDetails.Include(u => u.Shift).ThenInclude(u => u.Physician).ToList()
+                        shiftdetails = _context.ShiftDetailRegions.Include(u => u.ShiftDetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.IsDeleted == new BitArray(new[] { false })).Where(u => u.RegionId == regionid).Select(u => u.ShiftDetail).ToList()
                     };
+                    if (regionid == 0)
+                    {
+                        week.shiftdetails = _context.ShiftDetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.IsDeleted == new BitArray(new[] { false })).ToList();
+                    }
                     return PartialView("../Scheduling/_WeekWise", week);
 
                 case "_MonthWise":
                     MonthWiseScheduling month = new MonthWiseScheduling
                     {
                         date = currentDate,
-                        shiftdetails = _context.ShiftDetails.Include(u => u.Shift).ThenInclude(u => u.Physician).ToList()
+                        shiftdetails = _context.ShiftDetailRegions.Include(u => u.ShiftDetail).ThenInclude(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.IsDeleted == new BitArray(new[] { false })).Where(u => u.RegionId == regionid).Select(u => u.ShiftDetail).ToList()
                     };
+                    if (regionid == 0)
+                    {
+                        month.shiftdetails = _context.ShiftDetails.Include(u => u.Shift).ThenInclude(u => u.Physician).Where(u => u.IsDeleted == new BitArray(new[] { false })).ToList();
+                    }
                     return PartialView("../Scheduling/_MonthWise", month);
 
                 default:
@@ -141,5 +151,15 @@ namespace HelloDocMVC.Controllers
         }
 
         #endregion
+        public void ViewShiftSave(SchedulingData modal)
+        {
+            _scheduling.ViewShiftSave(modal, CV.ID());
+        }
+        public IActionResult ViewShiftDelete(SchedulingData modal)
+        {
+            _scheduling.ViewShiftDelete(modal, CV.ID());
+
+            return RedirectToAction("Index");
+        }
     }
 }

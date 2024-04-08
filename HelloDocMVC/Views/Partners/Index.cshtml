@@ -13,7 +13,8 @@
                    };
 }
 @using static HelloDocMVC.Entity.Models.Constant;
-@model List<HelloDocMVC.Entity.DataModels.HealthProfessional>;
+@using HelloDocMVC.Entity.Models;
+@model List<PartnersData>;
 <style>
     .was-validated .form-check-input:valid ~ .form-check-label, .form-check-input:valid {
         color: black !important;
@@ -35,13 +36,13 @@
                     <a id="searchicon">
                         <i class="fa fa-search"></i>
                     </a>
-                    <input type="text" id="searchInput"  class="form-control" onkeydown="subsubmit()" placeholder="Search Vendors">
+                    <input type="text" id="searchVendor" class="form-control" placeholder="Search Vendors">
                 </div>
                 <div class="search m-1">
                     <a id="regionicon">
                         <i class="fa fa-search"></i>
                     </a>
-                    <select class="form-select" data-allow-clear="true" tabindex="-1" id="roledropdown" onchange="getdatabyrole()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
+                    <select class="form-select" data-allow-clear="true" tabindex="-1" id="Profession" onchange="handleSearchVendor()" asp-items="@(new SelectList(ViewBag.Profession,"HealthProfessionalId","ProfessionName"))" data-control="select2" data-placeholder="Select Level">
                         <option value="">All Region</option>
                     </select>
                 </div>
@@ -68,21 +69,21 @@
                         }
                     </tr>
                 </thead>
-                <tbody class="table-group-divider" id="rolebody">
+                <tbody class="table-group-divider" id="vendordata">
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.VendorName</td>
-                            <td>@item.</td>
+                            <td>@item.Profession</td>
+                            <td>@item.Business</td>
                             <td>@item.Email</td>
                             <td>@item.FaxNumber</td>
                             <td>@item.PhoneNumber</td>
-                            <td>@item.BusinessContact</td>
+                            <td>@item.BusinessNumber</td>
                             <td class="d-flex justify-content-center">
-                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.VendorId" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Edit
                                 </a>
-                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="@item.VendorId" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <a asp-action="AdminEdit" asp-controller="Access" asp-route-id="" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Delete
                                 </a>
                             </td>
@@ -95,14 +96,14 @@
 </div>
 <script>
     function getdatabyrole() {
-        var role = $("#roledropdown").val();
+        var role = $("#regiondropdown").val();
         if (role == '-1') {
             role = null;
             location.reload();
         }
         $.ajax({
             type: "POST",
-            url: '@Url.Action("UserRole", "Access")?role=' + role,
+            url: '@Url.Action("Index", "Partners")?regionId=' + region,
             cache: false,
             success: function (response) {
                 console.log(response);
@@ -115,3 +116,32 @@
         });
     }
 </script> 
+<script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('searchVendor').addEventListener('keyup', function (evt) {
+                if (evt.key === 'Enter') {
+                    evt.preventDefault();
+                    handleSearchVendor();
+                }
+            });
+        });
+    function handleSearchVendor() {
+        var searchValue = $('#searchVendor').val();
+        var Profession = $("#Profession").val();
+        console.log("Search value: " + searchValue);
+        console.log("Profession id: " + Profession);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Index", "Partners")',
+            data: { searchValue: searchValue, Profession: Profession },
+            success: function (data) {
+                console.log("AJAX success");
+                var bodyContent = $(data).find('tbody').html();
+                $('#vendordata').html(bodyContent);
+            },
+            error: function (error) {
+                console.log("Error:", error);
+            }
+        });
+    }
+</script>
