@@ -246,25 +246,25 @@ namespace HelloDocMVC.Repository.Repository
             TimeOnly currentTimeOfDay = TimeOnly.FromDateTime(DateTime.Now);
 
             List<ViewProvider> pl = await (from r in _context.Physicians
-                                             where r.IsDeleted == new BitArray(1)
-                                             select new ViewProvider
-                                             {
-                                                 Createddate = r.CreatedDate,
-                                                 Physicianid = r.PhysicianId,
-                                                 Address1 = r.Address1,
-                                                 Address2 = r.Address2,
-                                                 Adminnotes = r.AdminNotes,
-                                                 Altphone = r.AltPhone,
-                                                 Businessname = r.BusinessName,
-                                                 Businesswebsite = r.BusinessWebsite,
-                                                 City = r.City,
-                                                 Firstname = r.FirstName,
-                                                 Lastname = r.LastName,
-                                                 Status = r.Status,
-                                                 Email = r.Email,
-                                                 Photo = r.Photo
+                                           where r.IsDeleted == new BitArray(1)
+                                           select new ViewProvider
+                                           {
+                                               Createddate = r.CreatedDate,
+                                               Physicianid = r.PhysicianId,
+                                               Address1 = r.Address1,
+                                               Address2 = r.Address2,
+                                               Adminnotes = r.AdminNotes,
+                                               Altphone = r.AltPhone,
+                                               Businessname = r.BusinessName,
+                                               Businesswebsite = r.BusinessWebsite,
+                                               City = r.City,
+                                               Firstname = r.FirstName,
+                                               Lastname = r.LastName,
+                                               Status = r.Status,
+                                               Email = r.Email,
+                                               Photo = r.Photo
 
-                                             }).ToListAsync();
+                                           }).ToListAsync();
             if (region != null)
             {
                 pl = await (
@@ -322,5 +322,94 @@ namespace HelloDocMVC.Repository.Repository
 
         }
         #endregion
+        #region GetAllNotApprovedShift
+        public async Task<List<SchedulingData>> GetAllNotApprovedShift(int? regionId)
+        {
+
+            List<SchedulingData> ss = await (from s in _context.Shifts
+                                              join pd in _context.Physicians
+                                              on s.PhysicianId equals pd.PhysicianId
+                                              join sd in _context.ShiftDetails
+                                              on s.ShiftId equals sd.ShiftId into shiftGroup
+                                              from sd in shiftGroup.DefaultIfEmpty()
+                                              join rg in _context.Regions
+                                              on sd.RegionId equals rg.RegionId
+                                              where (regionId == null || regionId == -1 || sd.RegionId == regionId) && sd.Status == 0 && sd.IsDeleted == new BitArray(1)
+                                              select new SchedulingData
+                                              {
+                                                  regionid = (int)sd.RegionId,
+                                                  RegionName = rg.Name,
+                                                  shiftdetailid = sd.ShiftDetailId,
+                                                  status = sd.Status,
+                                                  starttime = sd.StartTime,
+                                                  endtime = sd.EndTime,
+                                                  physicianid = s.PhysicianId,
+                                                  physicianname = pd.FirstName + ' ' + pd.LastName,
+                                                  shiftdate = sd.ShiftDate
+                                              })
+                                .ToListAsync();
+            return ss;
+        }
+        #endregion
+
+        #region DeleteShift
+        public async Task<bool> DeleteShift(string s, string AdminID)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    ShiftDetail sd = _context.ShiftDetails.FirstOrDefault(sd => sd.ShiftDetailId == i);
+                    if (sd != null)
+                    {
+                        sd.IsDeleted[0] = true;
+                        sd.ModifiedBy = AdminID;
+                        sd.ModifiedDate = DateTime.Now;
+                        _context.ShiftDetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        public async Task<bool> UpdateStatusShift(string s, string AdminID)
+        {
+            List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
+            try
+            {
+                foreach (int i in shidtID)
+                {
+                    ShiftDetail sd = _context.ShiftDetails.FirstOrDefault(sd => sd.ShiftDetailId == i);
+                    if (sd != null)
+                    {
+                        sd.Status = (short)(sd.Status == 1 ? 0 : 1);
+                        sd.ModifiedBy = AdminID;
+                        sd.ModifiedDate = DateTime.Now;
+                        _context.ShiftDetails.Update(sd);
+                        _context.SaveChanges();
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
     }
 }

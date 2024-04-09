@@ -20,8 +20,8 @@
                 <a id="regionicon">
                     <i class="fa fa-search"></i>
                 </a>
-                <select class="form-select" data-allow-clear="true" tabindex="-1" id="schedulingregion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" style="padding-left:5px">
-                    <option value="0">All Region</option>
+                <select class="form-select" data-allow-clear="true" tabindex="-1" id="mdsoncallregion" onchange="ChangeRegion()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" style="padding-left:5px">
+                    <option value="-1">All Region</option>
                 </select>
             </div>
             <div class="btns">
@@ -88,5 +88,43 @@
                 });
             });
         });
+
+        function ChangeRegion() {
+            var region = $("#mdsoncallregion").val();
+            if (region == '-1') {
+                region = null;
+                location.reload();
+            }
+            console.log(region);
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("MDsOnCall", "Scheduling")?regionId=' + region,
+                cache: false,
+                success: function (response) {
+                    console.log(response);
+                    $(".oncall").empty();
+                    $(".offcall").empty();
+                    response.forEach(function (item) {
+                        var div = document.createElement('div');
+                        div.className = 'col-md-4 my-2';
+                        var img = document.createElement('img');
+                        img.src = '/Upload/Physician/' + item.physicianId + '/' + item.photo;
+                        img.style.height = '100px';
+                        var span = document.createElement('span');
+                        span.textContent = item.firstName + ' ' + item.lastName;
+                        div.appendChild(img);
+                        div.appendChild(span);
+                        if (item.onCallStatus === 1) {
+                            $(".oncall").append(div);
+                        } else if (item.onCallStatus === 0) {
+                            $(".offcall").append(div);
+                        }
+                    });
+                },
+                error: function () {
+                    alert("Error while checking region.");
+                }
+            });
+        }
     </script>
 }

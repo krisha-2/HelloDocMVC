@@ -174,5 +174,41 @@ namespace HelloDocMVC.Controllers
             return View("../Scheduling/MDsOnCall", v);
         }
         #endregion
+        #region RequestedShift
+        public async Task<IActionResult> RequestedShift(int? regionId)
+        {
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
+            List<SchedulingData> v = await _scheduling.GetAllNotApprovedShift(regionId);
+
+            return View("../Scheduling/ReviewShift", v);
+        }
+        #endregion
+
+        #region _ApprovedShifts
+
+        public async Task<IActionResult> _ApprovedShifts(string shiftids)
+        {
+            if (await _scheduling.UpdateStatusShift(shiftids, CV.ID()))
+            {
+                TempData["Status"] = "Approved Shifts Successfully..!";
+            }
+
+
+            return RedirectToAction("RequestedShift");
+        }
+        #endregion
+
+        #region _DeleteShifts
+
+        public async Task<IActionResult> _DeleteShifts(string shiftids)
+        {
+            if (await _scheduling.DeleteShift(shiftids, CV.ID()))
+            {
+                TempData["Status"] = "Delete Shifts Successfully..!";
+            }
+
+            return RedirectToAction("RequestedShift");
+        }
+        #endregion
     }
 }
