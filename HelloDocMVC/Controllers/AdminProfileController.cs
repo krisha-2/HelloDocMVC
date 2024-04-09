@@ -9,7 +9,6 @@ namespace HelloDocMVC.Controllers
 {
     public class AdminProfileController : Controller
     {
-        #region Constructor
         private readonly IAdminProfile _IAdminProfile;
         private readonly IComboBox _combobox;
         private readonly INotyfService _notyf;
@@ -19,9 +18,6 @@ namespace HelloDocMVC.Controllers
             _combobox = combobox;
             _notyf = INotyfService;
         }
-        #endregion
-
-        #region Index
         public async Task<IActionResult> Index(int? id)
         {
             ViewAdminProfileData p = await _IAdminProfile.GetProfileDetails((id != null ? (int)id : Convert.ToInt32(CV.UserID())));
@@ -29,9 +25,6 @@ namespace HelloDocMVC.Controllers
             ViewBag.userrolecombobox = await _combobox.AdminRoleComboBox();
             return View("../AdminProfile/Index", p);
         }
-        #endregion
-
-        #region EditPassword
         public async Task<IActionResult> EditPassword(string password)
         {
             if (await _IAdminProfile.EditPassword(password, Convert.ToInt32(CV.UserID())))
@@ -44,9 +37,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index");
         }
-        #endregion
-
-        #region EditAdministratorInfo
         [HttpPost]
         public IActionResult EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
         {
@@ -60,9 +50,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index");
         }
-        #endregion
-
-        #region BillingInfoEdit
         [HttpPost]
         public async Task<IActionResult> BillingInfoEdit(ViewAdminProfileData _viewAdminProfile)
         {
@@ -76,6 +63,5 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index");
         }
-        #endregion
     }
 }

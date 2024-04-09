@@ -15,13 +15,10 @@ namespace HelloDocMVC.Repository.Repository
     public class Scheduling : IScheduling
     {
         private readonly HelloDocDbContext _context;
-
         public Scheduling(HelloDocDbContext context)
         {
             _context = context;
         }
-        #region Scheduling
-
         public void AddShift(SchedulingData model, List<string?>? chk, string adminId)
         {
 
@@ -166,7 +163,6 @@ namespace HelloDocMVC.Repository.Repository
 
             }
         }
-
         public void ViewShift(int shiftdetailid)
         {
             SchedulingData modal = new SchedulingData();
@@ -189,7 +185,6 @@ namespace HelloDocMVC.Repository.Repository
             modal.shiftdetailid = shiftdetailid;
 
         }
-
         public void ViewShiftreturn(SchedulingData modal)
         {
             var shiftdetail = _context.ShiftDetails.FirstOrDefault(u => u.ShiftDetailId == modal.shiftdetailid);
@@ -204,7 +199,6 @@ namespace HelloDocMVC.Repository.Repository
             _context.ShiftDetails.Update(shiftdetail);
             _context.SaveChanges();
         }
-        #endregion
         public bool ViewShiftSave(SchedulingData modal, string id)
         {
             var shiftdetail = _context.ShiftDetails.FirstOrDefault(u => u.ShiftDetailId == modal.shiftdetailid);
@@ -239,7 +233,6 @@ namespace HelloDocMVC.Repository.Repository
 
             return true;
         }
-        #region PhysicianOnCall
         public async Task<List<ViewProvider>> PhysicianOnCall(int? region)
         {
             DateTime currentDateTime = DateTime.Now;
@@ -321,8 +314,6 @@ namespace HelloDocMVC.Repository.Repository
 
 
         }
-        #endregion
-        #region GetAllNotApprovedShift
         public async Task<List<SchedulingData>> GetAllNotApprovedShift(int? regionId)
         {
 
@@ -350,9 +341,6 @@ namespace HelloDocMVC.Repository.Repository
                                 .ToListAsync();
             return ss;
         }
-        #endregion
-
-        #region DeleteShift
         public async Task<bool> DeleteShift(string s, string AdminID)
         {
             List<int> shidtID = s.Split(',').Select(int.Parse).ToList();
@@ -381,8 +369,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-
         public async Task<bool> UpdateStatusShift(string s, string AdminID)
         {
             List<int> shidtID = s.Split(',').Select(int.Parse).ToList();

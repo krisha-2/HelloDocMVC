@@ -10,7 +10,6 @@ namespace HelloDocMVC.Controllers
 {
     public class AccessController : Controller
     {
-        #region Constructor
         private readonly IAccessRole _IAccessRole;
         private readonly INotyfService _notyf;
         private readonly IComboBox _comboBox;
@@ -18,7 +17,6 @@ namespace HelloDocMVC.Controllers
         private readonly EmailConfiguration _emailConfig;
         private readonly IAdminProfile _IAdminProfile;
         private readonly IProvider _IProvider;
-
         public AccessController(ILogger<AdminController> logger, IAccessRole IRoleAccessRepository, INotyfService notyf, IComboBox comboBox, EmailConfiguration emailConfiguration, IAdminProfile IMyProfileRepository, IProvider IProvider)
         {
             _IAccessRole = IRoleAccessRepository;
@@ -29,16 +27,11 @@ namespace HelloDocMVC.Controllers
             _IAdminProfile = IMyProfileRepository;
             _IProvider = IProvider;
         }
-
-        #endregion
-        #region Index
         public async Task<IActionResult> Index()
         {
             List<Role> v = await _IAccessRole.GetRoleAccessDetails();
             return View("../Access/Index", v);
         }
-        #endregion
-        #region User_Access
         public async Task<IActionResult> UserRole(int? role)
         {
             List<ViewUser> data = await _IAccessRole.GetAllUserDetails(role);
@@ -48,8 +41,6 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Access/UserRole", data);
 		}
-		#endregion
-		#region Create_Role_Access-ADDEdit
 		public async Task<IActionResult> CreateRoleAccess(int? id)
 		{
 			if (id != null)
@@ -62,8 +53,6 @@ namespace HelloDocMVC.Controllers
 
 			return View("../Access/CreateRole");
 		}
-		#endregion
-		#region GetMenusByAccount
 		public async Task<IActionResult> GetMenusByAccount(short Accounttype, int roleid)
 		{
 			if (Accounttype == 0)
@@ -98,9 +87,6 @@ namespace HelloDocMVC.Controllers
 
 			return Json(v);
 		}
-		#endregion
-
-		#region PostRoleMenu
 		public async Task<IActionResult> PostRoleMenu(ViewRole role, string Menusid)
 		{
 			if (role.Roleid == 0)
@@ -127,9 +113,6 @@ namespace HelloDocMVC.Controllers
 			}
 			return RedirectToAction("Index");
 		}
-		#endregion
-
-		#region DeletePhysician
 		public async Task<IActionResult> DeleteRole(int roleid)
 		{
 			bool data = await _IAccessRole.DeleteRoles(roleid, CV.ID());
@@ -144,8 +127,6 @@ namespace HelloDocMVC.Controllers
 				return RedirectToAction("Index");
 			}
 		}
-        #endregion
-        #region AddEdit_Profile
         public async Task<IActionResult> PhysicianAddEdit(int? id)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
@@ -162,10 +143,6 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Provider/Edit");
         }
-        #endregion
-
-        #region AdminAdd
-
         public async Task<IActionResult> AdminAddEdit(int? id)
         {
 
@@ -179,9 +156,6 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Access/AdminAddEdit");
         }
-        #endregion
-
-        #region AdminEdit
         public async Task<IActionResult> AdminEdit(int? id)
         {
             ViewAdminProfileData p = await _IAdminProfile.GetProfileDetails((id != null ? (int)id : Convert.ToInt32(CV.UserID())));
@@ -189,9 +163,6 @@ namespace HelloDocMVC.Controllers
             ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
             return View("../AdminProfile/Index", p);
         }
-        #endregion
-
-        #region Create_Admin
         [HttpPost]
         public async Task<IActionResult> AdminAdd(ViewAdminProfileData vm)
         {
@@ -217,8 +188,6 @@ namespace HelloDocMVC.Controllers
             }*/
             return RedirectToAction("UserRole");
         }
-        #endregion
-        #region SaveAdminInfo
         public async Task<IActionResult> SaveAdminInfo(ViewAdminProfileData vm)
         {
             bool data = await _IAdminProfile.SaveAdminInfo(vm);
@@ -232,9 +201,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
-        #endregion
-
-        #region SaveAdministrationinfo
         public async Task<IActionResult> EditAdministratorInfo(ViewAdminProfileData vm)
         {
             //bool data = await _IAdminProfile.EditAdministratorInfo(vm);
@@ -248,9 +214,6 @@ namespace HelloDocMVC.Controllers
             //}
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
-        #endregion
-
-        #region EditBillingInfo
         public async Task<IActionResult> BillingInfoEdit(ViewAdminProfileData vm)
         {
             bool data = await _IAdminProfile.BillingInfoEdit(vm);
@@ -264,9 +227,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
-        #endregion
-
-        #region ResetPassAdmin
         public async Task<IActionResult> EditPassword(string password, int AdminId)
         {
             bool data = await _IAdminProfile.EditPassword(password, AdminId);
@@ -280,6 +240,5 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("AdminEdit", new { id = AdminId });
         }
-        #endregion
     }
 }

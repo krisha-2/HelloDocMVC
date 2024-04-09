@@ -298,7 +298,6 @@ namespace HelloDocMVC.Repository.Repository
             pl.Regionids = regions;
             return pl;
         }
-        #region SavePhysicianInfo
         public async Task<bool> EditAccountInfo(ViewProvider vm)
         {
             try
@@ -335,9 +334,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-
-        #region Change_Password
         public async Task<bool> ChangePasswordAsync(string password, int Physicianid)
         {
             var hasher = new PasswordHasher<string>();
@@ -358,9 +354,6 @@ namespace HelloDocMVC.Repository.Repository
             }
             return false;
         }
-        #endregion
-
-        #region EditPhysicianInfo
         public async Task<bool> EditPhysicianInfo(ViewProvider vm)
         {
             try
@@ -428,8 +421,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region EditMailBillingInfo
         public async Task<bool> EditMailBillingInfo(ViewProvider vm, string AdminId)
         {
             try
@@ -468,8 +459,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region EditProviderProfile
         public async Task<bool> EditProviderProfile(ViewProvider vm, string AdminId)
         {
             try
@@ -516,8 +505,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region EditProviderOnbording
         public async Task<bool> EditProviderOnbording(ViewProvider vm, string AdminId)
         {
             try
@@ -568,8 +555,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region DeletePhysician
         public async Task<bool> DeletePhysician(int PhysicianID, string AdminID)
         {
             try
@@ -606,8 +591,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region Find_Location_Physician
         public List<PhysicianLocation> FindPhysicianLocation()
         {
             List<PhysicianLocation> pl = _context.PhysicianLocations
@@ -623,6 +606,5 @@ namespace HelloDocMVC.Repository.Repository
             return pl;
 
         }
-        #endregion
     }
 }

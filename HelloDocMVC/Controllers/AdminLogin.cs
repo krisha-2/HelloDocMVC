@@ -44,13 +44,11 @@ namespace HelloDocMVC.Controllers
                 return View("../AdminLogin/Index");
             }
         }
-        #region end_session
         public IActionResult Logout()
         {
             Response.Cookies.Delete("jwt");
             return RedirectToAction("Index", "AdminLogin");
         }
-        #endregion
         public IActionResult AuthError()
         {
             return View("../AdminLogin/AuthError");

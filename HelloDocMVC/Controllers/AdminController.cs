@@ -129,7 +129,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index", "Admin");
         }
-        #region AssignProvider
         public async Task<IActionResult> AssignProvider(int requestid, int ProviderId, string Notes)
         {
             if (await _IAdminDashboard.AssignProvider(requestid, ProviderId, Notes))
@@ -143,14 +142,11 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("Index", "Admin");
         }
-        #endregion
-        #region providerbyregion
         public IActionResult ProviderbyRegion(int Regionid)
         {
             var v = _comboBox.ProviderbyRegion(Regionid);
             return Json(v);
         }
-        #endregion
         public IActionResult Orders()
         {
             ViewBag.Profession = _comboBox.Profession();
@@ -167,7 +163,6 @@ namespace HelloDocMVC.Controllers
             var v = _comboBox.OrderData(profession);
             return Json(v);
         }
-        #region Clear_case
         public IActionResult ClearCase(int RequestID)
         {
             bool cc = _IAdminDashboard.ClearCase(RequestID);
@@ -182,16 +177,11 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index", "Admin", new { Status = "2" });
         }
-        #endregion
-        #region View_Upload
         public async Task<IActionResult> ViewUploads(ViewDocuments viewDocument, int? id)
         {
             ViewDocuments v = await _IAdminDashboard.GetDocumentByRequest(viewDocument, id);
             return View("../Admin/ViewUploads", v);
         }
-        #endregion
-
-        #region UploadDoc_Files
         public IActionResult UploadDoc(int Requestid, IFormFile file)
         {
             if (_IAdminDashboard.SaveDoc(Requestid, file))
@@ -204,9 +194,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
-        #endregion
-
-        #region DeleteOnesFile
         public async Task<IActionResult> DeleteFile(int? id, int Requestid)
         {
             if (await _IAdminDashboard.DeleteDocumentByRequest(id.ToString()))
@@ -219,9 +206,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
-        #endregion
-
-        #region AllFilesDelete
         public async Task<IActionResult> AllFilesDelete(string deleteids, int Requestid)
         {
             if (await _IAdminDashboard.DeleteDocumentByRequest(deleteids))
@@ -234,7 +218,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
-        #endregion
         public async Task<IActionResult> TransferProvider(int requestId, int ProviderId, string Notes)
         {
             if (await _IAdminDashboard.TransferProvider(requestId, ProviderId, Notes))
@@ -248,16 +231,12 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("Index", "Admin");
         }
-        #region View_Notes
         public IActionResult ViewNotes(int id)
         {
 
             ViewNotesData sm = _IAdminDashboard.getNotesByID(id);
             return View("../Admin/ViewNotes", sm);
         }
-        #endregion
-
-        #region Edit_Notes
         public IActionResult ChangeNotes(int RequestID, string? adminnotes, string? physiciannotes)
         {
             if (adminnotes != null || physiciannotes != null)
@@ -281,7 +260,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("ViewNotes", new { id = RequestID });
             }
         }
-        #endregion
         //public IActionResult Orders(Orders sm)
         //{
         //    if (ModelState.IsValid)
@@ -304,7 +282,6 @@ namespace HelloDocMVC.Controllers
         //        return View("../Admin/Orders", sm);
         //    }
         //}
-        #region SendAgreement
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendAgreementmail(int requestid)
@@ -315,8 +292,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index", "Admin");
         }
-        #endregion
-        #region CloseCase
         public async Task<IActionResult> CloseCase(int RequestID)
         {
             ViewCloseCase vc = _IAdminDashboard.CloseCaseData(RequestID);
@@ -337,8 +312,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index", "Admin");
         }
-        #endregion
-
         public IActionResult EditForCloseCase(ViewCloseCase sm)
         {
             bool result = _IAdminDashboard.EditForCloseCase(sm);
@@ -410,14 +383,12 @@ namespace HelloDocMVC.Controllers
         {
             return View("./CreateRequest");
         }
-
         [HttpPost]
         public IActionResult CreateRequest(Patient vdcp)
         {
             _IAdminDashboard.CreateRequest(vdcp);
             return RedirectToAction("Index", "Admin");
         }
-        #region SendFilEmail
         public async Task<IActionResult> SendFileEmail(string mailids, int Requestid, string email)
         {
             if (await _IAdminDashboard.SendFileEmail(mailids, Requestid, email))
@@ -431,7 +402,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
-        #endregion
     }
 }
     

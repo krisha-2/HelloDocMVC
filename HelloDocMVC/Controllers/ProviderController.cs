@@ -25,7 +25,6 @@ namespace HelloDocMVC.Controllers
             _comboBox = comboBox;
             _emailConfig = emailConfiguration;
         }
-        #region Index
         public async Task<IActionResult> IndexAsync(int? region)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
@@ -40,17 +39,12 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Provider/Index", v);
         }
-        #endregion
-
-        #region ChangeNotificationPhysician
         public async Task<IActionResult> ChangeNotificationPhysician(string changedValues)
         {
             Dictionary<int, bool> changedValuesDict = JsonConvert.DeserializeObject<Dictionary<int, bool>>(changedValues);
             _IProvider.ChangeNotificationPhysician(changedValuesDict);
             return RedirectToAction("Index");
         }
-        #endregion
-        #region AddEdit_Profile
         public async Task<IActionResult> Edit(int? id)
         {
 
@@ -70,8 +64,6 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Provider/Edit");
         }
-        #endregion
-        #region SendMessage
         public async Task<IActionResult> SendMessage(string? email, int? way, string? msg)
         {
             bool result;
@@ -97,8 +89,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index");
         }
-        #endregion
-         #region AddEdit_Profile
         public async Task<IActionResult> PhysicianProfile(int? id)
         {
 
@@ -118,8 +108,6 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Provider/Edit");
         }
-        #endregion
-        #region Physician_Add
         [HttpPost]
         public async Task<IActionResult> PhysicianAdd(ViewProvider physicians)
         {
@@ -145,8 +133,6 @@ namespace HelloDocMVC.Controllers
 			}
 			return RedirectToAction("Index");
         }
-        #endregion
-        #region Update_Physician_Profile
         public async Task<IActionResult> EditAccountInfo(ViewProvider data)
         {
             string actionName = RouteData.Values["action"].ToString();
@@ -161,8 +147,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
         }
-        #endregion
-        #region ResetPassAdmin
         public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
         {
             if (await _IProvider.ChangePasswordAsync(password, Physicianid))
@@ -175,8 +159,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("PhysicianProfile", new { id = Physicianid });
         }
-        #endregion
-        #region EditPhysicianInfo
         public async Task<IActionResult> EditPhysicianInfo(ViewProvider data)
         {
             if (await _IProvider.EditPhysicianInfo(data))
@@ -190,9 +172,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
         }
-        #endregion
-
-        #region EditMailBillingInfo
         public async Task<IActionResult> EditMailBillingInfo(ViewProvider data)
         {
             if (await _IProvider.EditMailBillingInfo(data, CV.ID()))
@@ -206,9 +185,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
         }
-        #endregion
-
-        #region EditProviderProfile
         public async Task<IActionResult> EditProviderProfile(ViewProvider data)
         {
             if (await _IProvider.EditProviderProfile(data, CV.ID()))
@@ -222,8 +198,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
         }
-        #endregion
-        #region EditProviderOnbording
         public async Task<IActionResult> EditProviderOnbording(ViewProvider data)
         {
             if (await _IProvider.EditProviderOnbording(data, CV.ID()))
@@ -237,8 +211,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
         }
-        #endregion
-        #region DeletePhysician
         public async Task<IActionResult> DeletePhysician(int PhysicianID)
         {
             bool data = await _IProvider.DeletePhysician(PhysicianID, CV.ID());
@@ -253,7 +225,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("PhysicianAll");
             }
         }
-        #endregion
         public async Task<IActionResult> Location()
         {
             ViewBag.Log = _IProvider.FindPhysicianLocation();

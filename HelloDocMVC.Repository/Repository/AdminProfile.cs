@@ -16,7 +16,6 @@ namespace HelloDocMVC.Repository.Repository
         {
             _context = context;
         }
-        #region GetProfile
         public async Task<ViewAdminProfileData> GetProfileDetails(int UserId)
         {
             ViewAdminProfileData? v = await (from r in _context.Admins
@@ -57,8 +56,6 @@ namespace HelloDocMVC.Repository.Repository
             v.Regionids = regions;
             return v;
         }
-        #endregion
-        #region EditPassword
         public async Task<bool> EditPassword(string password, int adminId)
         {
             var hasher = new PasswordHasher<string>();
@@ -74,8 +71,6 @@ namespace HelloDocMVC.Repository.Repository
             }
             return false;
         }
-        #endregion
-        #region EditAdministratorInfo
         public bool EditAdministratorInfo(ViewAdminProfileData _viewAdminProfile)
         {
             try
@@ -132,8 +127,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region BillingInfoEdit
         public async Task<bool> BillingInfoEdit(ViewAdminProfileData _viewAdminProfile)
         {
             try
@@ -166,8 +159,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-        #region SavePhysicianInfo
         public async Task<bool> SaveAdminInfo(ViewAdminProfileData vm)
         {
             try
@@ -204,9 +195,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
-
-        #region Admin_Add
         public async Task<bool> AdminPost(ViewAdminProfileData admindata, string AdminId)
         {
             try
@@ -275,6 +263,5 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #endregion
     }
 }

@@ -27,6 +27,7 @@ builder.Services.AddScoped<IProvider, Provider>();
 builder.Services.AddScoped<IAccessRole, AccessRole>();
 builder.Services.AddScoped<IScheduling, Scheduling>();
 builder.Services.AddScoped<IPartners, Partners>();
+builder.Services.AddScoped<IRecords, Records>();
 builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();

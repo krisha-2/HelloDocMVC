@@ -37,17 +37,6 @@ namespace HelloDocMVC.Controllers
 
             return Json(PhysiciansByRegion);
         }
-        #region
-        //public IActionResult Scheduling()
-        //{
-        //    ViewBag.Adminname = HttpContext.Session.GetString("Adminname");
-        //    ViewBag.RegionCombobox = _adminFunction.RegionComboBox();
-        //    ViewBag.PhysiciansByRegion = new SelectList(Enumerable.Empty<SelectListItem>());
-        //    SchedulingModel modal = new SchedulingModel();
-        //    modal.regions = _context.Regions.ToList();
-        //    return View(modal);
-        //}
-
         public IActionResult LoadSchedulingPartial(string PartialName, string date, int regionid)
         {
             var currentDate = DateTime.Parse(date);
@@ -100,19 +89,13 @@ namespace HelloDocMVC.Controllers
                     return PartialView("../Scheduling/_DayWise");
             }
         }
-
-
         public IActionResult AddShift(SchedulingData model)
         {
             string adminId = CV.ID();
             var chk = Request.Form["repeatdays"].ToList();
             _scheduling.AddShift(model, chk, adminId);
             return RedirectToAction("Index");
-
         }
-
-
-
         public SchedulingData viewshift(int shiftdetailid)
         {
             SchedulingData modal = new SchedulingData();
@@ -150,8 +133,6 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("Index");
         }
-
-        #endregion
         public void ViewShiftSave(SchedulingData modal)
         {
             _scheduling.ViewShiftSave(modal, CV.ID());
@@ -162,7 +143,6 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("Index");
         }
-        #region Provider_on_call
         public async Task<IActionResult> MDSOnCall(int? regionId)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
@@ -173,8 +153,6 @@ namespace HelloDocMVC.Controllers
             }
             return View("../Scheduling/MDsOnCall", v);
         }
-        #endregion
-        #region RequestedShift
         public async Task<IActionResult> RequestedShift(int? regionId)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
@@ -182,10 +160,6 @@ namespace HelloDocMVC.Controllers
 
             return View("../Scheduling/ReviewShift", v);
         }
-        #endregion
-
-        #region _ApprovedShifts
-
         public async Task<IActionResult> _ApprovedShifts(string shiftids)
         {
             if (await _scheduling.UpdateStatusShift(shiftids, CV.ID()))
@@ -196,10 +170,6 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("RequestedShift");
         }
-        #endregion
-
-        #region _DeleteShifts
-
         public async Task<IActionResult> _DeleteShifts(string shiftids)
         {
             if (await _scheduling.DeleteShift(shiftids, CV.ID()))
@@ -209,6 +179,5 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("RequestedShift");
         }
-        #endregion
     }
 }

@@ -43,7 +43,15 @@
                     </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link px-3 text-dark " asp-action="Index" asp-controller="Admin">Records</a>
+                    <a class="nav-link px-3 text-dark " asp-action="Index" asp-controller="Partners">Partners</a>
+                </li>
+                <li class="nav-item dropdown me-3">
+                    <a class="nav-link dropdown text-dark @(path.StartsWith("/Access") ? "activesbnav" : "")" id="AccessnavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Records
+                    </a>
+                    <div class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" asp-action="PatientRecord" asp-controller="Records">Patient History</a>
+                    </div>
                 </li>
             </ul>
         </div>

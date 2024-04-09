@@ -20,6 +20,5 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<List<RoleComboBox>> UserRoleComboBox();
         public Task<List<RoleComboBox>> PhysicianRoleComboBox();
         public Task<List<RoleComboBox>> AdminRoleComboBox();
-
     }
 }

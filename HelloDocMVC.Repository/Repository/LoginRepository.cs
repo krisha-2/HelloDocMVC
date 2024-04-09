@@ -18,7 +18,6 @@ namespace HelloDocMVC.Repository.Repository
 
     public class LoginRepository : ILoginRepository
     {
-        #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly HelloDocDbContext _context;
         private readonly INotyfService _notyf;
@@ -30,9 +29,6 @@ namespace HelloDocMVC.Repository.Repository
             _notyf = notyf;
             _emailConfig = emailConfig;
         }
-        #endregion
-
-        #region Constructor
         public async Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser)
         {
             var user = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == aspNetUser.Email && u.PasswordHash == aspNetUser.PasswordHash);
@@ -78,7 +74,6 @@ namespace HelloDocMVC.Repository.Repository
                 return null;
             }
         }
-        #endregion
         public bool SendResetLink(String Email)
         {
             var agreementUrl = "https://localhost:44338/Login/Resetpass?Email=" + Email;
@@ -88,5 +83,4 @@ namespace HelloDocMVC.Repository.Repository
             return true;
         }
     }
-
 }

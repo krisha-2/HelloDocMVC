@@ -16,7 +16,6 @@ namespace HelloDocMVC.Repository.Repository
 {
     public class JwtSession : IJwtSession
     {
-        #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IConfiguration Configuration;
         public JwtSession(IConfiguration Configuration, IHttpContextAccessor httpContextAccessor)
@@ -24,7 +23,6 @@ namespace HelloDocMVC.Repository.Repository
             this.httpContextAccessor = httpContextAccessor;
             this.Configuration = Configuration;
         }
-        #endregion
         public string GenerateJWTAuthetication(UserInfo userinfo)
         {
             var claims = new List<Claim>

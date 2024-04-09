@@ -8,7 +8,6 @@ namespace HelloDocMVC.Controllers
     {
         private readonly IAdminDashboard _IAdminDashboard;
         private readonly INotyfService _notyf;
-
         public AgreementPage(IAdminDashboard adminDashboard, IComboBox comboBox, INotyfService notyf)
         {
             _IAdminDashboard = adminDashboard;
@@ -25,7 +24,6 @@ namespace HelloDocMVC.Controllers
             _IAdminDashboard.SendAgreement_accept(RequestID);
             return RedirectToAction("Index", "Admin");
         }
-
         public IActionResult Reject(int RequestID, string Notes)
         {
             _IAdminDashboard.SendAgreement_Reject(RequestID, Notes);
