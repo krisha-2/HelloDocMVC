@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HelloDocMVC.Repository.Repository.Interface;
 using System.Collections;
+using HelloDocMVC.Repository.Repository;
 
 namespace HelloDocMVC.Controllers
 {
@@ -161,5 +162,17 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("Index");
         }
+        #region Provider_on_call
+        public async Task<IActionResult> MDSOnCall(int? regionId)
+        {
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
+            List<ViewProvider> v = await _scheduling.PhysicianOnCall(regionId);
+            if (regionId != null)
+            {
+                return Json(v);
+            }
+            return View("../Scheduling/MDsOnCall", v);
+        }
+        #endregion
     }
 }

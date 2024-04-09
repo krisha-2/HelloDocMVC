@@ -20,16 +20,6 @@ namespace HelloDocMVC.Repository.Repository
         {
             _context = context;
         }
-        //#region GetPartnersByProfession
-        //public async Task<List<HealthProfessional>> GetPartnersByProfession(int? regionId)
-        //{
-        //    List<HealthProfessional> pl = await (from r in _context.HealthProfessionals
-        //                                         where r.IsDeleted == new BitArray(1) && (!regionId.HasValue || r.RegionId == regionId)
-        //                                         select r)
-        //                                .ToListAsync();
-        //    return pl;
-        //}
-        //#endregion
         public List<PartnersData> GetPartnersByProfession(string searchValue, int Profession)
         {
             var result = (from Hp in _context.HealthProfessionals
@@ -40,8 +30,8 @@ namespace HelloDocMVC.Repository.Repository
                              && (Profession == 0 || Hp.Profession == Profession)
                           select new PartnersData
                           {
-                              Profession = Hp.VendorName,
-                              Business = asp.ProfessionName,
+                              Profession = asp.ProfessionName,
+                              Business = Hp.VendorName,
                               Email = Hp.Email,
                               FaxNumber = Hp.FaxNumber,
                               PhoneNumber = Hp.PhoneNumber,
