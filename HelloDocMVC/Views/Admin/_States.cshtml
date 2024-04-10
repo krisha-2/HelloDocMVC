@@ -1,7 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model HelloDocMVC.Entity.Models.PaginatedViewModel;
+﻿@model HelloDocMVC.Entity.Models.PaginatedViewModel;
 <form id="filterForm" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#SearchResult"
       asp-action="_SearchResult" asp-controller="Admin" novalidate="novalidate">
     <input type="hidden" asp-for="Status" id="requeststatus" class="form-control">
@@ -110,8 +107,7 @@
             </button>
         </div>
     </div>
-    <!--End Important links-->
-    <!--Searchbar-->
+@*Search*@
     <div class="mt-2 mx-2 bg-white">
         <div class="searchBar px-2">
             <div class="searchPatientRegion py-2">
