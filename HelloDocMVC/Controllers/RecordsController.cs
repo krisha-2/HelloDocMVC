@@ -64,5 +64,16 @@ namespace HelloDocMVC.Controllers
 
             return RedirectToAction("BlockHistory");
         }
+        public IActionResult EmailLogs(RecordsData rm)
+        {
+            RecordsData r = _IRecords.GetFilteredEmailLogs(rm);
+            return View("../Records/EmailLogs", r);
+        }
+        public IActionResult SMSLogs(RecordsData rm)
+        {
+            RecordsData r = _IRecords.GetFilteredSMSLogs(rm);
+            return PartialView("../Records/SMSLogs", r);
+        }
+ 
     }
 }

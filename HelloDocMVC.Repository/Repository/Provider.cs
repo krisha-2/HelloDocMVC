@@ -208,7 +208,7 @@ namespace HelloDocMVC.Repository.Repository
                     FileSave.UploadProviderDoc(physiciandata.Trainingdoc, Physician.PhysicianId, "Trainingdoc.pdf");
 
                     FileSave.UploadProviderDoc(physiciandata.SignatureFile, Physician.PhysicianId, Physician.FirstName + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Signature.png");
-                    FileSave.UploadProviderDoc(physiciandata.PhotoFile, Physician.PhysicianId, Physician.FirstName + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo." + Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
+                    //FileSave.UploadProviderDoc(physiciandata.PhotoFile, Physician.PhysicianId, Physician.FirstName + "-" + DateTime.Now.ToString("yyyyMMddhhmmss") + "-Photo." + Path.GetExtension(physiciandata.PhotoFile.FileName).Trim('.'));
 
                     // Physician_region
                     List<int> priceList = physiciandata.Regionsid.Split(',').Select(int.Parse).ToList();

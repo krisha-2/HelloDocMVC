@@ -24,7 +24,7 @@
     </div>
     @* Profile Information *@
     <div class="bg-white rounded shadow mt-3 pb-3">
-        <form method="post" asp-controller="Provider" asp-action="PhysicianAddEdit" id="addedit" enctype="multipart/form-data">
+        <form method="post" asp-controller="Provider" asp-action="Edit" id="addedit" enctype="multipart/form-data">
             <div class="p-4 border border-bottom">
                 @* Account Information *@
                 <h5><strong>Account Information</strong></h5>
@@ -34,13 +34,14 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="UserName" placeholder=Suchtext />
                                 <label for="UserName">User Name</label>
+                                <span asp-validation-for="PassWord" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
                                 <label for="PassWord">PassWord</label>
-                                @* <span asp-validation-for="Password"></span> *@
+                                <span asp-validation-for="PassWord" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -48,6 +49,7 @@
                                 <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Status">Status</label>
+                                <span asp-validation-for="PassWord" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -55,6 +57,7 @@
                                 <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Roleid">Role</label>
+                                <span asp-validation-for="PassWord" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -71,9 +74,9 @@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
+                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name" required>
                                 <label for="Firstname">First Name</label>
-                                @* <span asp-validation-for="Firstname" class="text-danger"></span> *@
+                                <span asp-validation-for="Firstname" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -85,9 +88,9 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="Email" placeholder="Date Of Birth">
+                                <input type="text" asp-for="Email" class="form-control shadow-none input1" id="Email" placeholder="Date Of Birth" required>
                                 <label for="Email">Email</label>
-                                @* <span asp-validation-for="Email" class="text-danger"></span> *@
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -151,9 +154,10 @@
                 <div class="col-xl-12">
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
-                            <div class="form-floating h-100 w-100">
-                                <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1" autocomplete="off" placeholder="Phone Number">
+                            <div class="form-floating h-100 w-100"> 
+                                <input type="text" asp-for="Address1" class="form-control shadow-none input2" id="Address1" autocomplete="off" placeholder="Phone Number" required> 
                                 <label for="Address1">Address 1</label>
+                                <span asp-validation-for="Address1" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -164,29 +168,30 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
-                                <input type="text" asp-for="City" class="form-control shadow-none input2" id="City" autocomplete="off" placeholder="Phone Number">
+                                <input type="text" asp-for="City" class="form-control shadow-none input2" id="City" autocomplete="off" placeholder="Phone Number" required>
                                 <label for="City">City</label>
+                                <span asp-validation-for="City" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="State" class="form-control shadow-none input2" id="State" placeholder=Suchtext autocomplete=off>
                                 <label for="State">State</label>
-                                @* <span asp-validation-for="State" class="text-danger"></span> *@
+                                
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zipcode" placeholder=Suchtext autocomplete=off>
+                                <input type="text" asp-for="Zipcode" class="form-control shadow-none input2" id="Zipcode" placeholder=Suchtext autocomplete=off required>
                                 <label for="Zipcode">Zip</label>
-                                @* <span asp-validation-for="State" class="text-danger"></span> *@
+                                <span asp-validation-for="Zipcode" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete="off">
+                                <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete="off" required>
                                 <label for="phone">Phone Number</label>
-                                @* <span asp-validation-for="Altphone" class="text-danger"></span> *@
+                                <span asp-validation-for="Altphone" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -202,16 +207,16 @@
                     <div class="row pb-4">
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Businessname" class="form-control shadow-none input3" id="Businessname" placeholder=Suchtext>
+                                <input type="text" asp-for="Businessname" class="form-control shadow-none input3" id="Businessname" placeholder=Suchtext required>
                                 <label for="Businessname">Business Name</label>
-                                @* <span asp-validation-for="Address1" class="text-danger"></span> *@
+                                <span asp-validation-for="Businessname" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <input type="text" asp-for="Businesswebsite" class="form-control shadow-none input3" id="Businesswebsite" placeholder=Suchtext>
+                                <input type="text" asp-for="Businesswebsite" class="form-control shadow-none input3" id="Businesswebsite" placeholder=Suchtext required>
                                 <label for="Businesswebsite">Business Website</label>
-                                @* <span asp-validation-for="Address2" class="text-danger"></span> *@
+                                <span asp-validation-for="Businesswebsite" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -265,6 +270,7 @@
                             <div class="form-floating">
                                 <textarea id="Adminnotes" asp-for="Adminnotes" required class="input-outline w-100 fs-6 form-control shadow-none input3" type="text" style=" height:100px;"></textarea>
                                 <label class="inputs-lable inputs-lable-textarea fs-6" for="Adminnotes">Admin Notes</label>
+                                <span asp-validation-for="Adminnotes" class="text-danger"></span>
                             </div>
 
                         </div>

@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,28 +18,38 @@ namespace HelloDocMVC.Entity.Models
         public string? role { get; set; }
         public int? Physicianid { get; set; }
         public string? Aspnetuserid { get; set; }
+        [Required(ErrorMessage = "UserName is required")]
         public string? UserName { get; set; }
+        [Required(ErrorMessage = "Password is required")]
         public string? PassWord { get; set; }
         public string? Regionsid { get; set; }
+        [Required(ErrorMessage = "FirstName is required")]
         public string Firstname { get; set; } = null!;
         public string? Lastname { get; set; }
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Please Enter Valid Email Address!")]
         public string Email { get; set; } = null!;
         public string? Mobile { get; set; }
         public string? State { get; set; }
+        [Required(ErrorMessage = "ZipCode is required")]
         public string? Zipcode { get; set; }
         public string? Medicallicense { get; set; }
         public string? Photo { get; set; }
         public IFormFile? PhotoFile { get; set; }
+        [Required(ErrorMessage = "AdminNotes is Required")]
         public string? Adminnotes { get; set; }
         public bool Isagreementdoc { get; set; }
         public bool Isbackgrounddoc { get; set; }
         public bool Istrainingdoc { get; set; }
         public bool Isnondisclosuredoc { get; set; }
         public bool Islicensedoc { get; set; }
+        [Required(ErrorMessage = "Address is Required")]
         public string? Address1 { get; set; }
         public string? Address2 { get; set; }
+        [Required(ErrorMessage = "City is Required")]
         public string? City { get; set; }
         public int? Regionid { get; set; }
+        [Required(ErrorMessage = "Phone number is Required")]
         public string? Altphone { get; set; }
         public string? Createdby { get; set; } = null!;
         public DateTime? Createddate { get; set; }

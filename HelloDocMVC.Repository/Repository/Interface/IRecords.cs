@@ -17,5 +17,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         bool DeleteRequest(int? RequestId);
         RecordsData BlockHistory(RecordsData rm);
         bool Unblock(int RequestId, string id);
+        public RecordsData GetFilteredSMSLogs(RecordsData rm);
+        public RecordsData GetFilteredEmailLogs(RecordsData rm);
     }
 }

@@ -105,10 +105,10 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
-                            <li><a class="dropdown-item" asp-action="ViewUploads" asp-controller="Admin" asp-route-RequestId="@item.RequestId"><i class="bi bi-journals"></i> View Uploads</a></li>
+                            <li><a class="dropdown-item" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Uploads</a></li>
                             <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin"><i class="bi bi-journals"></i> View Notes</a></li>
                             <li><a class="dropdown-item" asp-action="Orders" asp-controller="Admin"><i class="bi bi-journal-text"></i> Orders</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Doctors Notes</a></li>
+                            @*<li><a class="dropdown-item" href="#"><i class="bi bi-x-circle"></i> Doctors Notes</a></li>*@
                             <li><a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-ban"></i> Encounter</a></li>
                         </ul>
                     </td>

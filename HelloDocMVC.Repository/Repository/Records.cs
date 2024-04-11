@@ -213,5 +213,81 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
+        #region GetFilteredEmailLogs
+        public RecordsData GetFilteredEmailLogs(RecordsData rm)
+        {
+            List<EmailLogs> allData = (from req in _context.EmailLogs
+                                       where (rm.AccountType == null || rm.AccountType == 0 || req.RoleId == rm.AccountType) &&
+                                             (!rm.StartDate.HasValue || req.CreateDate.Date == rm.StartDate.Value.Date) &&
+                                             (!rm.EndDate.HasValue || req.SentDate.Value.Date == rm.EndDate.Value.Date) &&
+                                             (rm.ReceiverName.IsNullOrEmpty() || _context.AspNetUsers.FirstOrDefault(e => e.Email == req.EmailId).UserName.ToLower().Contains(rm.ReceiverName.ToLower())) &&
+                                             (rm.Email.IsNullOrEmpty() || req.EmailId.ToLower().Contains(rm.Email.ToLower()))
+                                       select new EmailLogs
+                                       {
+                                           Recipient = _context.AspNetUsers.FirstOrDefault(e => e.Email == req.EmailId).UserName ?? null,
+                                           ConfirmationNumber = req.ConfirmationNumber,
+                                           CreateDate = req.CreateDate,
+                                           EmailTemplate = req.EmailTemplate,
+                                           FilePath = req.FilePath,
+                                           SentDate = (DateTime)req.SentDate,
+                                           RoleId = req.RoleId,
+                                           EmailId = req.EmailId,
+                                           SentTries = req.SentTries,
+                                           SubjectName = req.SubjectName,
+                                           Action = (int)req.Action
+                                       }).ToList();
+
+            int totalItemCount = allData.Count;
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)rm.PageSize);
+            List<EmailLogs> list = allData.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+
+            RecordsData records = new()
+            {
+                EmailLogs = list,
+                CurrentPage = rm.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = rm.PageSize
+            };
+
+            return records;
+        }
+        #endregion GetFilteredEmailLogs
+
+        #region GetFilteredSMSLogs
+        public RecordsData GetFilteredSMSLogs(RecordsData rm)
+        {
+            List<SMSLogs> allData = (from req in _context.Smslogs
+                                     where (rm.AccountType == null || rm.AccountType == 0 || req.RoleId == rm.AccountType) &&
+                                           (!rm.StartDate.HasValue || req.CreateDate.Date == rm.StartDate.Value.Date) &&
+                                           (!rm.EndDate.HasValue || req.SentDate.Value.Date == rm.EndDate.Value.Date) &&
+                                           (rm.ReceiverName.IsNullOrEmpty() || _context.AspNetUsers.FirstOrDefault(e => e.PhoneNumber == req.MobileNumber).UserName.ToLower().Contains(rm.ReceiverName.ToLower())) &&
+                                           (rm.PhoneNumber.IsNullOrEmpty() || req.MobileNumber.ToLower().Contains(rm.PhoneNumber.ToLower()))
+                                     select new SMSLogs
+                                     {
+                                         Recipient = _context.AspNetUsers.FirstOrDefault(e => e.PhoneNumber == req.MobileNumber).UserName,
+                                         ConfirmatioNumber = req.ConfirmationNumber,
+                                         CreateDate = req.CreateDate,
+                                         SmsTemplate = req.Smstemplate,
+                                         SentDate = (DateTime)req.SentDate,
+                                         RoleId = req.RoleId,
+                                         MobileNumber = req.MobileNumber,
+                                         SentTries = req.SentTries,
+                                         Action = req.Action
+                                     }).ToList();
+
+            int totalItemCount = allData.Count;
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)rm.PageSize);
+            List<SMSLogs> list = allData.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();
+
+            RecordsData records = new()
+            {
+                SMSLogs = list,
+                CurrentPage = rm.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = rm.PageSize
+            };
+            return records;
+        }
+        #endregion GetFilteredSMSLogs
     }
 }

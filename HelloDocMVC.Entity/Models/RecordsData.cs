@@ -12,7 +12,11 @@ namespace HelloDocMVC.Entity.Models
         public List<SearchRecords>? SearchRecords { get; set; }
         public List<User>? Users { get; set; }
         public List<BlockRequests>? BlockRequests { get; set; }
-
+        public List<EmailLogs>? EmailLogs { get; set; }
+        public List<SMSLogs>? SMSLogs { get; set; }
+        // Email Logs
+        public int? AccountType { get; set; }
+        public string? ReceiverName { get; set; }
         // Extra Input Fields For Search Record
         public string? SearchInput { get; set; }
         public int? RegionId { get; set; }
@@ -24,12 +28,10 @@ namespace HelloDocMVC.Entity.Models
         public string? PatientName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-
         // Extra Input Fields For Patient Record
         public string? FirstName { get; set; }
         public string LastName { get; set; }
         public int UserId { get; set; }
-
         // Pagination
         public int CurrentPage { get; set; } = 1;
         public int TotalPages { get; set; } = 1;

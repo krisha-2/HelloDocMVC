@@ -21,10 +21,10 @@
 
 <div class="container-fluid px-4 mt-2 pb-3">
     <div class="d-flex justify-content-between my-2">
-        <div class="d-flex align-self-center">
+        <div class="d-flex align-self-center mt-3">
             <h4><strong>Search Records</strong></h4>
         </div>
-        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-info text-white shadow-none">
+        <a asp-controller="Admin" asp-action="Index" class="btn btn-info text-white shadow-none mt-3">
             <i class="fa-solid fa-share-from-square"></i>
             <span class="d-none d-sm-inline">Export Data To Excel</span>
         </a>
@@ -94,9 +94,9 @@
         </form>
         <!-- End Filter Inputs -->
         <!--List of Outcomes-->
-        <div class="table-responsive">
+        <div class="table-responsive m-2">
             <table class="table table-responsive mt-3 mb-0">
-                <thead class="bg-light">
+                <thead class="bg-light table-secondary">
                     <tr>
                         <th scope="col">Patient Name</th>
                         <th scope="col">Requestor</th>

@@ -109,7 +109,7 @@ namespace HelloDocMVC.Controllers
             return View("../Provider/Edit");
         }
         [HttpPost]
-        public async Task<IActionResult> PhysicianAdd(ViewProvider physicians)
+        public async Task<IActionResult> Edit(ViewProvider physicians)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
@@ -131,7 +131,7 @@ namespace HelloDocMVC.Controllers
 			{
 				_notyf.Error("Physician not added Successfully..!");
 			}
-			return RedirectToAction("Index");
+			return RedirectToAction("UserRole","Access");
         }
         public async Task<IActionResult> EditAccountInfo(ViewProvider data)
         {

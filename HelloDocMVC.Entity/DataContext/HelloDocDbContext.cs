@@ -98,7 +98,7 @@ public partial class HelloDocDbContext : DbContext
         {
             entity.HasKey(e => e.AdminId).HasName("Admin_pkey");
 
-            entity.Property(e => e.AdminId).ValueGeneratedNever();
+            entity.Property(e => e.AdminId).HasIdentityOptions(2L, null, null, null, null, null);
 
             entity.HasOne(d => d.AspNetUser).WithMany(p => p.AdminAspNetUsers)
                 .OnDelete(DeleteBehavior.ClientSetNull)

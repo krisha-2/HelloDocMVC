@@ -15,7 +15,7 @@
                     <a class="nav-link px-3 text-dark @(path.EndsWith("/Admin") ? "activesbnav" : "")" aria-current="page" asp-action="Index" asp-controller="Admin">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link px-3 text-dark @(path.StartsWith("/Provider") ? "activesbnav" : "")" asp-action="Location" asp-controller="Provider">Provider Location</a>
+                    <a class="nav-link px-3 text-dark @(path.StartsWith("/Provider/Location") ? "activesbnav" : "")" asp-action="Location" asp-controller="Provider">Provider Location</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link px-3 text-dark @(path.StartsWith("/AdminProfile") ? "activesbnav" : "")" asp-action="Index" asp-controller="AdminProfile">My Profile</a>
@@ -48,8 +48,8 @@
                     </a>
                     <div class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" asp-action="SearchRecord" asp-controller="Records">Search Records</a>
-                        <a class="dropdown-item" asp-action="PatientRecord" asp-controller="Records">Email Logs</a>
-                        <a class="dropdown-item" asp-action="PatientRecord" asp-controller="Records">SMS Logs</a>
+                        <a class="dropdown-item" asp-action="EmailLogs" asp-controller="Records">Email Logs</a>
+                        <a class="dropdown-item" asp-action="SMSLogs" asp-controller="Records">SMS Logs</a>
                         <a class="dropdown-item" asp-action="PatientRecord" asp-controller="Records">Patient History</a>
                         <a class="dropdown-item" asp-action="BlockHistory" asp-controller="Records">Block History</a>
                     </div>
