@@ -117,13 +117,123 @@ namespace HelloDocMVC.Repository.Repository
         //        return true;
         //    }
         //}
-        public bool DeleteBusiness(int vendorId)
+        //public bool DeleteBusiness(int vendorId)
+        //{
+        //    HealthProfessional hp = _context.HealthProfessionals.Where(x => x.VendorId == vendorId).FirstOrDefault();
+        //    hp.IsDeleted[0] = true;
+        //    _context.HealthProfessionals.Update(hp);
+        //    _context.SaveChanges();
+        //    return true;
+        //}
+        #region BusinessById
+        public async Task<PartnersData> BusinessById(int? VendorId)
         {
-            HealthProfessional hp = _context.HealthProfessionals.Where(x => x.VendorId == vendorId).FirstOrDefault();
-            hp.IsDeleted[0] = true;
-            _context.HealthProfessionals.Update(hp);
-            _context.SaveChanges();
-            return true;
+            PartnersData? data = await (from v in _context.HealthProfessionals
+                                       join type in _context.HealthProfessionalTypes
+                                       on v.Profession equals type.HealthProfessionalId into VendorGroup
+                                       from vg in VendorGroup.DefaultIfEmpty()
+                                       where v.VendorId == VendorId
+                                       select new PartnersData
+                                       {
+                                           VendorId = v.VendorId,
+                                           VendorName = v.VendorName,
+                                           ProfessionId = (int)v.Profession,
+                                           FaxNumber = v.FaxNumber,
+                                           Address = v.Address,
+                                           City = v.City,
+                                           State = v.State,
+                                           ZipCode = v.Zip,
+                                           CreatedDate = v.CreatedDate,
+                                           Email = v.Email,
+                                           BusinessContact = v.BusinessContact,
+                                           PhoneNumber = v.PhoneNumber,
+                                           BusinessName = vg.ProfessionName
+                                       }).FirstOrDefaultAsync();
+            return data;
         }
+        #endregion BusinessById
+        #region AddEditBusiness
+        public bool AddEditBusiness(PartnersData data)
+        {
+            try
+            {
+                if (data.VendorId != 0)
+                {
+                    var result = _context.HealthProfessionals.Where(hp => hp.VendorId == data.VendorId).FirstOrDefault();
+                    if (result != null)
+                    {
+
+                        result.VendorName = data.VendorName;
+                        result.Profession = data.ProfessionId;
+                        result.FaxNumber = data.FaxNumber;
+                        result.Address = data.Address;
+                        result.City = data.City;
+                        result.State = data.State;
+                        result.Zip = data.ZipCode;
+                        result.CreatedDate = DateTime.Now;
+                        result.PhoneNumber = data.PhoneNumber;
+                        result.IsDeleted = new BitArray(1);
+                        result.Email = data.Email;
+                        result.BusinessContact = data.BusinessContact;
+                        result.ModifiedDate = DateTime.Now;
+
+                        _context.HealthProfessionals.Update(result);
+                        _context.SaveChanges();
+
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    HealthProfessional hp = new()
+                    {
+                        VendorName = data.VendorName,
+                        Profession = data.ProfessionId,
+                        FaxNumber = data.FaxNumber,
+                        Address = data.Address,
+                        City = data.City,
+                        State = data.State,
+                        Zip = data.ZipCode,
+                        CreatedDate = DateTime.Now,
+                        PhoneNumber = data.PhoneNumber,
+                        IsDeleted = new BitArray(1),
+                        Email = data.Email,
+                        BusinessContact = data.BusinessContact
+                    };
+                    _context.HealthProfessionals.Add(hp);
+                    _context.SaveChanges();
+
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion AddEditBusiness
+
+        #region DeleteVendor
+        public bool DeleteVendor(int? VendorId)
+        {
+            try
+            {
+                var data = _context.HealthProfessionals.FirstOrDefault(v => v.VendorId == VendorId);
+                data.IsDeleted = new BitArray(1);
+                data.IsDeleted[0] = true;
+                _context.HealthProfessionals.Update(data);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+        #endregion DeleteVendor
     }
 }

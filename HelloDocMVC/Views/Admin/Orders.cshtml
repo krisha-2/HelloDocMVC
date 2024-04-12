@@ -48,17 +48,17 @@
         </div>
         <div class="row">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4">
-                <input asp-for="Fax_Number" type="text" class="form-control" placeholder="Fax Number" id="Fax_Number">
+                <input asp-for="FaxNumber" type="text" class="form-control" placeholder="Fax Number" id="Fax_Number">
                 <label class="text-secondary" for="faxnumber">Fax Number</label>
-                <span asp-validation-for="Fax_Number" class="text-danger"></span>
+                <span asp-validation-for="FaxNumber" class="text-danger"></span>
             </div>
         </div>
         <div class="form-group p-2">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Prescription or Order details"></textarea>
+            <textarea class="form-control" asp-for="Prescription" id="exampleFormControlTextarea1" rows="3" placeholder="Prescription or Order details"></textarea>
         </div>
         <div class="row">
             <div class="form-group col-md-6 p-3 form-floating">
-                <select class="form-select shadow-none" id="floatingSelectGrid">
+                <select class="form-select shadow-none" id="floatingSelectGrid" asp-for="NoOfRefill">
                     <option selected class="text-secondary">Not required</option>
                     <option value="1">1</option>
                     <option value="2">2</option>

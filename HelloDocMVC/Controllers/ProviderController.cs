@@ -6,6 +6,7 @@ using HelloDocMVC.Repository.Repository.Interface;
 using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Models;
+using Twilio.TwiML.Messaging;
 
 namespace HelloDocMVC.Controllers
 {
@@ -25,17 +26,17 @@ namespace HelloDocMVC.Controllers
             _comboBox = comboBox;
             _emailConfig = emailConfiguration;
         }
-        public async Task<IActionResult> IndexAsync(int? region)
+        public async Task<IActionResult> IndexAsync(int? region,ViewProvider vp)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            var v = await _IProvider.PhysicianAll();
+            var v =  _IProvider.PhysicianAll(vp);
             if (region == null)
             {
-                v = await _IProvider.PhysicianAll();
+                v =  _IProvider.PhysicianAll(vp);
             }
             else
             {
-                v = await _IProvider.PhysicianByRegion(region);
+                v = _IProvider.PhysicianByRegion(region,vp);
             }
             return View("../Provider/Index", v);
         }
@@ -66,10 +67,11 @@ namespace HelloDocMVC.Controllers
         }
         public async Task<IActionResult> SendMessage(string? email, int? way, string? msg)
         {
-            bool result;
+            bool result = false;
+            bool sms = false;
             if (way == 1)
             {
-                result = await _emailConfig.SendMail(email, "Check massage", "Hello " + msg);
+                sms = _IProvider.SendMessage(msg);
             }
             else if (way == 2)
             {
@@ -78,16 +80,18 @@ namespace HelloDocMVC.Controllers
             else
             {
                 result = await _emailConfig.SendMail(email, "Check massage", "Hello " + msg);
+                sms = _IProvider.SendMessage(msg);
             }
             if (result)
             {
-                _notyf.Success("Massage Send Successfully..!");
+                _notyf.Success("Email sent Successfully.");
             }
-            else
+            if (sms)
             {
-                _notyf.Error("Massage Not Send..!");
+                _notyf.Success("Message sent Successfully.");
             }
             return RedirectToAction("Index");
+
         }
         public async Task<IActionResult> PhysicianProfile(int? id)
         {

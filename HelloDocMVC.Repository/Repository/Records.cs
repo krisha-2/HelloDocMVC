@@ -213,7 +213,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        #region GetFilteredEmailLogs
         public RecordsData GetFilteredEmailLogs(RecordsData rm)
         {
             List<EmailLogs> allData = (from req in _context.EmailLogs
@@ -251,9 +250,6 @@ namespace HelloDocMVC.Repository.Repository
 
             return records;
         }
-        #endregion GetFilteredEmailLogs
-
-        #region GetFilteredSMSLogs
         public RecordsData GetFilteredSMSLogs(RecordsData rm)
         {
             List<SMSLogs> allData = (from req in _context.Smslogs
@@ -288,6 +284,5 @@ namespace HelloDocMVC.Repository.Repository
             };
             return records;
         }
-        #endregion GetFilteredSMSLogs
     }
 }

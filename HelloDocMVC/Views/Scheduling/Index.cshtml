@@ -79,8 +79,8 @@
                 <a id="regionicon">
                     <i class="fa fa-search"></i>
                 </a>
-                <select class="form-select ms-2" data-allow-clear="true" tabindex="-1" id="suggestions" onchange="myFunction()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" style="padding-left:5px">
-                    <option value="-1">All Region</option>
+                <select class="form-select ms-2" data-allow-clear="true" tabindex="-1" id="suggestions" onchange="searchRegion()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" style="padding-left:5px">
+                    <option value="0">All Region</option>
                 </select>
             </div>
             <div class="btns">
@@ -289,6 +289,20 @@
                 },
                 error: function () {
                     alert("Error while fetching Physicians.");
+                }
+            });
+        }
+        //search
+        function searchRegion() {
+            var region = $("#suggestions").val();
+            $.ajax({
+                url: '@Url.Action("LoadSchedulingPartial", "Scheduling")',
+                data: { PartialName: currentPartial, date: filterDate.toISOString(), regionid: region },
+                success: function (data) {
+                    $(".calander").html(data);
+                },
+                error: function (e) {
+                    console.log(e);
                 }
             });
         }

@@ -68,9 +68,9 @@
         </form>
         <!-- End Filter Inputs -->
         <!--List of Outcomes-->
-        <div class="table-responsive">
+        <div class="table-responsive m-2">
             <table class="table table-responsive mt-3 mb-0">
-                <thead class="bg-light">
+                <thead class="bg-light table-secondary">
                     <tr>
                         <th scope="col">Recipient</th>
                         <th scope="col">Action</th>
@@ -186,13 +186,13 @@
             var formData = $("#FilterForm").serialize();
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("SMSLog", "Records")',
+                url: '@Url.Action("SMSLogs", "Records")',
                 data: formData,
                 cache: false,
                 success: function (response) {
                     console.log(response);
                     var bodyContent = $(response).find('tbody').html();
-                    var pagination = $(response).find('nav').html();
+                    var pagination = $(response).find('#Pagination').html();
                     $('#SMSLogs').html(bodyContent);
                     $('#Pagination').html(pagination);
                 }

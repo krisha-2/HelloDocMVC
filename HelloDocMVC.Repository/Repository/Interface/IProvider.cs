@@ -10,8 +10,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
 {
     public interface IProvider
     {
-        public Task<List<ViewProvider>> PhysicianAll();
-        public Task<List<ViewProvider>> PhysicianByRegion(int? region);
+        public ViewProvider PhysicianAll(ViewProvider vp);
+        public ViewProvider PhysicianByRegion(int? region, ViewProvider vp);
         public Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict);
         public Task<bool> PhysicianAddEdit(ViewProvider physiciandata, string AdminId);
         public Task<ViewProvider> GetPhysicianById(int id);
@@ -23,5 +23,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> EditProviderOnbording(ViewProvider vm, string AdminId);
         public Task<bool> DeletePhysician(int PhysicianID, string AdminID);
         public List<PhysicianLocation> FindPhysicianLocation();
+        public bool SendMessage(string? Message);
     }
 }

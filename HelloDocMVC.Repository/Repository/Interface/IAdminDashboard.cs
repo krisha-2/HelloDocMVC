@@ -25,7 +25,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Boolean SaveDoc(int Requestid, IFormFile file);
         public Task<bool> DeleteDocumentByRequest(string ids);
         public bool ClearCase(int RequestID);
-        //public bool Orders(Orders sm);
+        public bool SendOrder(Orders data);
         public ViewNotesData getNotesByID(int id);
         public bool EditViewNotes(string? adminnotes, string? physiciannotes, int RequestID);
         public bool SendAgreement(int requestid);

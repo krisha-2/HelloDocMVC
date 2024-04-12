@@ -24,5 +24,6 @@ namespace HelloDocMVC.Entity.Models
         public DateTime? ModifiedDate { get; set; }
         public DateTime DateOfService { get; set; }
         public DateTime? CloseCaseDate { get; set; }
+
     }
 }

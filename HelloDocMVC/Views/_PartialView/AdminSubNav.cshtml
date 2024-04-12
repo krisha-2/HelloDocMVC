@@ -65,13 +65,56 @@
     </div>
     <div class="offcanvas-body">
         <ul class="list-group list-group-flush">
-            <li class="list-group-item h6"><a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-dark">Dashboard</a></li>
+            @*<li class="list-group-item h6"><a asp-controller="Admin" asp-action="Index" class="text-decoration-none text-dark">Dashboard</a></li>
             <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">Provider Location</a></li>
             <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">My Profile</a></li>
             <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">Providers</a></li>
             <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">Partners</a></li>
             <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">Access</a></li>
-            <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">Records</a></li>
+            <li class="list-group-item h6"><a asp-controller="Profile" asp-action="Index" class="text-decoration-none text-dark">Records</a></li>*@
+            <li class="nav-item">
+                <a class="nav-link px-3 text-dark @(path.EndsWith("/Admin") ? "activesbnav" : "")" aria-current="page" asp-action="Index" asp-controller="Admin" class="text-decoration-none">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-3 text-dark @(path.StartsWith("/Provider/Location") ? "activesbnav" : "")" asp-action="Location" asp-controller="Provider" class="text-decoration-none">Provider Location</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-3 text-dark @(path.StartsWith("/AdminProfile") ? "activesbnav" : "")" asp-action="Index" asp-controller="AdminProfile">My Profile</a>
+            </li>
+            <li class="nav-item dropdown ">
+                <a class="nav-link dropdown px-2 text-dark" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Providers
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item @(path.StartsWith("/Provider") ? "activesbnav" : "")" asp-action="Index" asp-controller="Provider">Provider</a>
+                    <a class="dropdown-item @(path.StartsWith("/Provider") ? "activesbnav" : "")" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
+                    <a class="dropdown-item" href="#"> Invoicing</a>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link px-3 text-dark " asp-action="Index" asp-controller="Partners">Partners</a>
+            </li>
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link dropdown text-dark @(path.StartsWith("/Access") ? "activesbnav" : "")" id="AccessnavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Access
+                </a>
+                <div class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" asp-action="Index" asp-controller="Access">Account Access</a>
+                    <a class="dropdown-item" asp-action="UserRole" asp-controller="Access">User Access</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link dropdown text-dark @(path.StartsWith("/Records") ? "activesbnav" : "")" id="AccessnavbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Records
+                </a>
+                <div class="dropdown-menu mt-2" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" asp-action="SearchRecord" asp-controller="Records">Search Records</a>
+                    <a class="dropdown-item" asp-action="EmailLogs" asp-controller="Records">Email Logs</a>
+                    <a class="dropdown-item" asp-action="SMSLogs" asp-controller="Records">SMS Logs</a>
+                    <a class="dropdown-item" asp-action="PatientRecord" asp-controller="Records">Patient History</a>
+                    <a class="dropdown-item" asp-action="BlockHistory" asp-controller="Records">Block History</a>
+                </div>
+            </li>
         </ul>
     </div>
 </div>

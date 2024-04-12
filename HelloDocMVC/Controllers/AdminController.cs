@@ -153,6 +153,29 @@ namespace HelloDocMVC.Controllers
            
             return View();
         }
+        [HttpPost]
+        public IActionResult Orders(Orders sm)
+        {
+            if (ModelState.IsValid)
+            {
+                bool data = _IAdminDashboard.SendOrder(sm);
+                if (data)
+                {
+                    _notyf.Success("Order Created  successfully...");
+                    _notyf.Information("Mail is sended to Vendor successfully...");
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    _notyf.Error("Order Not Created...");
+                    return View("../Admin/Orders", sm);
+                }
+            }
+            else
+            {
+                return View("../Admin/Orders", sm);
+            }
+        }
         public IActionResult Business(int profession)
         {
             var v = _comboBox.Business(profession);
@@ -260,28 +283,7 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("ViewNotes", new { id = RequestID });
             }
         }
-        //public IActionResult Orders(Orders sm)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        bool data = _IAdminDashboard.Orders(sm);
-        //        if (data)
-        //        {
-        //            _notyf.Success("Order Created  successfully...");
-        //            _notyf.Information("Mail is sended to Vendor successfully...");
-        //            return RedirectToAction("Index", "AdminDashBoard");
-        //        }
-        //        else
-        //        {
-        //            _notyf.Error("Order Not Created...");
-        //            return View("../Admin/Orders", sm);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return View("../Admin/Orders", sm);
-        //    }
-        //}
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendAgreementmail(int requestid)

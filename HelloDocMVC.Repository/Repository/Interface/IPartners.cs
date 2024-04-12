@@ -13,6 +13,9 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public List<PartnersData> GetPartnersByProfession(string searchValue, int Profession);
         //public bool EditPartners(HealthProfessional hp);
         //public bool AddBusiness(HealthProfessional hp);
-        public bool DeleteBusiness(int vendorId);
+        //public bool DeleteBusiness(int vendorId);
+        public Task<PartnersData> BusinessById(int? VendorId);
+        public bool AddEditBusiness(PartnersData data);
+        public bool DeleteVendor(int? VendorId);
     }
 }

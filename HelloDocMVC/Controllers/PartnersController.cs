@@ -64,13 +64,74 @@ namespace HelloDocMVC.Controllers
         //    return RedirectToAction("Index");
 
         //}
-        public IActionResult DeleteBusiness(int VendorId)
-        {
-            var res = _IPartners.DeleteBusiness(VendorId);
+        //public IActionResult DeleteBusiness(int VendorId)
+        //{
+        //    var res = _IPartners.DeleteBusiness(VendorId);
 
-            if (res)
+        //    if (res)
+        //    {
+        //        _notyf.Success("Vendor Deleted Successfully");
+        //    }
+        //    else
+        //    {
+        //        _notyf.Error("Vendor not deleted");
+        //    }
+        //    return RedirectToAction("Index");
+        //}
+        #region AddEditBusiness
+        public async Task<IActionResult> AddEditBusiness(int? VendorId)
+        {
+            List<Profession> hpt = _comboBox.Profession();
+            ViewBag.ProfessionType = hpt;
+            if (VendorId == null)
             {
-                _notyf.Success("Vendor Deleted Successfully");
+                ViewData["Status"] = "Add";
+            }
+            else
+            {
+                ViewData["Status"] = "Edit";
+                PartnersData data = await _IPartners.BusinessById(VendorId);
+                return View("../Partners/AddEditBusiness", data);
+            }
+            return View("../Partners/AddEditBusiness");
+        }
+        #endregion AddEditBusiness
+
+        #region AddBusiness
+        public IActionResult AddBusiness(PartnersData data)
+        {
+            if (_IPartners.AddEditBusiness(data))
+            {
+                if (data.VendorId != 0)
+                {
+                    _notyf.Success("Business Edited Successfully.");
+                }
+                else
+                {
+                    _notyf.Success("Business Added Successfully.");
+                }
+            }
+            else
+            {
+                if (data.VendorId != 0)
+                {
+                    _notyf.Error("Business not edited.");
+                }
+                else
+                {
+                    _notyf.Error("Business not added.");
+                }
+            }
+            return RedirectToAction("Index");
+        }
+        #endregion AddBusiness
+
+        #region DeleteVendor
+        public IActionResult DeleteVendor(int? VendorId)
+        {
+            if (_IPartners.DeleteVendor(VendorId))
+            {
+                _notyf.Success("Vendor Deleted Successfully.");
             }
             else
             {
@@ -78,5 +139,6 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("Index");
         }
+        #endregion DeleteVendor
     }
 }

@@ -583,6 +583,33 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
+        public bool SendOrder(Orders data)
+        {
+            try
+            {
+                OrderDetail od = new()
+                {
+                    RequestId = data.RequestId,
+                    VendorId = data.VendorId,
+                    FaxNumber = data.FaxNumber,
+                    Email = data.Email,
+                    BusinessContact = data.Business_contact,
+                    Prescription = data.Prescription,
+                    NoOfRefill = data.NoOfRefill,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = "65e196bf-b39d-48e8-a3da-ebd3b699dede"
+                };
+                _context.OrderDetails.Add(od);
+                _context.SaveChanges(true);
+                var req = _context.Requests.FirstOrDefault(e => e.RequestId == data.RequestId);
+                _emailConfig.SendMail(data.Email, "Order Details", "<p>Prescription:" + data.Prescription + "<br> No of Refills: " + data.NoOfRefill + "</p>");
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public bool SendAgreement(int requestid)
         {
             var res = _context.RequestClients.FirstOrDefault(e => e.RequestId == requestid);

@@ -71,6 +71,13 @@ namespace HelloDocMVC.Entity.Models
         public IFormFile? Trainingdoc { get; set; }
         public IFormFile? BackGrounddoc { get; set; }
         public IFormFile? Licensedoc { get; set; }
+        public List<ViewProvider> ProviderData { get; set; }
+        // Pagination
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
+        public int PageSize { get; set; } = 5;
+        public bool? IsAscending { get; set; } = true;
+        public string? SortedColumn { get; set; } = "PatientName";
         public List<Regions>? Regionids { get; set; }
         public class Regions
         {

@@ -24,9 +24,9 @@ namespace HelloDocMVC.Repository.Repository
             _context = context;
             _emailConfig = emailConfig;
         }
-        public async Task<List<ViewProvider>> PhysicianAll()
+        public ViewProvider PhysicianAll(ViewProvider vp)
         {
-            List<ViewProvider> data = await (from r in _context.Physicians
+            List<ViewProvider> data = (from r in _context.Physicians
                                              join Notifications in _context.PhysicianNotifications
                                              on r.PhysicianId equals Notifications.PhysicianId into aspGroup
                                              from nof in aspGroup.DefaultIfEmpty()
@@ -54,12 +54,44 @@ namespace HelloDocMVC.Repository.Repository
                                                    Email = r.Email,
                                                    Isnondisclosuredoc = (bool)r.IsNonDisclosureDoc
                                                })
-                                        .ToListAsync();
-            return data;
+                                        .ToList();
+            if (vp.IsAscending == true)
+            {
+                data = vp.SortedColumn switch
+                {
+                    "PatientName" => data.OrderBy(x => x.Firstname).ToList(),
+                    "Role" => data.OrderBy(x => x.role).ToList(),
+                    _ => data.OrderBy(x => x.Firstname).ToList()
+                };
+            }
+            else
+            {
+                data = vp.SortedColumn switch
+                {
+                    "PatientName" => data.OrderByDescending(x => x.Firstname).ToList(),
+                    "Role" => data.OrderByDescending(x => x.role).ToList(),
+                    _ => data.OrderByDescending(x => x.Firstname).ToList()
+                };
+            }
+            int totalItemCount = data.Count;
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)vp.PageSize);
+            List<ViewProvider> list = data.Skip((vp.CurrentPage - 1) * vp.PageSize).Take(vp.PageSize).ToList();
+
+            ViewProvider model = new()
+            {
+                ProviderData = list,
+                CurrentPage = vp.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = vp.PageSize,
+                IsAscending = vp.IsAscending,
+                SortedColumn = vp.SortedColumn
+            };
+
+            return model;
         }
-        public async Task<List<ViewProvider>> PhysicianByRegion(int? region)
+        public ViewProvider PhysicianByRegion(int? region,ViewProvider vp)
         {
-            List<ViewProvider> data = await (
+            List<ViewProvider> data = (
                                         from pr in _context.PhysicianRegions
                                         join ph in _context.Physicians
                                         on pr.PhysicianId equals ph.PhysicianId into rGroup
@@ -90,8 +122,40 @@ namespace HelloDocMVC.Repository.Repository
                                             Email = r.Email,
                                             Isnondisclosuredoc = r.IsNonDisclosureDoc == null ? false : true
                                         })
-                                        .ToListAsync();
-            return data;
+                                        .ToList();
+            if (vp.IsAscending == true)
+            {
+                data = vp.SortedColumn switch
+                {
+                    "PatientName" => data.OrderBy(x => x.Firstname).ToList(),
+                    "Role" => data.OrderBy(x => x.role).ToList(),
+                    _ => data.OrderBy(x => x.Firstname).ToList()
+                };
+            }
+            else
+            {
+                data = vp.SortedColumn switch
+                {
+                    "PatientName" => data.OrderByDescending(x => x.Firstname).ToList(),
+                    "Role" => data.OrderByDescending(x => x.role).ToList(),
+                    _ => data.OrderByDescending(x => x.Firstname).ToList()
+                };
+            }
+            int totalItemCount = data.Count;
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)vp.PageSize);
+            List<ViewProvider> list = data.Skip((vp.CurrentPage - 1) * vp.PageSize).Take(vp.PageSize).ToList();
+
+            ViewProvider model = new()
+            {
+                ProviderData = list,
+                CurrentPage = vp.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = vp.PageSize,
+                IsAscending = vp.IsAscending,
+                SortedColumn = vp.SortedColumn
+            };
+
+            return model;
         }
         public async Task<bool> ChangeNotificationPhysician(Dictionary<int, bool> changedValuesDict)
         {
@@ -605,6 +669,12 @@ namespace HelloDocMVC.Repository.Repository
                         }).ToList();
             return pl;
 
+        }
+        public bool SendMessage(string? Message)
+        {
+            string contact = "+917801870065";
+            bool sms = _emailConfig.SendSMS(contact, Message).Result;
+            return sms;
         }
     }
 }
