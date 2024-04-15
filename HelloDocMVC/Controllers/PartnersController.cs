@@ -30,10 +30,10 @@ namespace HelloDocMVC.Controllers
             _emailConfig = emailConfiguration;
         }
         #endregion
-        public IActionResult Index(string searchValue, int Profession)
+        public IActionResult Index(string searchValue, int Profession, PartnersData pd)
         {
             ViewBag.Profession = _context.HealthProfessionalTypes.ToList();
-            List<PartnersData> data = _IPartners.GetPartnersByProfession(searchValue, Profession);
+            PartnersData data = _IPartners.GetPartnersByProfession(searchValue, Profession, pd);
             return View("../Partners/Index", data);
         }
         //public IActionResult AddEditBusiness(int VendorId)
@@ -78,67 +78,41 @@ namespace HelloDocMVC.Controllers
         //    }
         //    return RedirectToAction("Index");
         //}
-        #region AddEditBusiness
-        public async Task<IActionResult> AddEditBusiness(int? VendorId)
+        public IActionResult AddEditBusiness(int VendorId)
         {
-            List<Profession> hpt = _comboBox.Profession();
-            ViewBag.ProfessionType = hpt;
-            if (VendorId == null)
+            if (VendorId == 0)
             {
-                ViewData["Status"] = "Add";
+                ViewData["Heading"] = "Add";
             }
             else
             {
-                ViewData["Status"] = "Edit";
-                PartnersData data = await _IPartners.BusinessById(VendorId);
-                return View("../Partners/AddEditBusiness", data);
+                ViewData["Heading"] = "Update";
             }
-            return View("../Partners/AddEditBusiness");
+            ViewBag.Professions = _context.HealthProfessionalTypes.ToList();
+            var result = _IPartners.EditPartners(VendorId);
+            return View("AddEditBusiness", result);
         }
-        #endregion AddEditBusiness
-
-        #region AddBusiness
-        public IActionResult AddBusiness(PartnersData data)
+        public IActionResult EditPartnersData(HealthProfessional hp)
         {
-            if (_IPartners.AddEditBusiness(data))
+            var result = _IPartners.EditPartnersData(hp);
+            if (result == true)
             {
-                if (data.VendorId != 0)
-                {
-                    _notyf.Success("Business Edited Successfully.");
-                }
-                else
-                {
-                    _notyf.Success("Business Added Successfully.");
-                }
+                _notyf.Success("Data edited Successfully...");
             }
             else
             {
-                if (data.VendorId != 0)
-                {
-                    _notyf.Error("Business not edited.");
-                }
-                else
-                {
-                    _notyf.Error("Business not added.");
-                }
+                _notyf.Error("Data not Changed...");
             }
             return RedirectToAction("Index");
         }
-        #endregion AddBusiness
-
-        #region DeleteVendor
-        public IActionResult DeleteVendor(int? VendorId)
+        public IActionResult DeleteBusiness(int VendorId)
         {
-            if (_IPartners.DeleteVendor(VendorId))
+            bool res = _IPartners.DeleteBusiness(VendorId);
+            if (res == true)
             {
-                _notyf.Success("Vendor Deleted Successfully.");
-            }
-            else
-            {
-                _notyf.Error("Vendor not deleted");
+                _notyf.Success("Business Deleted Successfully..");
             }
             return RedirectToAction("Index");
         }
-        #endregion DeleteVendor
     }
 }

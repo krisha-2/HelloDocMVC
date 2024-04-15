@@ -89,28 +89,37 @@ namespace HelloDocMVC.Controllers
 		}
 		public async Task<IActionResult> PostRoleMenu(ViewRole role, string Menusid)
 		{
-			if (role.Roleid == 0)
-			{
-				if (await _IAccessRole.PostRoleMenu(role, Menusid, CV.ID()))
-				{
-					_notyf.Success("Role Added Successfully...");
-				}
-				else
-				{
-					_notyf.Error("Role not Added...");
-				}
-			}
-			else
-			{
-				if (await _IAccessRole.PutRoleMenu(role, Menusid, CV.ID()))
-				{
-					_notyf.Success("Role Modified Successfully...");
-				}
-				else
-				{
-					_notyf.Error("Role not Modified...");
-				}
-			}
+            if (Menusid != null)
+            {
+                if (role.Roleid == 0)
+                {
+                    if (await _IAccessRole.PostRoleMenu(role, Menusid, CV.ID()))
+                    {
+                        _notyf.Success("Role Added Successfully...");
+                    }
+                    else
+                    {
+                        _notyf.Error("Role not Added...");
+                    }
+                }
+                else
+                {
+                    if (await _IAccessRole.PutRoleMenu(role, Menusid, CV.ID()))
+                    {
+                        _notyf.Success("Role Modified Successfully...");
+                    }
+                    else
+                    {
+                        _notyf.Error("Role not Modified...");
+                    }
+                }
+            }
+            else
+            {
+                TempData["Errormessage"] = "Please Select one of the role!!";
+                return View("../Access/CreateRole");
+            }
+			
 			return RedirectToAction("Index");
 		}
 		public async Task<IActionResult> DeleteRole(int roleid)

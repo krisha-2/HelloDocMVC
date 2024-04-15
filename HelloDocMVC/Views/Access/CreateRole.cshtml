@@ -34,8 +34,9 @@
                 <div class="row pb-4">
                     <div class="col-md-6 pb-3">
                         <div class="form-floating">
-                            <input type="text" asp-for="Name" class="form-control shadow-none" id="Name" placeholder="First Name" />
+                            <input type="text" asp-for="Name" class="form-control shadow-none" id="Name" placeholder="First Name" required />
                             <label for="Name">Role Name</label>
+                            <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
                     </div>
                     <div class="col-md-6 pb-3">
@@ -43,6 +44,7 @@
                             <select class="form-select" required asp-for="Accounttype" id="Accounttype" data-allow-clear="true" tabindex="-1" onchange="accounttype()" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                             </select>
                             <label for="Accounttype">Status</label>
+                            <span asp-validation-for="Accounttype" class="text-danger"></span>
                         </div>
                     </div>
                     <input name="Menusid" type="hidden" id="menusid" />
@@ -52,6 +54,13 @@
                         </div>
                     </div>
                 </div>
+                @if (TempData["Errormessage"] != null)
+                {
+                    <div class="alert text-start alert-info alert-dismissible fade show" role="alert">
+                        <strong>Heyy</strong> @TempData["Errormessage"]
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
                 <div class="d-flex justify-content-end mb-3">
                     <input type="submit" class="text-end btn btn-info text-white me-2" id="submitresetpass" value="Save" />
                     <button class="text-end btn btn-outline-info " id="submitresetpass">cancel</button>

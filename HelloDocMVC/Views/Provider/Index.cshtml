@@ -251,39 +251,6 @@
             }
         });
     });
-    //$(document).ready(function () {
-    //    $("#Submit").click(function () {
-    //        var formData = $("#FilterForm").serialize();
-    //        $.ajax({
-    //            type: "POST",
-    //            url: '@@Url.Action("SearchRecord", "Records")',
-    //            data: formData,
-    //            cache: false,
-    //            success: function (response) {
-    //                console.log(response);
-    //                var bodyContent = $(response).find('tbody').html();
-    //                var pagination = $(response).find('.pagenav').html();
-    //                $('#providerbody').html(bodyContent);
-    //                $('#Pagination').html(pagination);
-    //            }
-    //        });
-    //    });
-    //});
-    //function setpagenumber(e) {
-    //    console.log(e)
-    //    if (e == 'previous') {
-    //        var cp = @@Model.CurrentPage-1;
-    //        $('#currentpagevalue').val(cp);
-    //    }
-    //    else if (e == 'next') {
-    //        var cp = @@Model.CurrentPage + 1;
-    //        $('#currentpagevalue').val(cp);
-    //    }
-    //    else {
-    //        $('#currentpagevalue').val(e);
-    //    }
-    //    $("#documentform").submit();
-    //}
     function setpagenumber(e) {
         if (e == 'previous') {
             var cp = @Model.CurrentPage-1;

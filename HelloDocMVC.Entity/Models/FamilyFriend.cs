@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 namespace HelloDocMVC.Entity.Models
 {
     public class FamilyFriend
@@ -37,6 +38,7 @@ namespace HelloDocMVC.Entity.Models
         [Required(ErrorMessage = "ZipCode is Required")]
         public string ZipCode { get; set; }
         public string RoomSuite { get; set; }
+        public IFormFile? file { get; set; }
 
     }
 }

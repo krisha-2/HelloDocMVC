@@ -10,12 +10,12 @@ namespace HelloDocMVC.Repository.Repository.Interface
 {
     public interface IPartners
     {
-        public List<PartnersData> GetPartnersByProfession(string searchValue, int Profession);
+        public PartnersData GetPartnersByProfession(string searchValue, int Profession, PartnersData pd);
         //public bool EditPartners(HealthProfessional hp);
         //public bool AddBusiness(HealthProfessional hp);
         //public bool DeleteBusiness(int vendorId);
-        public Task<PartnersData> BusinessById(int? VendorId);
-        public bool AddEditBusiness(PartnersData data);
-        public bool DeleteVendor(int? VendorId);
+        public HealthProfessional EditPartners(int VendorId);
+        public bool EditPartnersData(HealthProfessional hp);
+        public bool DeleteBusiness(int VendorId);
     }
 }

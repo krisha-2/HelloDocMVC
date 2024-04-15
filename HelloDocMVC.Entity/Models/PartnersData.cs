@@ -26,5 +26,12 @@ namespace HelloDocMVC.Entity.Models
         public int ProfessionId { get; set; }
         public string BusinessContact { get; set; }
         public string BusinessName { get; set; }
+        public List<PartnersData>? PD { get; set; }
+        // Pagination
+        public int CurrentPage { get; set; } = 1;
+        public int TotalPages { get; set; } = 1;
+        public int PageSize { get; set; } = 5;
+        public bool? IsAscending { get; set; } = true;
+        public string? SortedColumn { get; set; } = "Business";
     }
 }

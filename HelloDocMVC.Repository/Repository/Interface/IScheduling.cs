@@ -15,7 +15,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public bool ViewShiftSave(SchedulingData modal, string id);
         public bool ViewShiftDelete(SchedulingData modal, string id);
         public Task<List<ViewProvider>> PhysicianOnCall(int? region);
-        public Task<List<SchedulingData>> GetAllNotApprovedShift(int? regionId);
+        public SchedulingData GetAllNotApprovedShift(int? regionId, SchedulingData sd);
         public Task<bool> DeleteShift(string s, string AdminID);
         public Task<bool> UpdateStatusShift(string s, string AdminID);
     }

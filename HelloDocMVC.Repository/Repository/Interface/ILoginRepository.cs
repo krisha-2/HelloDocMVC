@@ -12,5 +12,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
     {
         Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser);
         public bool SendResetLink(String Email);
+        public bool isAccessGranted(int roleId, string menuName);
     }
 }

@@ -314,10 +314,10 @@ namespace HelloDocMVC.Repository.Repository
 
 
         }
-        public async Task<List<SchedulingData>> GetAllNotApprovedShift(int? regionId)
+        public SchedulingData GetAllNotApprovedShift(int? regionId, SchedulingData schd)
         {
 
-            List<SchedulingData> ss = await (from s in _context.Shifts
+            List<SchedulingData> ss =  (from s in _context.Shifts
                                               join pd in _context.Physicians
                                               on s.PhysicianId equals pd.PhysicianId
                                               join sd in _context.ShiftDetails
@@ -325,7 +325,7 @@ namespace HelloDocMVC.Repository.Repository
                                               from sd in shiftGroup.DefaultIfEmpty()
                                               join rg in _context.Regions
                                               on sd.RegionId equals rg.RegionId
-                                              where (regionId == null || regionId == -1 || sd.RegionId == regionId) && sd.Status == 0 && sd.IsDeleted == new BitArray(1)
+                                              where (regionId == null || regionId == 0 || sd.RegionId == regionId) && sd.Status == 0 && sd.IsDeleted == new BitArray(1)
                                               select new SchedulingData
                                               {
                                                   regionid = (int)sd.RegionId,
@@ -338,8 +338,44 @@ namespace HelloDocMVC.Repository.Repository
                                                   physicianname = pd.FirstName + ' ' + pd.LastName,
                                                   shiftdate = sd.ShiftDate
                                               })
-                                .ToListAsync();
-            return ss;
+                                .ToList();
+            if (schd.IsAscending == true)
+            {
+                ss = schd.SortedColumn switch
+                {
+                    "PhysicianName" => ss.OrderBy(x => x.physicianname).ToList(),
+                    "ShiftDate" => ss.OrderBy(x => x.shiftdate).ToList(),
+                    "StartTime" => ss.OrderBy(x => x.starttime).ToList(),
+                    "RegionName" => ss.OrderBy(x => x.regionid).ToList(),
+                    _ => ss.OrderBy(x => x.physicianname).ToList()
+                };
+            }
+            else
+            {
+                ss = schd.SortedColumn switch
+                {
+                    "PhysicianName" => ss.OrderByDescending(x => x.physicianname).ToList(),
+                    "ShiftDate" => ss.OrderByDescending(x => x.shiftdate).ToList(),
+                    "StartTime" => ss.OrderByDescending(x => x.starttime).ToList(),
+                    "RegionName" => ss.OrderByDescending(x => x.regionid).ToList(),
+                    _ => ss.OrderByDescending(x => x.physicianname).ToList()
+                };
+            }
+            int totalItemCount = ss.Count;
+            int totalPages = (int)Math.Ceiling(totalItemCount / (double)schd.PageSize);
+            List<SchedulingData> list = ss.Skip((schd.CurrentPage - 1) * schd.PageSize).Take(schd.PageSize).ToList();
+
+            SchedulingData model = new()
+            {
+                SD = list,
+                CurrentPage = schd.CurrentPage,
+                TotalPages = totalPages,
+                PageSize = schd.PageSize,
+                IsAscending = schd.IsAscending,
+                SortedColumn = schd.SortedColumn
+            };
+
+            return model;
         }
         public async Task<bool> DeleteShift(string s, string AdminID)
         {

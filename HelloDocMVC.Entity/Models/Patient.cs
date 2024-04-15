@@ -39,5 +39,7 @@ namespace HelloDocMVC.Entity.Models
         public string ZipCode { get; set; }
         public string? RoomSuite { get; set; }
         public IFormFile UploadFile { get; set; }
+        public string UploadImage { get; set; }
+        public IFormFile? file { get; set; }
     }
 }

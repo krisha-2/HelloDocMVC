@@ -55,7 +55,8 @@ namespace HelloDocMVC.Repository.Repository
                     {
                         var admindata = _context.Admins.FirstOrDefault(u => u.AspNetUserId == user.Id);
                         admin.UserId = admindata.AdminId;
-                    }
+                        admin.RoleID = (int)admindata.RoleId;
+                }
                     else if (admin.Role == "Patient")
                     {
                         var admindata = _context.Users.FirstOrDefault(u => u.AspNetUserId == user.Id);
@@ -81,6 +82,19 @@ namespace HelloDocMVC.Repository.Repository
                 $"We received a request to reset the password of your account." +
                 $"To reset your password,click on the below link <a href='{agreementUrl}'>Reset Password..</a>");
             return true;
+        }
+        public bool isAccessGranted(int roleId, string menuName)
+        {
+            // Get the list of menu IDs associated with the role
+            IQueryable<int> menuIds = _context.RoleMenus
+                                            .Where(e => e.RoleId == roleId)
+                                            .Select(e => e.MenuId);
+
+            // Check if any menu with the given name exists in the list of menu IDs
+            bool accessGranted = _context.Menus
+                                         .Any(e => menuIds.Contains(e.MenuId) && e.Name == menuName);
+
+            return accessGranted;
         }
     }
 }

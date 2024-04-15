@@ -80,7 +80,7 @@ namespace HelloDocMVC.Repository.Repository
                                                  (rm.PhysicianName.IsNullOrEmpty() || (p.FirstName + " " + p.LastName).ToLower().Contains(rm.PhysicianName.ToLower())) &&
                                                  (rm.Email.IsNullOrEmpty() || rc.Email.ToLower().Contains(rm.Email.ToLower())) &&
                                                  (rm.PhoneNumber.IsNullOrEmpty() || rc.PhoneNumber.ToLower().Contains(rm.PhoneNumber.ToLower()))
-                                           orderby req.CreatedDate
+                                           //orderby req.CreatedDate
                                            select new SearchRecords
                                            {
                                                ModifiedDate = req.ModifiedDate,
@@ -98,7 +98,26 @@ namespace HelloDocMVC.Repository.Repository
                                                PhysicianNote = nt != null ? nt.PhysicianNotes ?? "" : "",
                                                PatientNote = rc.Notes ?? ""
                                            }).ToList();
-
+            if (rm.IsAscending == true)
+            {
+                allData = rm.SortedColumn switch
+                {
+                    "PatientName" => allData.OrderBy(x => x.PatientName).ToList(),
+                    "DateOfService" => allData.OrderBy(x => x.DateOfService).ToList(),
+                    "Email" => allData.OrderBy(x => x.Email).ToList(),
+                    _ => allData.OrderBy(x => x.DateOfService).ToList()
+                };
+            }
+            else
+            {
+                allData = rm.SortedColumn switch
+                {
+                    "PhysicianName" => allData.OrderByDescending(x => x.PatientName).ToList(),
+                    "Business" => allData.OrderByDescending(x => x.DateOfService).ToList(),
+                    "Email" => allData.OrderByDescending(x => x.Email).ToList(),
+                    _ => allData.OrderByDescending(x => x.DateOfService).ToList()
+                };
+            }
             int totalItemCount = allData.Count;
             int totalPages = (int)Math.Ceiling(totalItemCount / (double)rm.PageSize);
             List<SearchRecords> list = allData.Skip((rm.CurrentPage - 1) * rm.PageSize).Take(rm.PageSize).ToList();

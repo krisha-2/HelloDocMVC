@@ -138,16 +138,19 @@
                         <select class="form-select form-select-sm mt-3 p-2" required data-allow-clear="true" tabindex="-1" onchange="myFunction()" id="region1" asp-for="regionid" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                             <option id="defaultreason" value="">All Region</option>
                         </select>
+                        <span asp-validation-for="regionid" class="text-danger"></span>
                     </div>
                     <div class="form-floating">
                     <select class="form-select form-select-sm mt-3 p-2" required asp-for="physicianid" data-allow-clear="true" tabindex="-1" id="Physician" data-control="select2" data-placeholder="Select Level">
-                         <option>Select Physician</option> 
+                         <option value="">Select Physician</option> 
                     </select>
+                    <span asp-validation-for="physicianid" class="text-danger"></span>
                     </div>
                     @*<label for="region2">Select Physician</label>*@
                     <div class="form-floating mt-3">
                         <input asp-for="shiftdate" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" placeholder="Date">
                         <label for="floatingInput">Shift Date</label>
+                        <span asp-validation-for="shiftdate" class="text-danger"></span>
                     </div>
                     <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
                         <div class="col mb-3 mb-md-0">
@@ -210,14 +213,14 @@
                 <input asp-for="shiftdetailid" type="hidden" id="shiftmodalid" />
                 <div class="modal-body">
                     <div class="form-floating">
-                        <select class="form-select" data-allow-clear="true" tabindex="-1" id="shiftmodalRegion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" readonly>
+                        <select class="form-select" data-allow-clear="true" tabindex="-1" id="shiftmodalRegion" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" disabled>
                             <option value="">Select Region</option>
                         </select>
                         <label for="floatingSelect" class="text-info">
                             Region
                         </label>
                     </div>
-                    <select asp-for="physicianid" class="form-select mt-4" id="physelect2" aria-label="Floating label select example" style="height:58px" readonly>
+                    <select asp-for="physicianid" class="form-select mt-4" id="physelect2" aria-label="Floating label select example" style="height:58px" disabled>
                         <option id="shiftmodalPhysician" selected>Select Physician</option>
                     </select>
                     <div class="form-floating mt-3">

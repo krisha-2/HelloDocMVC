@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +11,10 @@ namespace HelloDocMVC.Entity.Models
 	public class ViewRole
 	{
 		public int Roleid { get; set; }
-		public string Name { get; set; } = null!;
-		public short Accounttype { get; set; }
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; } = null!;
+        [Required(ErrorMessage = "Status is required")]
+        public short Accounttype { get; set; }
 		public string Createdby { get; set; } = null!;
 		public DateTime Createddate { get; set; }
 		public string? Modifiedby { get; set; }

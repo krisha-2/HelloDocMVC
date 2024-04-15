@@ -283,7 +283,6 @@ namespace HelloDocMVC.Controllers
                 return RedirectToAction("ViewNotes", new { id = RequestID });
             }
         }
-        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendAgreementmail(int requestid)
