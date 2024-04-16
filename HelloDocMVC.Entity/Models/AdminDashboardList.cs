@@ -50,6 +50,11 @@ namespace HelloDocMVC.Entity.Models
         public int UnpaidRequest { get; set; }
         public bool? IsAscending { get; set; } = true;
         public string? SortedColumn { get; set; } = "RequestedDate";
+        //Provider dashboard states
+        public int PhysicianNewRequest { get; set; }
+        public int PhysicianPendingRequest { get; set; }
+        public int physicianActiveRequest { get; set; }
+        public int PhysicianConcludeRequest { get; set; }
 
     }
 }

@@ -27,13 +27,20 @@ namespace HelloDocMVC.Controllers
             _comboBox = comboBox;
             _notyf = notyf;
         }
-        [CheckProviderAccess("Admin")]
+        [CheckProviderAccess("Admin,Physician")]
+        [Route("Physician/Dashboard")]
+        [Route("Admin/Dashboard")]
         public async Task<IActionResult> IndexAsync()
         {
             ViewBag.Profession = _comboBox.Profession();
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.CaseReasonComboBox = await _comboBox.CaseReasonComboBox();
-            PaginatedViewModel sm = _IAdminDashboard.IndexData();
+            //PaginatedViewModel sm = _IAdminDashboard.IndexData();
+            PaginatedViewModel sm = _IAdminDashboard.IndexData(-1);
+            if (CV.role() == "Physician")
+            {
+                sm = _IAdminDashboard.IndexData(Convert.ToInt32(CV.UserID()));
+            }
             return View("../Admin/Index",sm);
         }
         public IActionResult ViewCase(int? id)
@@ -72,6 +79,10 @@ namespace HelloDocMVC.Controllers
             Response.Cookies.Append("Status", Status);
             PaginatedViewModel contacts = _IAdminDashboard.GetRequests(Status, data);
 
+            if (CV.role() == "Physician")
+            {
+                contacts = _IAdminDashboard.GetRequests(Status, data, Convert.ToInt32(CV.UserID()));
+            }
             switch (Status)
             {
                 case "1":

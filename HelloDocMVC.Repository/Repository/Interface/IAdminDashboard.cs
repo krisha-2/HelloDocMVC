@@ -14,9 +14,10 @@ namespace HelloDocMVC.Repository.Repository.Interface
     public interface IAdminDashboard
     {
         public List<AdminDashboardList> NewRequestData();
-        public PaginatedViewModel IndexData();
+        public PaginatedViewModel IndexData(int ProviderId);
         public ViewCase ViewCaseData(int? id);
         public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data);
+        public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data, int ProviderId);
         public bool CancelCase(int RequestID, string Note, string CaseTag);
         public bool BlockCase(int RequestID, string Note);
         public Task<bool> AssignProvider(int RequestId, int ProviderId, string notes);

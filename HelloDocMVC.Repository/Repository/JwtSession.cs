@@ -28,7 +28,8 @@ namespace HelloDocMVC.Repository.Repository
             var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Email, userinfo.Username),
-            new Claim(ClaimTypes.Role, userinfo.Role),
+            new Claim(ClaimTypes.Role, userinfo.Role), 
+            new Claim("role", userinfo.Role),
             new Claim("FirstName", userinfo.FirstName),
             new Claim("UserId", userinfo.UserId.ToString()),
             new Claim("Username", userinfo.Username.ToString()),

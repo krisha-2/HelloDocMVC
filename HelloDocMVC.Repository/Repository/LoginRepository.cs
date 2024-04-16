@@ -66,6 +66,7 @@ namespace HelloDocMVC.Repository.Repository
                     {
                         var admindata = _context.Physicians.FirstOrDefault(u => u.AspNetUserId == user.Id);
                         admin.UserId = admindata.PhysicianId;
+                        admin.RoleID = (int)admindata.RoleId;
                     }
                     return admin;
                 //}

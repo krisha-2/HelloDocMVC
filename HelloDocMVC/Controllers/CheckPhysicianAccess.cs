@@ -10,10 +10,10 @@ namespace HelloDocMVC.Controllers
     [AttributeUsage(AttributeTargets.All)]
     public class CheckProviderAccess : Attribute, IAuthorizationFilter
     {
-        private readonly string _role;
-        public CheckProviderAccess(string role)
+        private readonly List<string> _role;
+        public CheckProviderAccess(string role = "")
         {
-            _role = role;
+            _role = role.Split(',').ToList();
         }
         public void OnAuthorization(AuthorizationFilterContext filterContext)
         {
@@ -38,7 +38,20 @@ namespace HelloDocMVC.Controllers
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(_role) || roles.Value != _role)
+            var flag = false;
+            foreach (var role in _role)
+            {
+                if (string.IsNullOrWhiteSpace(role) || roles.Value != role)
+                {
+                    flag = false;
+                }
+                else
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
             {
                 filterContext.Result = new RedirectResult("../AdminLogin/AuthError");
 
