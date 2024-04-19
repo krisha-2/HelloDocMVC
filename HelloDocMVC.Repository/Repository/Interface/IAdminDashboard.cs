@@ -43,7 +43,10 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> SendFileEmail(string ids, int Requestid, string email);
         public Task<bool> AcceptPhysician(int requestid, string note, int ProviderId);
         public Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId);
-
-
+        public bool CaseFinalized(ViewEncounter Data);
+        public bool ContactAdmin(int ProviderId, string Notes);
+        public bool Housecall(int RequestId);
+        public bool Consult(int RequestId);
+        public bool ConcludeCarePost(int RequestId, string Notes);
     }
 }

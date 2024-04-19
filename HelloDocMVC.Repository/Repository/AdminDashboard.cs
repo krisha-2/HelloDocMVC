@@ -1106,6 +1106,22 @@ namespace HelloDocMVC.Repository.Repository
 
                           }).FirstAsync();
         }
+        public bool CaseFinalized(ViewEncounter Data)
+        {
+            try
+            {
+                var data = _context.EncounterForms.FirstOrDefault(e => e.EncounterFormId == Data.EncounterId);
+                //data.ModifiedDate = DateTime.Now;
+                data.IsFinalize = true;
+                _context.EncounterForms.Update(data);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
         public async Task<bool> AcceptPhysician(int RequestId, string note, int ProviderId)
         {
 
@@ -1145,6 +1161,70 @@ namespace HelloDocMVC.Repository.Repository
             _context.RequestStatusLogs.Update(rsl);
             _context.SaveChanges();
 
+            return true;
+        }
+        public bool ContactAdmin(int ProviderId, string Notes)
+        {
+            try
+            {
+                var res = _context.Physicians.FirstOrDefault(e => e.PhysicianId == ProviderId);
+                _emailConfig.SendMail(res.Email, "Request For Profile Chnges", Notes);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        public bool Housecall(int RequestId)
+        {
+            var request = _context.Requests.FirstOrDefault(req => req.RequestId == RequestId);
+            request.Status = 5;
+            request.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 5;
+            _context.RequestStatusLogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool Consult(int RequestId)
+        {
+            var request = _context.Requests.FirstOrDefault(req => req.RequestId == RequestId);
+            request.Status = 6;
+            request.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 6;
+            _context.RequestStatusLogs.Add(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public bool ConcludeCarePost(int RequestId, string Notes)
+        {
+            var requestData = _context.Requests.FirstOrDefault(e => e.RequestId == RequestId);
+            requestData.Status = 8;
+            requestData.ModifiedDate = DateTime.Now;
+            _context.Requests.Update(requestData);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog
+            {
+                RequestId = RequestId,
+                Notes = Notes,
+                Status = 8,
+                CreatedDate = DateTime.Now
+            };
+            _context.RequestStatusLogs.Add(rsl);
+            _context.SaveChanges();
             return true;
         }
     }

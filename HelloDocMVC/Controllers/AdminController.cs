@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using static HelloDocMVC.Entity.Models.Constant;
 using HelloDocMVC.Repository.Repository;
 using OfficeOpenXml;
+using Rotativa;
 
 namespace HelloDocMVC.Controllers
 {
@@ -437,6 +438,81 @@ namespace HelloDocMVC.Controllers
                 _notyf.Success("Request Successfully transfered to admin...");
             }
 
+            return Redirect("~/Physician/Dashboard");
+        }
+        public IActionResult ContactAdmin(string Note)
+        {
+            bool Contact = _IAdminDashboard.ContactAdmin(Convert.ToInt32(CV.UserID()), Note);
+            if (Contact)
+            {
+                _notyf.Success("Mail Send Succesfully Successfully");
+            }
+            else
+            {
+                _notyf.Error("Mail Not Send Succesfully");
+            }
+            return RedirectToAction("PhysicianProfile", "Providers", new { id = Convert.ToInt32(CV.UserID()) });
+        }
+        public IActionResult Housecall(int RequestId)
+        {
+            if (_IAdminDashboard.Housecall(RequestId))
+            {
+                _notyf.Success("Case Accepted...");
+            }
+            else
+            {
+                _notyf.Error("Case Not Accepted...");
+            }
+            return Redirect("~/Physician/DashBoard");
+        }
+        public IActionResult Consult(int RequestId)
+        {
+            if (_IAdminDashboard.Consult(RequestId))
+            {
+                _notyf.Success("Case is in conclude state...");
+            }
+            else
+            {
+                _notyf.Error("Error...");
+            }
+            return Redirect("~/Physician/DashBoard");
+        }
+        //public IActionResult generatePDF(int id)
+        //{
+        //    var FormDetails = _IAdminDashboard.GetEncounterDetails(id);
+        //    return new ViewAsPdf("../Admin/EncounterPdf", FormDetails);
+        //}
+        public async Task<IActionResult> ConcludeCare(int? id, ViewDocuments viewDocument)
+        {
+            if (id == null)
+            {
+                id = viewDocument.RequestID;
+            }
+            ViewDocuments v = await _IAdminDashboard.GetDocumentByRequest(viewDocument, id);
+            return View("../Admin/ConcludeCare", v);
+        }
+        public IActionResult UploadDocProvider(int Requestid, IFormFile file)
+        {
+            if (_IAdminDashboard.SaveDoc(Requestid, file))
+            {
+                _notyf.Success("File Uploaded Successfully");
+            }
+            else
+            {
+                _notyf.Error("File Not Uploaded");
+            }
+            return RedirectToAction("ConcludeCare", "Admin", new { id = Requestid });
+        }
+        public IActionResult ConcludeCarePost(int RequestId, string Notes)
+        {
+            if (_IAdminDashboard.ConcludeCarePost(RequestId, Notes))
+            {
+                _notyf.Success("Case concluded...");
+            }
+            else
+            {
+                _notyf.Error("Error...");
+            }
             return Redirect("~/Physician/Dashboard");
         }
     }

@@ -10,6 +10,7 @@ namespace HelloDocMVC.Entity.Models
     {
         public int? RequestId { get; set; }
         public int? AdminId { get; set; }
+        public int EncounterId { get; set; }
         public int? PhysicianId { get; set; }
 
         public string FirstName { get; set; } = string.Empty;
@@ -73,6 +74,7 @@ namespace HelloDocMVC.Entity.Models
 
         public string? Followup { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime ModifiedDate { get; set; }
     }
 }
 

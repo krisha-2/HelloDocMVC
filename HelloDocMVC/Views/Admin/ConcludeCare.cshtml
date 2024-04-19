@@ -1,0 +1,350 @@
+﻿@model HelloDocMVC.Entity.Models.ViewDocuments
+@{
+    Layout = "_LayoutAdminDashboard";
+    var status = "null";
+    if (TempData["Status"] == null)
+    {
+        status = "null";
+    }
+    else
+    {
+        status = TempData["Status"].ToString();
+    }
+}
+<div class="container">
+    <div class="card bg-transparent border-0 p-2 bg-white" style="border-radius: 15px;">
+        <div class="col-xl-12 d-flex justify-content-between">
+            <div class="card-header  border-0 bg-transparent p-1 my-1">
+                <div class="text-start">
+
+                    <h4 class="mt-2 font-weight-bold"><strong>Conclude Care</strong></h4>
+                </div>
+            </div>
+            <a onclick="history.go(-1);"
+               class="btn border border-info bg-light rounded mt-3 mb-1">
+                <i class="fa fa-angle-left text-info align-middle"></i>
+                <span class="text-info">
+                    <b class="align-text-top">&nbsp;&nbsp;Back</b>
+                </span>
+            </a>
+        </div>
+        <div class="card-body  m-1 shadow" style="border-radius: 15px;">
+            <p class="doc-text-card text-secondary">Patient name</p>
+            <div class="d-flex align-items-center">
+                <h5 class="text-info"><b>@Model.Firstname @Model.Lastname </b></h5>
+                <h6 class="doc-text-card mx-2 text-secondary">@Model.ConfirmationNumber</h6>
+            </div>
+
+            <div class="doc-text-card mt-2 text-secondary">
+                check here for any files that you or the
+                doctor of yours subsequents requestors have attached for yo to
+                review
+            </div>
+            <div class="col-md-12 mt-3">
+                <form method="post" id="myForm" asp-action="UploadDocProvider" asp-controller="Admin" enctype="multipart/form-data">
+                    <div class="d-flex justify-content-between bg-light border border-secondary rounded">
+                        <button type="button" id="choosenfile" class="col btn text-start text-secondary" onclick="document.getElementById('file').click()">
+                            Select File
+                        </button>
+                        <input id="file" type="file" class="d-none form-control doc_uploder" name="file">
+                        <input type="hidden" name="Requestid" value="@Model.RequestID" />
+                        <div class="btn btn-info text-white py-2" value="Upload" id="fileupload">
+                            <i class="fa fa-cloud-upload"></i>
+                            <span class="d-none d-sm-inline">Upload</span>
+                        </div>
+                    </div>
+                </form>
+                <div class="card-header-2 mt-3 d-flex justify-content-between border-0 bg-transparent ">
+                    <div class="mt-2">
+                        <h6> Document</h6>
+                    </div>
+                    <div class="text-end d-flex ">
+                        <div id="downloadAll" class="btn btn-outline-info btn-back text-end d-flex mx-1">
+                            <i class="fa-solid fa-download me-1 mt-1"></i><span class="d-none d-sm-block">Downlode all</span>
+                        </div>
+                    </div>
+                </div>
+                @* dashboard view *@
+                <div class="table-responsive mt-3 d-none d-sm-block">
+                    <table class="table dataTable table-responsive">
+                        <thead class="border-0">
+                            <tr class="table-secondary">
+                                @{
+                                    var i1 = @Model.SortedColumn;
+                                    var J1 = @Model.IsAscending;
+                                    <th scope="col" class="table-text-header px-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="topflexCheckDefault">
+                                        </div>
+                                    </th>
+                                    <th scope="col" class="table-text-header px-3 dt-orderable-asc dt-orderable-desc @(i1 == "Filename" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Filename')" style="position:relative;">
+                                        File Name
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" class="table-text-header px-3 dt-orderable-asc dt-orderable-desc @(i1 == "Uploader" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Uploader')" style="position:relative;">
+                                        Uploder
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" class="table-text-header dt-orderable-asc dt-orderable-desc @(i1 == "Createddate" ? (J1 == true ?"dt-ordering-asc" : "dt-ordering-desc" ) : "")" onclick="SetColumValue('Createddate')" style="position:relative;">
+                                        uplode date
+                                        <span class="dt-column-order"></span>
+                                    </th>
+                                    <th scope="col" class="table-text-header ">Action</th>
+                                }
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item2 in Model.documentslist)
+                            {
+                                <tr>
+                                    <td class="table-text px-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                            <input class="form-check-input RequestwisefilesId" type="hidden" value="@item2.RequestwisefilesId">
+                                        </div>
+                                    </td>
+                                    <td class="table-text  px-3 filename"> <span> @item2.Filename </span></td>
+                                    <td class="table-text  px-3">@item2.Uploader </td>
+                                    <td class="table-text  px-3">@item2.Createddate</td>
+                                    <td class="table-text text-center ">
+                                        <a class="btn btn-sm btn-outline-info document-button" download href="@item2.Filename.Replace("~","")">
+                                            <i class="fa fa-cloud-download"></i>
+                                        </a>
+
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!--Mobile screen View-->
+                <div class="d-block d-sm-none border-top my-2 t-tab">
+                    @foreach (var item in Model.documentslist)
+                    {
+                        <div class="border-bottom">
+                            <div class="d-inline-flex my-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault1">
+                                    <input class="form-check-input RequestwisefilesId" type="hidden" value="@item.RequestwisefilesId">
+                                </div>
+                                <div>
+                                    <small>@item.Filename</small>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <label class="text-break"><small>@item.Uploader</small></label>
+                                <label><small>@item.Createddate.("MMM d , yyyy")</small></label>
+                            </div>
+                            <div class="mb-3">
+                                <a class="btn btn-sm download-link btn-outline-info document-button" download href="@item.Filename.Replace("~","")">
+                                    <i class="fa fa-cloud-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <!--End Mobile screen View-->
+            </div>
+        </div>
+        <div class="m-2 d-flex justify-content-between">
+            <form id="documentformPagesize" asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+                <div class="search m-1 d-flex justify-content-between">
+                    <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+                    <span class="pagesize">Page Size</span>
+                    <select class="form-select pagesizeselect" asp-for="PageSize" data-allow-clear="true" tabindex="-1" id="pagesizedropdowndocument" data-control="select2" data-placeholder="Select Level">
+                        <option value="5" selected>5</option>
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                    </select>
+                </div>
+            </form>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-container">
+                    @{
+                        int i;
+                        <form id="documentform" asp-action="ViewUpload" asp-controller="AdminActions" asp-route-id="" novalidate="novalidate" class="d-flex">
+                            <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+                            <input type="hidden" asp-for="CurrentPage" id="currentpagevaluedocument" />
+                            <input type="hidden" asp-for="SortedColumn" />
+                            <input type="hidden" asp-for="IsAscending" />
+                            <input type="hidden" asp-for="PageSize" />
+                            @if (@Model.CurrentPage > 1)
+                            {
+                            <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('previous')">&lt;</button></li>
+                            }
+                            else
+                            {
+                            <li class="me-2 page-item"><a class="disabled btn">&lt;</a></li>
+                            }
+                            @for (i = 1; i <= @Model.TotalPages; i++)
+                            {
+                            <li class="page-item me-2"><button class="@(i == @Model.CurrentPage ? "activepagebtn" : "") btn shadow-none" onclick="setpagenumber(@i)">@i</button></li>
+                            }
+                            @if (@Model.TotalPages > @Model.CurrentPage)
+                            {
+                            <li class="page-item me-2"><button class="btn shadow-none" onclick="setpagenumber('next')">&gt;</button></li>
+                            }
+                            else
+                            {
+                            <li class="me-2 page-item"><a class="btn disabled">&gt;</a></li>
+                            }
+                        </form>
+                    }
+                </ul>
+            </nav>
+        </div>
+        <form method="post" asp-action="ConcludeCarePost" asp-controller="Admin">
+            <input value="@Model.RequestID" name="RequestId" type="hidden">
+            <div class="col-12">
+                <div class="col-12">
+                    <div class="form-floating mb-3">
+                        <textarea name="Notes" class="form-control shadow-none" placeholder="Leave a comment here" id="Symptoms" style="height: 100px"></textarea>
+                        <label for="Symptoms"><small>Provider Notes</small></label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-danger text-white rounded">Conclude Care</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<form class="sortingform" asp-action="ViewUpload" asp-controller="Admin" novalidate="novalidate">
+    <input type="hidden" asp-for="SortedColumn" id="sortedcol" />
+    <input type="hidden" asp-for="IsAscending" id="isAsc" />
+    <input type="hidden" asp-for="PageSize" />
+    <input type="hidden" value="@Model.RequestID" asp-for="RequestID" />
+</form>
+@section Scripts
+    {
+    <script>
+        function setpagenumber(e) {
+            console.log(e)
+            if (e == 'previous') {
+                var cp = @Model.CurrentPage-1;
+                $('#currentpagevaluedocument').val(cp);
+            }
+            else if (e == 'next') {
+                var cp = @Model.CurrentPage + 1;
+                $('#currentpagevaluedocument').val(cp);
+            }
+            else {
+                $('#currentpagevaluedocument').val(e);
+            }
+            $("#documentform").submit();
+        }
+        function SetColumValue(e) {
+            var modeldata = @Html.Raw(Json.Serialize(Model));
+            console.log(modeldata.sortedColumn)
+            console.log(modeldata.isAscending)
+            if (modeldata.sortedColumn === e) {
+                if (modeldata.isAscending == true) {
+                    document.getElementById('isAsc').value = false;
+                }
+                else {
+                    document.getElementById('isAsc').value = true;
+                }
+                console.log(document.getElementById('isAsc').value);
+            }
+            else {
+                document.getElementById('sortedcol').value = e;
+                document.getElementById('isAsc').value = true;
+            }
+            $(".sortingform").submit();
+        }
+    </script>
+    <script type="text/javascript">
+        $("#file").change(function () {
+            filename = this.files[0].name;
+            console.log(filename);
+            $("#choosenfile").text(filename);
+        });
+
+        $(function () {
+            $('#pagesizedropdowndocument').on('change', function () {
+                console.log("abc");
+                $('#documentformPagesize').submit();
+            });
+
+            $('.filename').each(function () {
+                var fileName = $(this).text().trim();
+                if (fileName.endsWith('.pdf')) {
+                    $(this).prepend('<i class="fa-solid fa-file-pdf" style="color: #be2323;font-size:1rem"></i> ');
+                } else if (fileName.endsWith('.doc') || fileName.endsWith('.docx')) {
+                    $(this).prepend('<i class="fa-solid fa-file-doc" style="color: #74C0FC;font-size:1rem"></i> ');
+                } else if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg') || fileName.endsWith('.png') || fileName.endsWith('.gif') || fileName.endsWith('.svg')) {
+                    $(this).prepend('<i class="fa-solid fa-images" style="color: #B197FC;font-size:1rem"></i> ');
+                } else {
+                    $(this).prepend(' <i class="fa-solid fa-file" > </i>');
+                }
+
+            });
+
+            $('#downloadAll').click(function () {
+                $('tbody tr').each(function () {
+                    if ($(this).find('.form-check-input').prop('checked')) {
+                        var downloadLink = $(this).find('.document-button').attr('href');
+                        var hiddenLink = document.createElement('a');
+                        hiddenLink.href = downloadLink;
+                        hiddenLink.target = '_blank';
+                        hiddenLink.download = '';
+                        document.body.appendChild(hiddenLink);
+                        hiddenLink.click();
+                        document.body.removeChild(hiddenLink);
+                    }
+                });
+                $('.t-tab > .border-bottom').each(function () {
+                    if ($(this).find('.form-check-input').prop('checked')) {
+                        var downloadLink = $(this).find('.document-button').attr('href');
+                        var hiddenLink = document.createElement('a');
+                        hiddenLink.href = downloadLink;
+                        hiddenLink.target = '_blank';
+                        hiddenLink.download = '';
+                        document.body.appendChild(hiddenLink);
+                        hiddenLink.click();
+                        document.body.removeChild(hiddenLink);
+                    }
+                });
+            });
+
+            $("form").on("change", ".file-upload-field", function () {
+                $(this).parent(".file-upload-wrapper1").attr("data-text", $(this).val().replace(/.*(\/|\\)/, ''));
+            });
+
+            $('#topflexCheckDefault').change(function () {
+                $('.table tbody input[type="checkbox"]').prop('checked', $(this).is(':checked'));
+            });
+
+            // Uncheck main checkbox in header when any checkbox in table body is unchecked
+            $('.table tbody input[type="checkbox"]').change(function () {
+                if (!$(this).is(':checked')) {
+                    $('#topflexCheckDefault').prop('checked', false);
+                }
+            });
+
+            $("#fileupload").click(function (e) {
+                e.preventDefault();
+                if ($('#file')[0].files[0] == undefined) {
+                    swal.fire({
+                        title: "Oops..",
+                        text: "Oops! Please Select One File ",
+                        icon: "error",
+                        showCancelButton: true,
+                        showConfirmButton: false,
+                        cancelButtonText: "Okay",
+                        cancelButtonColor: "#01BBE7",
+                    })
+                    return;
+                } else {
+                    $('#myForm').submit();
+                }
+            })
+        });
+
+    </script>
+}

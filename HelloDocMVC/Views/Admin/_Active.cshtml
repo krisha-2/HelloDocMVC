@@ -119,7 +119,7 @@
                             }
                             @if (CV.role() == "Physician")
                             {
-                                <li><a class="dropdown-item" asp-action="Orders" asp-controller="Admin"><i class="bi bi-journal-text"></i>Conclude Care</a></li>
+                                <li><a class="dropdown-item" asp-action="ConcludeCare" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i>Conclude Care</a></li>
                                 <li><a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-ban"></i>Encounter pdf</a></li>
                             }
                         </ul>
@@ -263,6 +263,9 @@
     <input type="hidden" asp-for="IsAscending" id="isAsc" />
 </form>
 <script>
+    function model_Case(id) {
+        document.getElementById('RequestID_EncounterPdf').value = id;
+    }
     function setpagenumber(e) {
         if (e == 'previous') {
             var cp = @Model.CurrentPage-1;
