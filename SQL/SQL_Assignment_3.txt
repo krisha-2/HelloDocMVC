@@ -1,0 +1,83 @@
+-- Create Department Table
+CREATE TABLE Department (
+    dept_id INT PRIMARY KEY,
+    dept_name NVARCHAR(255) NOT NULL
+);
+
+-- Insert 25 entries into Department Table
+INSERT INTO Department (dept_id, dept_name)
+VALUES
+    (1, 'Human Resources'),
+    (2, 'Marketing'),
+    (3, 'Finance'),
+    (4, 'Operations'),
+    (5, 'Research & Development'),
+    (6, 'Customer Support')
+    
+
+-- Create Employee Table
+CREATE TABLE Employee (
+    emp_id INT PRIMARY KEY,
+    dept_id INT FOREIGN KEY REFERENCES Department(dept_id),
+    mngr_id INT,
+    emp_name NVARCHAR(255) NOT NULL,
+    salary DECIMAL(10, 2) NOT NULL
+);
+
+-- Insert 25 entries into Employee Table
+INSERT INTO Employee (emp_id, dept_id, mngr_id, emp_name, salary)
+VALUES
+    (1, 1, NULL, 'John Smith', 60000),
+    (2, 2, 1, 'Jane Doe', 70000),
+    (3, 3, 1, 'Mark Johnson', 80000),
+    (4, 3, NULL, 'Emily White', 75000),
+    (5, 5, 4, 'Michael Davis', 90000),
+    (6, 6, 5, 'Sarah Brown', 65000),
+    (7, 5, 5, 'Chris Wilson', 72000),
+    (8, 6, NULL, 'Ashley Moore', 85000),
+    (9, 3, 8, 'Kevin Lee', 95000),
+    (10, 1, 8, 'Olivia Taylor', 82000),
+    (11, 2, NULL, 'Andrew Hall', 70000),
+    (12, 2, 11, 'Jessica Clark', 75000),
+    (13, 3, 11, 'Brian Miller', 88000),
+    (14, 4, 13, 'Natalie Young', 92000),
+    (15, 5, NULL, 'Eric Martinez', 98000),
+    (16, 6, 15, 'Lisa Turner', 105000),
+    (17, 6, NULL, 'Alex Robinson', 90000),
+    (18, 5, 17, 'Megan Adams', 80000),
+    (19, 1, 17, 'Daniel Stewart', 75000),
+    (20, 2, NULL, 'Kimberly Evans', 92000),
+    (21, 1, 20, 'Patrick Green', 85000),
+    (22, 2, 20, 'Lauren Carter', 78000),
+    (23, 5, NULL, 'Jordan Turner', 95000),
+    (24, 2, 23, 'Samantha Hall', 87000),
+    (25, 2, 23, 'Victor Brown', 92000);
+
+
+--1. write a SQL query to find Employees who have the biggest salary in their Department
+
+SELECT emp_id,emp_name,salary,dept_id 
+FROM Employee e  
+WHERE salary IN (select max(salary) from Employee em where e.dept_id=em.dept_id group by dept_id);
+
+--2. write a SQL query to find Departments that have less than 3 people in it
+select d.dept_name,count(dept_name)
+from Employee e
+join Department d
+on d.dept_id=e.dept_id
+group by dept_name
+having count(dept_name)<3;
+
+--3. write a SQL query to find All Department along with the number of people there
+select d.dept_name,count(e.dept_id)
+from Employee e
+join Department d
+on d.dept_id=e.dept_id
+group by dept_name;
+
+--4. write a SQL query to find All Department along with the total salary there
+select d.dept_name,sum(salary)
+from Employee e
+join Department d
+on d.dept_id=e.dept_id
+group by dept_name;

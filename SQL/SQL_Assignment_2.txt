@@ -1,0 +1,192 @@
+create table Salesman1
+(Salesman_id "int" NOT NULL primary key,
+Salesman_name varchar(20) not null,
+Salesman_city varchar(20) not null,
+Salesman_commission "int"  NOT NULL );
+
+create table Customer1
+(Customer_id "int" NOT NULL primary key,
+Customer_name varchar(20) not null,
+Customer_city varchar(20) not null,
+Customer_grade "int" not null,
+salesman_id "int"  NOT NULL references Salesman1(Salesman_id) );
+
+create table Orders1
+(Order_no "int" NOT NULL primary key,
+Pure_amount "int" not null,
+Order_date date not null,
+Customer_id "int" references Customer1(Customer_id) ,
+Salesman_id "int" references Salesman1(Salesman_id) );
+
+insert into Salesman1 values(11,'Pranav','Karwar',200);
+insert into Salesman1 values(24,'Prasanna','Bengalore',300);
+insert into Salesman1 values(39,'Prajwal','Kodagu',100);
+insert into Salesman1 values(44,'Pooja','Hubli',500.5);
+insert into Salesman1 values(15,'Prokta','Mysore',200.2);
+
+insert into Customer1 values(101,'Bhargav','Mysore',1,15);
+insert into Customer1 values(206,'Ramya','Bengalore',3,24);
+insert into Customer1 values(225,'Rajesh','Hubli',2,39);
+insert into Customer1 values(324,'Ravi','Mangalore',5,44);
+insert into Customer1 values(456,'Rajdeep','Belagavi',3,15);
+insert into Customer1 values(501,'Raghu','Dharavad',4,39);
+insert into Customer1 values(300,'Bhavya','Bengalore',1,15);
+
+insert into Orders1 values(5,10000,'2020-03-25',101,11);
+insert into Orders1 values(10,5000,'2020-03-25',456,15);
+insert into Orders1 values(7,9500,'2020-04-30',225,44);
+insert into Orders1 values(11,8700,'2020-07-07',324,24);
+insert into Orders1 values(17,1500,'2020-07-07',206,39);
+
+select * from Salesman1;
+select * from Customer1;
+select * from Orders1;
+
+alter table Salesman1 alter column Salesman_commission decimal(5,2);
+
+update Salesman1 
+set Salesman_commission=0.15 
+where Salesman_id=11;
+update Salesman1 
+set Salesman_commission=0.13 
+where Salesman_id=15;
+update Salesman1 
+set Salesman_commission=0.11 
+where Salesman_id=24;
+update Salesman1 
+set Salesman_commission=0.14 
+where Salesman_id=39;
+update Salesman1 
+set Salesman_commission=0.12 
+where Salesman_id=44;
+
+--1 write a SQL query to find the salesperson and customer who reside in the same city. Return Salesman, cust_name and city
+select s.Salesman_name,c.Customer_name,c.Customer_city 
+from Salesman1 s join Customer1 c 
+on s.Salesman_id=c.salesman_id
+where s.Salesman_city=c.Customer_city;
+
+--2 write a SQL query to find those orders where the order amount exists between 500 and 2000. Return ord_no, purch_amt, cust_name, city
+select o.Order_no,o.Pure_amount,c.Customer_name,c.Customer_city
+from Orders1 o join Customer1 c
+on o.salesman_id=o.salesman_id
+where o.Pure_amount between 500 and 2000;
+
+--3 write a SQL query to find the salesperson(s) and the customer(s) he represents. Return Customer Name, city, Salesman, commission
+select c.Customer_name,s.Salesman_name,s.Salesman_commission
+from Salesman1 s join Customer1 c
+on c.salesman_id=s.Salesman_id;
+
+--4 write a SQL query to find salespeople who received commissions of more than 12 percent from the company. Return Customer Name, customer city, Salesman, commission.
+select c.Customer_name,c.Customer_city,s.Salesman_name,s.Salesman_commission
+from Customer1 c join Salesman1 s
+on c.salesman_id=s.Salesman_id
+where s.Salesman_commission>0.12;
+
+--5 write a SQL query to locate those salespeople who do not live in the same city where their customers live and have received a commission of more than 12% from the company. Return Customer Name, customer city, Salesman, salesman city, commission
+select c.Customer_name,c.Customer_city,s.Salesman_name,Salesman_city,s.Salesman_commission
+from Salesman1 s join Customer1 c
+on c.salesman_id=s.Salesman_id
+where s.Salesman_commission>0.12 and s.Salesman_city!=c.Customer_city;
+
+--6 write a SQL query to find the details of an order. Return ord_no, ord_date, purch_amt, Customer Name, grade, Salesman, commission
+select o.Order_no,o.Order_date,o.Pure_amount,c.Customer_name,c.Customer_grade,s.Salesman_name,s.Salesman_commission
+from Orders1 o 
+join Salesman1 s
+on o.Salesman_id=s.salesman_id
+join Customer1 c
+on c.Customer_id=o.Customer_id;
+
+--7 Write a SQL statement to join the tables salesman, customer and orders so that the same column of each table appears once and only the relational rows are returned. 
+
+
+
+--8 write a SQL query to display the customer name, customer city, grade, salesman, salesman city. The results should be sorted by ascending customer_id.
+select c.Customer_name,c.Customer_city,c.Customer_grade,s.Salesman_name,s.Salesman_city
+from Customer1 c join Salesman1 s
+on s.Salesman_id=c.salesman_id
+order by Customer_id asc;
+
+--9 write a SQL query to find those customers with a grade less than 300. Return cust_name, customer city, grade, Salesman, salesmancity. The result should be ordered by ascending customer_id.
+select c.Customer_name,c.Customer_city,c.Customer_grade,s.Salesman_name,s.Salesman_city
+from Customer1 c join Salesman1 s
+on s.Salesman_id=c.salesman_id
+where c.Customer_grade<300
+order by Customer_id asc;
+
+--10 Write a SQL statement to make a report with customer name, city, order number, order date, and order amount in ascending order according to the order date to determine whether any of the existing customers have placed an order or not
+select c.Customer_name,c.Customer_city,o.Order_no,o.Order_date,o.Pure_amount
+from Customer1 c 
+left outer join Orders1 o
+on c.Customer_id=o.Customer_id
+order by Order_date asc;
+
+--11 Write a SQL statement to generate a report with customer name, city, order number, order date, order amount, salesperson name, and commission to determine if any of the existing customers have not placed orders or if they have placed orders through their salesman or by themselves
+select c.Customer_name,c.Customer_city,o.Order_no,o.Order_date,o.Pure_amount,s.Salesman_name,s.Salesman_commission
+from Customer1 c 
+left outer join Salesman1 s 
+on c.salesman_id=s.Salesman_id
+left outer join Orders1 o
+on c.Customer_id=o.Customer_id;
+
+--12 Write a SQL statement to generate a list in ascending order of salespersons who work either for one or more customers or have not yet joined any of the customers
+select * 
+from Salesman1 s
+left outer join Customer1 c
+on s.Salesman_id=c.salesman_id;
+
+--13 write a SQL query to list all salespersons along with customer name, city, grade, order number, date, and amount.
+select s.Salesman_name,c.Customer_name,c.Customer_city,c.Customer_grade,o.Order_no,o.Order_date,o.Pure_amount
+from Salesman1 s
+left outer join Customer1 c
+on s.Salesman_id=c.salesman_id
+left outer join Orders1 o
+on c.Customer_id=o.Customer_id;
+
+--14 Write a SQL statement to make a list for the salesmen who either work for one or more customers or yet to join any of the customers. The customer may have placed, either one or more orders on or above order amount 2000 and must have a grade, or he may not have placed any order to the associated supplier.
+select *
+from Salesman1 s
+left outer join Customer1 c
+on s.Salesman_id=c.salesman_id
+right outer join Orders1 o
+on c.Customer_id=o.Customer_id
+where Pure_amount>2000
+and c.Customer_grade is not null;
+
+--15 Write a SQL statement to generate a list of all the salesmen who either work for one or more customers or have yet to join any of them. The customer may have placed one or more orders at or above order amount 2000, and must have a grade, or he may not have placed any orders to the associated supplier.
+select *
+from Salesman1 s
+left outer join Customer1 c
+on s.Salesman_id=c.salesman_id
+right outer join Orders1 o
+on c.Customer_id=o.Customer_id
+where Pure_amount>2000
+and c.Customer_grade is not null;
+
+--16 Write a SQL statement to generate a report with the customer name, city, order no. order date, purchase amount for only those customers on the list who must have a grade and placed one or more orders or which order(s) have been placed by the customer who neither is on the list nor has a grade.
+
+--17 Write a SQL query to combine each row of the salesman table with each row of the customer table
+select * 
+from Salesman1
+cross join Customer1;
+
+--18 Write a SQL statement to create a Cartesian product between salesperson and customer, i.e. each salesperson will appear for all customers and vice versa for that salesperson who belongs to that city
+select *
+from Salesman1 s
+cross join Customer1 c
+where s.Salesman_city=c.Customer_city;
+
+--19 Write a SQL statement to create a Cartesian product between salesperson and customer, i.e. each salesperson will appear for every customer and vice versa for those salesmen who belong to a city and customers who require a grade 
+select *
+from Salesman1 s
+cross join Customer1 c
+where s.Salesman_city=c.Customer_city
+and c.Customer_grade is not null; 
+
+--20 Write a SQL statement to make a Cartesian product between salesman and customer i.e. each salesman will appear for all customers and vice versa for those salesmen who must belong to a city which is not the same as his customer and the customers should have their own grade
+select *
+from Salesman1 s
+cross join Customer1 c
+where s.Salesman_city!=c.Customer_city
+and c.Customer_grade is not null; 
+

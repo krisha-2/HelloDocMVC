@@ -713,7 +713,7 @@ namespace HelloDocMVC.Repository.Repository
         public bool SendAgreement(int requestid)
         {
             var res = _context.RequestClients.FirstOrDefault(e => e.RequestId == requestid);
-            var agreementUrl = "https://localhost:44338/AgreementPage?RequestID=" + requestid;
+            var agreementUrl = "https://localhost:7041/AgreementPage?RequestID=" + requestid;
             _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
             return true;
         }
@@ -1106,7 +1106,47 @@ namespace HelloDocMVC.Repository.Repository
 
                           }).FirstAsync();
         }
-        
+        public async Task<bool> AcceptPhysician(int RequestId, string note, int ProviderId)
+        {
+
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestId);
+            request.Status = 2;
+            request.AcceptedDate = DateTime.Now;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestId;
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 2;
+            rsl.Notes = note;
+            rsl.TransToPhysicianId = ProviderId;
+            _context.RequestStatusLogs.Update(rsl);
+            _context.SaveChanges();
+            return true;
+        }
+        public async Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId)
+        {
+            var request = await _context.Requests.FirstOrDefaultAsync(req => req.RequestId == RequestID);
+            request.Status = 1;
+            request.PhysicianId = null;
+            _context.Requests.Update(request);
+            _context.SaveChanges();
+
+            RequestStatusLog rsl = new RequestStatusLog();
+            rsl.RequestId = RequestID;
+            rsl.Notes = Note;
+            rsl.CreatedDate = DateTime.Now;
+            rsl.Status = 1;
+
+            rsl.PhysicianId = ProviderId;
+            rsl.TransToAdmin = new BitArray(1);
+            rsl.TransToAdmin[0] = true;
+            _context.RequestStatusLogs.Update(rsl);
+            _context.SaveChanges();
+
+            return true;
+        }
     }
 }
 

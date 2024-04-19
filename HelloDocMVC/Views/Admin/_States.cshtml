@@ -153,7 +153,7 @@
                 </div>
                 <div class="search m-1">
                     <i class="fa fa-search"></i>
-                      @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Scheduling"))
+                      @if (loginRepository.isAccessGranted((int)CV.RoleID(), "Region"))
                     {
                         <select class="form-select" required aria-label="Phone" asp-for="RegionId" data-allow-clear="true" tabindex="-1" onchange="subsubmit()" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level">
                             <option>All Region</option>

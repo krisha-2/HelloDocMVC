@@ -1,0 +1,26 @@
+QUESTION NO 1:
+
+
+The "film" table has the replacement cost and rental duration (assume, in weeks) for each movie.
+Can you tell me the movies (just the title and relevant details) sorted by highest to lowest replacement cost and rented out for 4-6 weeks.
+Also I don't want all the data, just give me 100 records. 
+
+ANSWER 1: 
+
+SELECT title, replacement_cost, rental duration
+FROM film
+ORDER BY replacement_cost DESC;
+
+QUESTION NO 2:
+
+
+I want a list of all movies that either have the rating 'G' or 'PG'.
+The movies must be longer than 120 minutes in length, and they should have the word 'Action' anywhere in the description.
+
+ANSWER 2: 
+
+SELECT title, rating, length, description
+FROM film
+WHERE rating IN ('G' , 'PG')
+AND length > 120
+AND description LIKE '%Actions';

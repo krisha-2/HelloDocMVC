@@ -414,6 +414,31 @@ namespace HelloDocMVC.Controllers
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _AcceptRequestPost(int RequestId, string Note)
+        {
+            if (await _IAdminDashboard.AcceptPhysician(RequestId, Note, Convert.ToInt32(CV.UserID())))
+            {
+                _notyf.Success("Case Accepted...");
+            }
+            else
+            {
+                _notyf.Success("Case Not Accepted...");
+            }
+            return Redirect("~/Physician/Dashboard");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> _TransfertoAdminPost(int RequestID, string Note)
+        {
+            if (await _IAdminDashboard.TransfertoAdmin(RequestID, Note, Convert.ToInt32(CV.UserID())))
+            {
+                _notyf.Success("Request Successfully transfered to admin...");
+            }
+
+            return Redirect("~/Physician/Dashboard");
+        }
     }
 }
     

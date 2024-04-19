@@ -41,6 +41,8 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public void CreateRequest(Patient vdcp);
         public Boolean SendLink(string FirstName, string LastName, string Email);
         public Task<bool> SendFileEmail(string ids, int Requestid, string email);
+        public Task<bool> AcceptPhysician(int requestid, string note, int ProviderId);
+        public Task<bool> TransfertoAdmin(int RequestID, string Note, int ProviderId);
 
 
     }

@@ -1,0 +1,28 @@
+QUESTION NO 1:
+
+
+return rental date, ruteun date, customer first name, kast name and email whose rental duration is more than 7 days
+
+ANSWER 1:
+
+select rental.rental_date, rental.return_date, AGE(rental_date, return_date) as "Rental Duration",
+customer.first_name, customer.last_name, customer.email
+from rental join customer
+on rental.customer_id = customer.customer_id
+where "Rental Duration">=7
+
+QUESTION NO 2:
+
+
+return string after the 10th character
+return string after the 15th character
+return string after 5th character just 3 word
+return string after 3th character just 1 word
+
+ANSWER 2:
+
+select title, substr(title,10) from film
+select title, substr(title,15) from film
+select title,length(title), substr(title,15) from film
+select title,length(title), substr(title,5,3) from film
+select title,length(title), substr(title,5,1) from film
