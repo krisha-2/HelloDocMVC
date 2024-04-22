@@ -3,16 +3,12 @@
 @{
     Layout = "_LayoutDashboard";
 }
-@{
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
-}
-@*@model HelloDoc.Models.UserProfile;*@
 @model HelloDocMVC.Entity.Models.UserProfile
 <div>
     <div class="d-flex justify-content-between container">
         <h3 class="mt-2"><b>User Profile</b></h3>
         <div class="border border-info rounded p-1 m-1">
-            <a asp-controller="Dashboard" asp-action="Index" class=" "><i class='fa fa-angle-left text-info p-2'>Back</i></a>
+            <a asp-controller="PatientDashboard" asp-action="PatientProfile" class=" "><i class='fa fa-angle-left text-info p-2'>Back</i></a>
         </div>
     </div>
     <form class="bg-white container mt-5 sbox" method="post" asp-controller="PatientProfile" asp-action="Edit">

@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Data;
@@ -11,6 +10,7 @@ using AspNetCoreHero.ToastNotification.Abstractions;
 using HelloDocMVC.Repository.Repository.Interface;
 using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Entity.Models;
+using HelloDocMVC.Entity.DataModels;
 
 namespace HelloDoc.Controllers
 {
@@ -20,12 +20,14 @@ namespace HelloDoc.Controllers
         private readonly HelloDocDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly INotyfService _notyf;
-        public LoginController(ILoginRepository loginRepository,HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, INotyfService notyf)
+        private readonly IJwtSession _jwtSession;
+        public LoginController(ILoginRepository loginRepository,HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, INotyfService notyf, IJwtSession jwtSession)
         {
             _ILoginRepository = loginRepository;
             _context = context;
             _httpContextAccessor = httpContextAccessor;
             _notyf = notyf;
+            _jwtSession = jwtSession;
         }
         public IActionResult Index()
         {
@@ -38,8 +40,10 @@ namespace HelloDoc.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string Email, string PasswordHash)
         {
-            var user = await _context.AspNetUsers.FirstOrDefaultAsync(u => u.Email == Email && u.PasswordHash == PasswordHash);
-
+            var user = new AspNetUser();
+            user.Email = Email;
+            user.PasswordHash = PasswordHash;
+            UserInfo u = await _ILoginRepository.CheckAccessLogin(user);
             if (user == null)
             {
                 ViewData["Error"] = " Your Username or password is incorrect. ";
@@ -47,15 +51,15 @@ namespace HelloDoc.Controllers
             }
             else
             {
-                int id = _context.Users.FirstOrDefault(u => u.AspNetUserId == user.Id).UserId;
-                string userName = _context.Users.Where(x => x.AspNetUserId == user.Id).Select(x => x.FirstName + " " + x.LastName).FirstOrDefault();
-
-                _httpContextAccessor.HttpContext.Session.SetInt32("id", id);
-                _httpContextAccessor.HttpContext.Session.SetString("Name", userName);
-
+                var jwtToken = _jwtSession.GenerateJWTAuthetication(u);
+                Response.Cookies.Append("jwt", jwtToken);
+                //int id = _context.Users.FirstOrDefault(u => u.AspNetUserId == user.Id).UserId;
+                //string userName = _context.Users.Where(x => x.AspNetUserId == user.Id).Select(x => x.FirstName + " " + x.LastName).FirstOrDefault();
+                //_httpContextAccessor.HttpContext.Session.SetInt32("id", id);
+                //_httpContextAccessor.HttpContext.Session.SetString("Name", userName);
                 return RedirectToAction("Index", "PatientDashboard");
             }
-        }
+            }
         public IActionResult ForgotPass()
         {
             return View();
@@ -104,7 +108,8 @@ namespace HelloDoc.Controllers
         }
         public IActionResult Logout()
             {
-            HttpContext.Session.Clear();
+            //HttpContext.Session.Clear();
+            Response.Cookies.Delete("jwt");
             return RedirectToAction("Index");
             }
 

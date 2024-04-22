@@ -5,13 +5,11 @@
 @using HelloDocMVC.Entity.Models.ViewModel
 @model  List<PatientDashboardList>
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
-@{
-    var userId = HttpContextAccessor.HttpContext.Session.GetString("UserID");
-}
+
 <div class="justify-content-between d-flex container-fluid mt-5 position-relative ">
     <div>
         <h3 class="fw-bolder">
-            Medical History @*@userId*@
+            Medical History 
         </h3>
     </div>
 </div>

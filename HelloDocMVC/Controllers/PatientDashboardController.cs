@@ -22,8 +22,9 @@ namespace HallodocMVC.Controllers
         }
         public IActionResult Index()
         {
-           int id = (int)_httpContextAccessor.HttpContext.Session.GetInt32("id");
-           var Result = _patientDashboard.PatientDashboardList(id);
+
+            int id = Int32.Parse(CV.UserID());
+            var Result = _patientDashboard.PatientDashboardList(id);
             return View(Result);
         }
         public IActionResult Document(int RequestId)
@@ -40,7 +41,7 @@ namespace HallodocMVC.Controllers
         public IActionResult PatientProfile()
         {
             var UsersProfile = _context.Users
-                                .Where(r => Convert.ToString(r.AspNetUserId) == (CV.UserID()))
+                                .Where(r => Convert.ToString(r.UserId) == (CV.UserID()))
                                 .Select(r => new UserProfile
                                 {
                                     UserId = r.UserId,

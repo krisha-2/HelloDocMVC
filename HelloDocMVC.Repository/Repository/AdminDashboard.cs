@@ -183,7 +183,6 @@ namespace HelloDocMVC.Repository.Repository
             };
             return paginatedViewModel;
         }
-        #region GetRequestsforProvider
         public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data, int ProviderId)
         {
             if (data.SearchInput != null)
@@ -228,10 +227,8 @@ namespace HelloDocMVC.Repository.Repository
                                                     Notes = rc.Notes,
                                                     ProviderId = (int)req.PhysicianId,
                                                     RequestorPhoneNumber = req.PhoneNumber,
-                                                    providerencounterstatus = req.Status
-
-
-
+                                                    providerencounterstatus = req.Status,
+                                                    IsFinalize = _context.EncounterForms.Any(ef => ef.RequestId == req.RequestId && ef.IsFinalize),
                                                 }).ToList();
 
 
@@ -269,7 +266,6 @@ namespace HelloDocMVC.Repository.Repository
             };
             return paginatedViewModel;
         }
-        #endregion
         public bool CancelCase(int RequestID, string Note, string CaseTag)
         {
             try
@@ -717,8 +713,8 @@ namespace HelloDocMVC.Repository.Repository
         public bool SendAgreement(int requestid)
         {
             var res = _context.RequestClients.FirstOrDefault(e => e.RequestId == requestid);
-            var agreementUrl = "https://localhost:7041/AgreementPage?RequestID=" + requestid;
-            _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Agree/Disagree</a>");
+            var agreementUrl = "https://localhost:7041/AgreementPage/Index?RequestID=" + requestid;
+            _emailConfig.SendMail(res.Email, "Agreement for your request", $"<a href='{agreementUrl}'>Click on given link to agree or disagree the request Agree/Disagree</a>");
             return true;
         }
         public bool SendAgreement_accept(int RequestID)
@@ -857,95 +853,6 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        //public ViewEncounter EncounterInfo(int id)
-        //{
-        //    var encounter = (from rc in _context.RequestClients
-        //                     join en in _context.EncounterForms on rc.RequestId equals en.RequestId into renGroup
-        //                     from subEn in renGroup.DefaultIfEmpty()
-        //                     where rc.RequestId == id
-        //                     select new ViewEncounter
-        //                     {
-        //                         RequestId = rc.RequestId,
-        //                         FirstName = rc.RcFirstName,
-        //                         LastName = rc.RcLastName,
-        //                         Location = rc.Address,
-        //                         DOB = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
-        //                         //DOS = (DateTime)subEn.DateOfService,
-        //                         Mobile = rc.PhoneNumber,
-        //                         Email = rc.Email,
-        //                         Injury = subEn.HistoryOfPresentIllnessOrInjury,
-        //                         History = subEn.MedicalHistory,
-        //                         Medications = subEn.Medications,
-        //                         Allergies = subEn.Allergies,
-        //                         Temp = subEn.Temp,
-        //                         HR = subEn.Hr,
-        //                         RR = subEn.Rr,
-        //                         Bp = subEn.BloodPressureSystolic,
-        //                         Bpd = subEn.BloodPressureDiastolic,
-        //                         O2 = subEn.O2,
-        //                         Pain = subEn.Pain,
-        //                         Heent = subEn.Heent,
-        //                         CV = subEn.Cv,
-        //                         Chest = subEn.Chest,
-        //                         ABD = subEn.Abd,
-        //                         Extr = subEn.Extremeties,
-        //                         Skin = subEn.Skin,
-        //                         Neuro = subEn.Neuro,
-        //                         Other = subEn.Other,
-        //                         Diagnosis = subEn.Diagnosis,
-        //                         Treatment = subEn.TreatmentPlan,
-        //                         MDispensed = subEn.MedicationsDispensed,
-        //                         Procedures = subEn.Procedures,
-        //                         Followup = subEn.FollowUp
-        //                     }).FirstOrDefault();
-        //    return encounter;
-        //}
-        //public void EditEncounterinfo(ViewEncounter ve)
-        //{
-        //    var RC = _context.RequestClients.FirstOrDefault(rc => rc.RequestId == ve.RequestId);
-
-        //    RC.RcFirstName = ve.FirstName;
-        //    RC.RcLastName = ve.LastName;
-        //    RC.Address = ve.Location;
-        //    RC.StrMonth = ve.DOB.Month.ToString();
-        //    RC.IntDate = ve.DOB.Day;
-        //    RC.IntYear = ve.DOB.Year;
-        //    RC.PhoneNumber = ve.Mobile;
-        //    RC.Email = ve.Email;
-        //    _context.Update(RC);
-        //    var E = _context.EncounterForms.FirstOrDefault(e => e.RequestId == ve.RequestId);
-        //    if (E == null)
-        //    {
-        //        E = new EncounterForm { RequestId = (int)ve.RequestId };
-        //        _context.EncounterForms.Add(E);
-        //    }
-        //    E.MedicalHistory = ve.History;
-        //    E.HistoryOfPresentIllnessOrInjury = ve.Injury;
-        //    E.Medications = ve.Medications;
-        //    E.Allergies = ve.Allergies;
-        //    E.Temp = ve.Temp;
-        //    E.Hr = ve.HR;
-        //    E.Rr = ve.RR;
-        //    E.BloodPressureSystolic = ve.Bp;
-        //    E.BloodPressureDiastolic = ve.Bpd;
-        //    E.O2 = ve.O2;
-        //    E.Pain = ve.Pain;
-        //    E.Heent = ve.Heent;
-        //    E.Cv = ve.CV;
-        //    E.Chest = ve.Chest;
-        //    E.Abd = ve.ABD;
-        //    E.Extremeties = ve.Extr;
-        //    E.Skin = ve.Skin;
-        //    E.Neuro = ve.Neuro;
-        //    E.Other = ve.Other;
-        //    E.Diagnosis = ve.Diagnosis;
-        //    E.TreatmentPlan = ve.Treatment;
-        //    E.MedicationsDispensed = ve.MDispensed;
-        //    E.Procedures = ve.Procedures;
-        //    E.FollowUp = ve.Followup;
-        //    _context.SaveChanges();
-        //}
-        #region GetEncounterDetails
         public ViewEncounter GetEncounterDetails(int RequestID)
         {
             var datareq = _context.RequestClients.FirstOrDefault(e => e.RequestId == RequestID);
@@ -1014,9 +921,6 @@ namespace HelloDocMVC.Repository.Repository
                 }
             }
         }
-        #endregion
-
-        #region EditEncounterDetails
         public bool EditEncounterDetails(ViewEncounter Data, string id)
         {
             try
@@ -1051,10 +955,7 @@ namespace HelloDocMVC.Repository.Repository
                         Rr = Data.Rr,
                         Skin = Data.Skin,
                         Temp = Data.Temp,
-                        TreatmentPlan = Data.Treatment,
-                        AdminId = admindata.AdminId,
-                        //CreatedDate = DateTime.Now,
-                        //ModifiedDate = DateTime.Now,
+                        TreatmentPlan = Data.Treatment
                     };
                     _context.EncounterForms.Add(enc);
                     _context.SaveChanges();
@@ -1109,8 +1010,6 @@ namespace HelloDocMVC.Repository.Repository
             }
 
         }
-        #endregion
-
         public bool CaseFinalized(ViewEncounter Data)
         {
             try
@@ -1162,10 +1061,61 @@ namespace HelloDocMVC.Repository.Repository
                                                 }).ToList();
             return allData;
         }
+        //  public bool SendLink(sendAgreement sendAgreement)
+        //{
+
+        //    var agreementUrl = "https://localhost:7151/PatientForm/Index?RequestID=" + sendAgreement.RequestId;
+        //    var subject = "Submit Request Page";
+        //    var EmailTemplate = $"Link for submitting a new request : <a href='{agreementUrl}'>click here..</a>";
+        //    bool sent = _emailConfig.SendMail(sendAgreement.Email, subject, EmailTemplate).Result;
+        //    EmailLog em = new EmailLog
+        //    {
+        //        EmailTemplate = EmailTemplate,
+        //        SubjectName = subject,
+        //        EmailId = sendAgreement.Email,
+        //        ConfirmationNumber = _context.Requests.Where(req => req.RequestId == sendAgreement.RequestId).Select(req => req.ConfirmationNumber).FirstOrDefault(),
+        //        CreateDate = DateTime.Now,
+        //        SentDate = DateTime.Now,
+        //        IsEmailSent = new BitArray(1),
+        //        SentTries = 1,
+        //        Action = 3, // action 3 for send link of submit request
+        //        RoleId = 2, // role 2 for admin
+        //    };
+
+        //    if (sent)
+        //    {
+        //        em.IsEmailSent[0] = true;
+        //    };
+        //    _context.EmailLogs.Add(em);
+        //    _context.SaveChanges();
+        //    return true;
+        //}
         public Boolean SendLink(string FirstName, string LastName, string Email)
         {
             var agreementUrl = "https://localhost:44348/Forms/Index?Name=" + FirstName + " " + LastName + "&Email=" + Email;
-            _emailConfig.SendMail(Email, "Link to Request", $"<a href='{agreementUrl}'>Request Page Link</a>");
+            var subject = "Submit Request Page";
+            var EmailTemplate = $"Link for submitting a new request : <a href='{agreementUrl}'>click here..</a>";
+            bool sent = _emailConfig.SendMail(Email, "Link to Request", $"<a href='{agreementUrl}'>Request Page Link</a>").Result;
+            EmailLog em = new EmailLog
+            {
+                EmailTemplate = EmailTemplate,
+                SubjectName = subject,
+                EmailId = Email,
+                //ConfirmationNumber = _context.Requests.Where(req => req.RequestId == sendAgreement.RequestId).Select(req => req.ConfirmationNumber).FirstOrDefault(),
+                CreateDate = DateTime.Now,
+                SentDate = DateTime.Now,
+                IsEmailSent = new BitArray(1),
+                SentTries = 1,
+                Action = 3, // action 3 for send link of submit request
+                RoleId = 2, // role 2 for admin
+            };
+
+            if (sent)
+            {
+                em.IsEmailSent[0] = true;
+            };
+            _context.EmailLogs.Add(em);
+            _context.SaveChanges();
             return true;
         }
         public void CreateRequest(Patient vdcp)
@@ -1292,22 +1242,6 @@ namespace HelloDocMVC.Repository.Repository
 
                           }).FirstAsync();
         }
-        //public bool CaseFinalized(ViewEncounter Data)
-        //{
-        //    try
-        //    {
-        //        var data = _context.EncounterForms.FirstOrDefault(e => e.EncounterFormId == Data.EncounterID);
-        //        //data.ModifiedDate = DateTime.Now;
-        //        data.IsFinalize = true;
-        //        _context.EncounterForms.Update(data);
-        //        _context.SaveChanges();
-        //        return true;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return false;
-        //    }
-        //}
         public async Task<bool> AcceptPhysician(int RequestId, string note, int ProviderId)
         {
 

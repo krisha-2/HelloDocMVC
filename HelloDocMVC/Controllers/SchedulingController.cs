@@ -97,7 +97,7 @@ namespace HelloDocMVC.Controllers
                 date = currentDate,
                 shiftdetails = _context.ShiftDetails.Include(u => u.Shift).Where(u => u.IsDeleted == new BitArray(new[] { false }) && u.Shift.PhysicianId == Int32.Parse(CV.UserID())).ToList()
             };
-            return PartialView("../Admin/Providers/Scheduling/_MonthWise", month);
+            return PartialView("../Scheduling/_MonthWise", month);
         }
         public IActionResult AddShift(SchedulingData model)
         {
