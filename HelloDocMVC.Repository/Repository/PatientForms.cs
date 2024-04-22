@@ -50,7 +50,7 @@ namespace HelloDocMVC.Repository.Repository
                 U.City = viewdata.City;
                 U.State = viewdata.State;
                 U.ZipCode = viewdata.ZipCode;
-                U.Status = 5;
+                U.Status = 1;
                 U.StrMonth = (viewdata.DOB.Month).ToString();
                 U.IntDate = viewdata.DOB.Day;
                 U.IntYear = viewdata.DOB.Year;
@@ -178,7 +178,7 @@ namespace HelloDocMVC.Repository.Repository
             R.RLastName = viewdata.Last_Name;
             R.PhoneNumber = viewdata.Phone_Number;
             R.Email = viewdata.E_mail;
-            R.Status = 2;
+            R.Status = 1;
             R.RelationName = viewdata.RelationName;
             R.ConfirmationNumber = R.PhoneNumber;
             R.IsUrgentEmailSent = new BitArray(1);
@@ -254,7 +254,7 @@ namespace HelloDocMVC.Repository.Repository
             R.RLastName = viewdata.Last_Name;
             R.PhoneNumber = viewdata.Phone_Number;
             R.Email = viewdata.E_mail;
-            R.Status = 5;
+            R.Status = 1;
             R.RelationName = viewdata.RelationName;
             R.ConfirmationNumber = R.PhoneNumber;
             R.IsUrgentEmailSent = new BitArray(1);
@@ -344,7 +344,7 @@ namespace HelloDocMVC.Repository.Repository
             R.RLastName = viewdata.Last_Name;
             R.PhoneNumber = viewdata.Phone_Number;
             R.Email = viewdata.E_mail;
-            R.Status = 5;
+            R.Status = 1;
             R.RelationName = viewdata.RelationName;
             R.ConfirmationNumber = R.PhoneNumber;
             R.IsUrgentEmailSent = new BitArray(1);

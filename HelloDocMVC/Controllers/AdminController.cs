@@ -13,6 +13,8 @@ using static HelloDocMVC.Entity.Models.Constant;
 using HelloDocMVC.Repository.Repository;
 using OfficeOpenXml;
 using Rotativa;
+using ViewAsPdf = Rotativa.AspNetCore.ViewAsPdf;
+
 
 namespace HelloDocMVC.Controllers
 {
@@ -50,22 +52,22 @@ namespace HelloDocMVC.Controllers
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
-        public IActionResult Encounter(int id)
-        {
-            ViewEncounter ei = _IAdminDashboard.EncounterInfo(id);
-            return View(ei);
-        }
-        [HttpPost]
-        public IActionResult EncounterPost(ViewEncounter _viewencounterinfo)
-        {
-            if (ModelState.IsValid)
-            {
-                _IAdminDashboard.EditEncounterinfo(_viewencounterinfo);
-                return RedirectToAction("Index", "Admin");
+        //public IActionResult Encounter(int id)
+        //{
+        //    ViewEncounter ei = _IAdminDashboard.EncounterInfo(id);
+        //    return View(ei);
+        //}
+        //[HttpPost]
+        //public IActionResult EncounterPost(ViewEncounter _viewencounterinfo)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _IAdminDashboard.EditEncounterinfo(_viewencounterinfo);
+        //        return RedirectToAction("Index", "Admin");
 
-            }
-            return View(_viewencounterinfo);
-        }
+        //    }
+        //    return View(_viewencounterinfo);
+        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(PaginatedViewModel data, String Status)
@@ -341,6 +343,64 @@ namespace HelloDocMVC.Controllers
             }
 
         }
+        #region Encounter_View
+        public IActionResult EncounterModel(int id)
+        {
+            ViewEncounter data = _IAdminDashboard.GetEncounterDetails(id);
+            return View("../Admin/EncounterForm", data);
+        }
+        #endregion
+        #region EncounterEdit
+        public IActionResult EncounterEdit(ViewEncounter data)
+        {
+            if (_IAdminDashboard.EditEncounterDetails(data, CV.ID()))
+            {
+                _notyf.Success("Encounter Changes Saved...");
+            }
+            else
+            {
+                _notyf.Error("Encounter Changes Not Saved...");
+            }
+            return RedirectToAction("EncounterModel", new { id = data.Requesid });
+        }
+        #endregion
+        #region Finalize
+        public IActionResult Finalize(ViewEncounter model)
+        {
+            bool data = _IAdminDashboard.EditEncounterDetails(model, CV.ID());
+            if (data)
+            {
+                bool final = _IAdminDashboard.CaseFinalized(model);
+                if (final)
+                {
+                    _notyf.Success("Case Is Finalized...");
+                    if (CV.role() == "Physician")
+                    {
+                        return Redirect("~/Physician/DashBoard");
+                    }
+                    return RedirectToAction("Index", "Admin");
+                }
+                else
+                {
+                    _notyf.Error("Case Is Not Finalized Please Enter Valid Data...");
+                    return RedirectToAction("EncounterModel", new { id = model.Requesid });
+                }
+            }
+            else
+            {
+                _notyf.Error("Case Is Not Finalized...");
+                return RedirectToAction("EncounterModel", new { id = model.Requesid });
+            }
+
+        }
+        #endregion
+        #region generatePDF
+        public IActionResult generatePDF(int id)
+        {
+            var FormDetails = _IAdminDashboard.GetEncounterDetails(id);
+            return new ViewAsPdf("../Admin/EncounterPdf", FormDetails);
+        }
+        #endregion
         public IActionResult Export(string status)
         {
             var requestData = _IAdminDashboard.Export(status);
@@ -477,11 +537,6 @@ namespace HelloDocMVC.Controllers
             }
             return Redirect("~/Physician/DashBoard");
         }
-        //public IActionResult generatePDF(int id)
-        //{
-        //    var FormDetails = _IAdminDashboard.GetEncounterDetails(id);
-        //    return new ViewAsPdf("../Admin/EncounterPdf", FormDetails);
-        //}
         public async Task<IActionResult> ConcludeCare(int? id, ViewDocuments viewDocument)
         {
             if (id == null)

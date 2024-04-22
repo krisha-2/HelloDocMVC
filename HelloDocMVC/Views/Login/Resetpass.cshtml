@@ -18,14 +18,14 @@
                 <form class="d-flex align-items-center justify-content-center flex-column formBody" method="post" asp-action="SavePassword" asp-controller="Login">
                     <input type="hidden" asp-for="Email" />
                     <div class="col-md-6 col-lg-4 col-xl-3 form-floating mb-3 d-flex justify-content-center align-item-center" required>
-                        <input type="password" class="form-control" id="inputpass" placeholder="Password" asp-for="PassWord">
+                        <input type="password" class="form-control" id="inputpass" placeholder="Password" asp-for="PassWord" required>
                         <label for="inputpass">
                             Password
                         </label>
                         <span asp-validation-for="PassWord" class="text-danger"></span>
                     </div>
                     <div class="col-md-6 col-lg-4 col-xl-3 form-floating mb-3 d-flex justify-content-center align-item-center" required>
-                        <input type="password" class="form-control" id="inputpass1" placeholder="Confirm Password" asp-for="PasswordHash">
+                        <input type="password" class="form-control" id="inputpass1" placeholder="Confirm Password" asp-for="PasswordHash" required>
                         <label for="inputpass1">
                             Confirm Password
                         </label>

@@ -6,8 +6,10 @@ namespace HelloDocMVC.Entity.Models
     {
         public int Id { get; set; }
         public string UserName { get; set; }
+        [Required(ErrorMessage = "Password is required")]
         public string PassWord { get; set; }
-        //[Compare("PassWord", ErrorMessage = "Password doesn't match.")]
+        [Required(ErrorMessage = "Password is required")]
+        [Compare("PassWord", ErrorMessage = "Password doesn't match.")]
         public string PasswordHash { get; set; }
         [Required(ErrorMessage = "FirstName is required")]
         public string? FirstName { get; set; }

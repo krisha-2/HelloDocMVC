@@ -138,7 +138,10 @@ namespace HelloDocMVC.Repository.Repository
                                                     PatientPhoneNumber = rc.PhoneNumber,
                                                     Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                                                     Notes = rc.Notes,
-                                                    RequestorPhoneNumber = req.PhoneNumber
+                                                    RequestorPhoneNumber = req.PhoneNumber,
+                                                    providerencounterstatus = req.Status,
+                                                    IsFinalize = _context.EncounterForms.Any(ef => ef.RequestId == req.RequestId && ef.IsFinalize),
+
                                                 }).ToList();
             if (data.IsAscending == true)
             {
@@ -224,7 +227,8 @@ namespace HelloDocMVC.Repository.Repository
                                                     Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
                                                     Notes = rc.Notes,
                                                     ProviderId = (int)req.PhysicianId,
-                                                    RequestorPhoneNumber = req.PhoneNumber
+                                                    RequestorPhoneNumber = req.PhoneNumber,
+                                                    providerencounterstatus = req.Status
 
 
 
@@ -853,93 +857,275 @@ namespace HelloDocMVC.Repository.Repository
                 return false;
             }
         }
-        public ViewEncounter EncounterInfo(int id)
-        {
-            var encounter = (from rc in _context.RequestClients
-                             join en in _context.EncounterForms on rc.RequestId equals en.RequestId into renGroup
-                             from subEn in renGroup.DefaultIfEmpty()
-                             where rc.RequestId == id
-                             select new ViewEncounter
-                             {
-                                 RequestId = rc.RequestId,
-                                 FirstName = rc.RcFirstName,
-                                 LastName = rc.RcLastName,
-                                 Location = rc.Address,
-                                 DOB = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
-                                 //DOS = (DateTime)subEn.DateOfService,
-                                 Mobile = rc.PhoneNumber,
-                                 Email = rc.Email,
-                                 Injury = subEn.HistoryOfPresentIllnessOrInjury,
-                                 History = subEn.MedicalHistory,
-                                 Medications = subEn.Medications,
-                                 Allergies = subEn.Allergies,
-                                 Temp = subEn.Temp,
-                                 HR = subEn.Hr,
-                                 RR = subEn.Rr,
-                                 Bp = subEn.BloodPressureSystolic,
-                                 Bpd = subEn.BloodPressureDiastolic,
-                                 O2 = subEn.O2,
-                                 Pain = subEn.Pain,
-                                 Heent = subEn.Heent,
-                                 CV = subEn.Cv,
-                                 Chest = subEn.Chest,
-                                 ABD = subEn.Abd,
-                                 Extr = subEn.Extremeties,
-                                 Skin = subEn.Skin,
-                                 Neuro = subEn.Neuro,
-                                 Other = subEn.Other,
-                                 Diagnosis = subEn.Diagnosis,
-                                 Treatment = subEn.TreatmentPlan,
-                                 MDispensed = subEn.MedicationsDispensed,
-                                 Procedures = subEn.Procedures,
-                                 Followup = subEn.FollowUp
-                             }).FirstOrDefault();
-            return encounter;
-        }
-        public void EditEncounterinfo(ViewEncounter ve)
-        {
-            var RC = _context.RequestClients.FirstOrDefault(rc => rc.RequestId == ve.RequestId);
+        //public ViewEncounter EncounterInfo(int id)
+        //{
+        //    var encounter = (from rc in _context.RequestClients
+        //                     join en in _context.EncounterForms on rc.RequestId equals en.RequestId into renGroup
+        //                     from subEn in renGroup.DefaultIfEmpty()
+        //                     where rc.RequestId == id
+        //                     select new ViewEncounter
+        //                     {
+        //                         RequestId = rc.RequestId,
+        //                         FirstName = rc.RcFirstName,
+        //                         LastName = rc.RcLastName,
+        //                         Location = rc.Address,
+        //                         DOB = new DateTime((int)rc.IntYear, Convert.ToInt32(rc.StrMonth.Trim()), (int)rc.IntDate),
+        //                         //DOS = (DateTime)subEn.DateOfService,
+        //                         Mobile = rc.PhoneNumber,
+        //                         Email = rc.Email,
+        //                         Injury = subEn.HistoryOfPresentIllnessOrInjury,
+        //                         History = subEn.MedicalHistory,
+        //                         Medications = subEn.Medications,
+        //                         Allergies = subEn.Allergies,
+        //                         Temp = subEn.Temp,
+        //                         HR = subEn.Hr,
+        //                         RR = subEn.Rr,
+        //                         Bp = subEn.BloodPressureSystolic,
+        //                         Bpd = subEn.BloodPressureDiastolic,
+        //                         O2 = subEn.O2,
+        //                         Pain = subEn.Pain,
+        //                         Heent = subEn.Heent,
+        //                         CV = subEn.Cv,
+        //                         Chest = subEn.Chest,
+        //                         ABD = subEn.Abd,
+        //                         Extr = subEn.Extremeties,
+        //                         Skin = subEn.Skin,
+        //                         Neuro = subEn.Neuro,
+        //                         Other = subEn.Other,
+        //                         Diagnosis = subEn.Diagnosis,
+        //                         Treatment = subEn.TreatmentPlan,
+        //                         MDispensed = subEn.MedicationsDispensed,
+        //                         Procedures = subEn.Procedures,
+        //                         Followup = subEn.FollowUp
+        //                     }).FirstOrDefault();
+        //    return encounter;
+        //}
+        //public void EditEncounterinfo(ViewEncounter ve)
+        //{
+        //    var RC = _context.RequestClients.FirstOrDefault(rc => rc.RequestId == ve.RequestId);
 
-            RC.RcFirstName = ve.FirstName;
-            RC.RcLastName = ve.LastName;
-            RC.Address = ve.Location;
-            RC.StrMonth = ve.DOB.Month.ToString();
-            RC.IntDate = ve.DOB.Day;
-            RC.IntYear = ve.DOB.Year;
-            RC.PhoneNumber = ve.Mobile;
-            RC.Email = ve.Email;
-            _context.Update(RC);
-            var E = _context.EncounterForms.FirstOrDefault(e => e.RequestId == ve.RequestId);
-            if (E == null)
+        //    RC.RcFirstName = ve.FirstName;
+        //    RC.RcLastName = ve.LastName;
+        //    RC.Address = ve.Location;
+        //    RC.StrMonth = ve.DOB.Month.ToString();
+        //    RC.IntDate = ve.DOB.Day;
+        //    RC.IntYear = ve.DOB.Year;
+        //    RC.PhoneNumber = ve.Mobile;
+        //    RC.Email = ve.Email;
+        //    _context.Update(RC);
+        //    var E = _context.EncounterForms.FirstOrDefault(e => e.RequestId == ve.RequestId);
+        //    if (E == null)
+        //    {
+        //        E = new EncounterForm { RequestId = (int)ve.RequestId };
+        //        _context.EncounterForms.Add(E);
+        //    }
+        //    E.MedicalHistory = ve.History;
+        //    E.HistoryOfPresentIllnessOrInjury = ve.Injury;
+        //    E.Medications = ve.Medications;
+        //    E.Allergies = ve.Allergies;
+        //    E.Temp = ve.Temp;
+        //    E.Hr = ve.HR;
+        //    E.Rr = ve.RR;
+        //    E.BloodPressureSystolic = ve.Bp;
+        //    E.BloodPressureDiastolic = ve.Bpd;
+        //    E.O2 = ve.O2;
+        //    E.Pain = ve.Pain;
+        //    E.Heent = ve.Heent;
+        //    E.Cv = ve.CV;
+        //    E.Chest = ve.Chest;
+        //    E.Abd = ve.ABD;
+        //    E.Extremeties = ve.Extr;
+        //    E.Skin = ve.Skin;
+        //    E.Neuro = ve.Neuro;
+        //    E.Other = ve.Other;
+        //    E.Diagnosis = ve.Diagnosis;
+        //    E.TreatmentPlan = ve.Treatment;
+        //    E.MedicationsDispensed = ve.MDispensed;
+        //    E.Procedures = ve.Procedures;
+        //    E.FollowUp = ve.Followup;
+        //    _context.SaveChanges();
+        //}
+        #region GetEncounterDetails
+        public ViewEncounter GetEncounterDetails(int RequestID)
+        {
+            var datareq = _context.RequestClients.FirstOrDefault(e => e.RequestId == RequestID);
+            var Data = _context.EncounterForms.FirstOrDefault(e => e.RequestId == RequestID);
+            if (Data != null)
             {
-                E = new EncounterForm { RequestId = (int)ve.RequestId };
-                _context.EncounterForms.Add(E);
+                ViewEncounter enc = new ViewEncounter
+                {
+                    ABD = Data.Abd,
+                    EncounterID = Data.EncounterFormId,
+                    Allergies = Data.Allergies,
+                    BloodPressureD = Data.BloodPressureDiastolic,
+                    BloodPressureS = Data.BloodPressureSystolic,
+                    Chest = Data.Chest,
+                    CV = Data.Cv,
+                    //DOB = new DateTime((int)datareq.IntYear, DateTime.ParseExact(datareq.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)datareq.IntDate),
+                    Date = DateTime.Now,
+                    Diagnosis = Data.Diagnosis,
+                    Hr = Data.Hr,
+                    HistoryOfMedical = Data.MedicalHistory,
+                    Heent = Data.Heent,
+                    Extr = Data.Extremeties,
+                    PhoneNumber = datareq.PhoneNumber,
+                    Email = datareq.Email,
+                    HistoryOfP = Data.HistoryOfPresentIllnessOrInjury,
+                    FirstName = datareq.RcFirstName,
+                    LastName = datareq.RcLastName,
+                    Followup = Data.FollowUp,
+                    Location = datareq.Location,
+                    Medications = Data.Medications,
+                    MedicationsDispensed = Data.MedicationsDispensed,
+                    Neuro = Data.Neuro,
+                    O2 = Data.O2,
+                    Other = Data.Other,
+                    Pain = Data.Pain,
+                    Procedures = Data.Procedures,
+                    Isfinalize = Data.IsFinalize,
+                    Requesid = RequestID,
+                    Rr = Data.Rr,
+                    Skin = Data.Skin,
+                    Temp = Data.Temp,
+                    Treatment = Data.TreatmentPlan
+                };
+                return enc;
             }
-            E.MedicalHistory = ve.History;
-            E.HistoryOfPresentIllnessOrInjury = ve.Injury;
-            E.Medications = ve.Medications;
-            E.Allergies = ve.Allergies;
-            E.Temp = ve.Temp;
-            E.Hr = ve.HR;
-            E.Rr = ve.RR;
-            E.BloodPressureSystolic = ve.Bp;
-            E.BloodPressureDiastolic = ve.Bpd;
-            E.O2 = ve.O2;
-            E.Pain = ve.Pain;
-            E.Heent = ve.Heent;
-            E.Cv = ve.CV;
-            E.Chest = ve.Chest;
-            E.Abd = ve.ABD;
-            E.Extremeties = ve.Extr;
-            E.Skin = ve.Skin;
-            E.Neuro = ve.Neuro;
-            E.Other = ve.Other;
-            E.Diagnosis = ve.Diagnosis;
-            E.TreatmentPlan = ve.Treatment;
-            E.MedicationsDispensed = ve.MDispensed;
-            E.Procedures = ve.Procedures;
-            E.FollowUp = ve.Followup;
-            _context.SaveChanges();
+            else
+            {
+                if (datareq != null)
+                {
+                    ViewEncounter enc = new ViewEncounter
+                    {
+                        FirstName = datareq.RcFirstName,
+                        PhoneNumber = datareq.PhoneNumber,
+                        LastName = datareq.RcLastName,
+                        Location = datareq.Location,
+                        //DOB = new DateTime((int)datareq.IntYear, DateTime.ParseExact(datareq.StrMonth, "MMMM", new CultureInfo("en-US")).Month, (int)datareq.IntDate),
+                        Date = DateTime.Now,
+                        Requesid = RequestID,
+                        Email = datareq.Email,
+                    };
+                    return enc;
+                }
+                else
+                {
+                    return new ViewEncounter();
+                }
+            }
+        }
+        #endregion
+
+        #region EditEncounterDetails
+        public bool EditEncounterDetails(ViewEncounter Data, string id)
+        {
+            try
+            {
+                var admindata = _context.Admins.FirstOrDefault(e => e.AspNetUserId == id);
+                if (Data.EncounterID == 0)
+                {
+                    EncounterForm enc = new()
+                    {
+                        Abd = Data.ABD,
+                        EncounterFormId = (int)Data.EncounterID,
+                        Allergies = Data.Allergies,
+                        BloodPressureDiastolic = Data.BloodPressureD,
+                        BloodPressureSystolic = Data.BloodPressureS,
+                        Chest = Data.Chest,
+                        Cv = Data.CV,
+                        Diagnosis = Data.Diagnosis,
+                        Hr = Data.Hr,
+                        MedicalHistory = Data.HistoryOfMedical,
+                        Heent = Data.Heent,
+                        Extremeties = Data.Extr,
+                        HistoryOfPresentIllnessOrInjury = Data.HistoryOfP,
+                        FollowUp = Data.Followup,
+                        Medications = Data.Medications,
+                        MedicationsDispensed = Data.MedicationsDispensed,
+                        Neuro = Data.Neuro,
+                        O2 = Data.O2,
+                        Other = Data.Other,
+                        Pain = Data.Pain,
+                        Procedures = Data.Procedures,
+                        RequestId = Data.Requesid,
+                        Rr = Data.Rr,
+                        Skin = Data.Skin,
+                        Temp = Data.Temp,
+                        TreatmentPlan = Data.Treatment,
+                        AdminId = admindata.AdminId,
+                        //CreatedDate = DateTime.Now,
+                        //ModifiedDate = DateTime.Now,
+                    };
+                    _context.EncounterForms.Add(enc);
+                    _context.SaveChanges();
+                    return true;
+                }
+                else
+                {
+                    var encdetails = _context.EncounterForms.FirstOrDefault(e => e.EncounterFormId == Data.EncounterID);
+                    if (encdetails != null)
+                    {
+                        encdetails.Abd = Data.ABD;
+                        encdetails.EncounterFormId = (int)Data.EncounterID;
+                        encdetails.Allergies = Data.Allergies;
+                        encdetails.BloodPressureDiastolic = Data.BloodPressureD;
+                        encdetails.BloodPressureSystolic = Data.BloodPressureS;
+                        encdetails.Chest = Data.Chest;
+                        encdetails.Cv = Data.CV;
+                        encdetails.Diagnosis = Data.Diagnosis;
+                        encdetails.Hr = Data.Hr;
+                        encdetails.MedicalHistory = Data.HistoryOfMedical;
+                        encdetails.Heent = Data.Heent;
+                        encdetails.Extremeties = Data.Extr;
+                        encdetails.HistoryOfPresentIllnessOrInjury = Data.HistoryOfP;
+                        encdetails.FollowUp = Data.Followup;
+                        encdetails.Medications = Data.Medications;
+                        encdetails.MedicationsDispensed = Data.MedicationsDispensed;
+                        encdetails.Neuro = Data.Neuro;
+                        encdetails.O2 = Data.O2;
+                        encdetails.Other = Data.Other;
+                        encdetails.Pain = Data.Pain;
+                        encdetails.Procedures = Data.Procedures;
+                        encdetails.RequestId = Data.Requesid;
+                        encdetails.Rr = Data.Rr;
+                        encdetails.Skin = Data.Skin;
+                        encdetails.Temp = Data.Temp;
+                        encdetails.TreatmentPlan = Data.Treatment;
+                        //encdetails.AdminId = admindata.AdminId;
+                        //encdetails.ModifiedDate = DateTime.Now;
+                        _context.EncounterForms.Update(encdetails);
+                        _context.SaveChanges();
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        #endregion
+
+        public bool CaseFinalized(ViewEncounter Data)
+        {
+            try
+            {
+                var data = _context.EncounterForms.FirstOrDefault(e => e.EncounterFormId == Data.EncounterID);
+                //data.ModifiedDate = DateTime.Now;
+                data.IsFinalize = true;
+                _context.EncounterForms.Update(data);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
         public List<AdminDashboardList> Export(string status)
         {
@@ -1106,22 +1292,22 @@ namespace HelloDocMVC.Repository.Repository
 
                           }).FirstAsync();
         }
-        public bool CaseFinalized(ViewEncounter Data)
-        {
-            try
-            {
-                var data = _context.EncounterForms.FirstOrDefault(e => e.EncounterFormId == Data.EncounterId);
-                //data.ModifiedDate = DateTime.Now;
-                data.IsFinalize = true;
-                _context.EncounterForms.Update(data);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
+        //public bool CaseFinalized(ViewEncounter Data)
+        //{
+        //    try
+        //    {
+        //        var data = _context.EncounterForms.FirstOrDefault(e => e.EncounterFormId == Data.EncounterID);
+        //        //data.ModifiedDate = DateTime.Now;
+        //        data.IsFinalize = true;
+        //        _context.EncounterForms.Update(data);
+        //        _context.SaveChanges();
+        //        return true;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return false;
+        //    }
+        //}
         public async Task<bool> AcceptPhysician(int RequestId, string note, int ProviderId)
         {
 

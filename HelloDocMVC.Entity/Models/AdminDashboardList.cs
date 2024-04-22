@@ -31,6 +31,9 @@ namespace HelloDocMVC.Entity.Models
         public string? ADStatus { get; set; }
         public  string PhysicianName { get; set; }
         public string DateOfService { get; set; }
+        public int providerencounterstatus { get; set; }
+        public bool IsFinalize { get; set; }
+
     }
     public class PaginatedViewModel
     {

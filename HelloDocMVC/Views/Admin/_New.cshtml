@@ -114,9 +114,7 @@
                             }
                             @if (CV.role() == "Physician")
                             {
-                                @*<li><a class="dropdown-item" asp-action="AcceptRequest" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i>Accept</a></li>*@
                                 <li><a class="dropdown-item" onclick="model_Case(@index)" id="AcceptCase_@item.RequestId" data-bs-toggle="modal" data-bs-target="#AcceptCase" data-bs-RequestId="@item.RequestId"><i class="bi bi-ban me-1"></i>Accept</a></li>
-
                             }
                             </ul>
                         </td>

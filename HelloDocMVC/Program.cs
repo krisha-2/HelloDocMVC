@@ -5,8 +5,7 @@ using HelloDocMVC.Repository.Repository.Interface;
 using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using HelloDocMVC.Entity.Models;
-
-
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var emailConfig = builder.Configuration
@@ -47,7 +46,8 @@ app.UseRouting();
 app.UseNotyf();
 app.UseSession();
 app.UseAuthorization();
+app.UseRotativa();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=AdminLogin}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index1}/{id?}");
 app.Run();

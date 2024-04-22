@@ -35,8 +35,12 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public ViewCloseCase CloseCaseData(int RequestID);
         public bool EditForCloseCase(ViewCloseCase model);
         public bool CloseCase(int RequestID);
-        public ViewEncounter EncounterInfo(int id);
-        public void EditEncounterinfo(ViewEncounter ve);
+        //public ViewEncounter EncounterInfo(int id);
+        //public void EditEncounterinfo(ViewEncounter ve);
+        public ViewEncounter GetEncounterDetails(int RequestID);
+        public bool EditEncounterDetails(ViewEncounter Data, string id);
+        //public bool CaseFinalized(ViewEncounter Data);
+
         List<AdminDashboardList> Export(string status);
         public void CreateRequest(Patient vdcp);
         public Boolean SendLink(string FirstName, string LastName, string Email);

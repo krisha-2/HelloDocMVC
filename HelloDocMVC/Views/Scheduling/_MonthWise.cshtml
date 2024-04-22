@@ -1,14 +1,4 @@
-﻿﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-@model HelloDocMVC.Entity.Models.MonthWiseScheduling
+﻿@model HelloDocMVC.Entity.Models.MonthWiseScheduling
 @using Microsoft.AspNetCore.Html
 @using Microsoft.AspNetCore.Mvc.Rendering
 
@@ -98,14 +88,20 @@
                                                                 {
                                                                     <div class="shiftdisplay shiftmodal" id="@obj.ShiftDetailId" data-bs-toggle="modal" data-bs-target="#viewShiftModal">
                                                                         @obj.StartTime-@obj.EndTime
-                                                                        @obj.Shift.Physician.FirstName, @obj.Shift.Physician.LastName
+                                                                        @if (CV.role() == "Admin")
+                                                                        {
+                                                                            @obj.Shift.Physician.FirstName @obj.Shift.Physician.LastName
+                                                                        }
                                                                     </div>
                                                                 }
                                                                 else
                                                                 {
                                                                     <div class="shiftdisplay2 shiftmodal" id="@obj.ShiftDetailId" data-bs-toggle="modal" data-bs-target="#viewShiftModal">
                                                                         @obj.StartTime-@obj.EndTime
-                                                                        @obj.Shift.Physician.FirstName, @obj.Shift.Physician.LastName
+                                                                        @if (CV.role() == "Admin")
+                                                                        {
+                                                                            @obj.Shift.Physician.FirstName @obj.Shift.Physician.LastName
+                                                                        }
                                                                     </div>
                                                                 }
                                                             </td>
@@ -120,14 +116,20 @@
                                                                 {
                                                                     <div class="shiftdisplay shiftmodal" id="@obj.ShiftDetailId" data-bs-toggle="modal" data-bs-target="#viewShiftModal">
                                                                         @obj.StartTime-@obj.EndTime
-                                                                        @obj.Shift.Physician.FirstName, @obj.Shift.Physician.LastName
+                                                                        @if (CV.role() == "Admin")
+                                                                        {
+                                                                            @obj.Shift.Physician.FirstName @obj.Shift.Physician.LastName
+                                                                        }
                                                                     </div>
                                                                 }
                                                                 else
                                                                 {
                                                                     <div class="shiftdisplay2 shiftmodal" id="@obj.ShiftDetailId" data-bs-toggle="modal" data-bs-target="#viewShiftModal">
                                                                         @obj.StartTime-@obj.EndTime
-                                                                        @obj.Shift.Physician.FirstName, @obj.Shift.Physician.LastName
+                                                                        @if (CV.role() == "Admin")
+                                                                        {
+                                                                            @obj.Shift.Physician.FirstName @obj.Shift.Physician.LastName
+                                                                        }
                                                                     </div>
                                                                 }
                                                             </td>

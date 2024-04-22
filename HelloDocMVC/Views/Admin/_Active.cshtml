@@ -49,6 +49,12 @@
                             <small>Notes</small>
                         </th>
                     }
+                    @if (CV.role() == "Physician")
+                    {
+                        <th scope="col">
+                            <small>Status</small>
+                        </th>
+                    }
                     <th scope="col">
                         <small>Actions</small>
                     </th>
@@ -97,6 +103,17 @@
                         }
                     </td>
                     <td><small>@item.Address</small></td>
+                    @if (CV.role() == "Physician")
+                    {
+                        <td>
+                            @if (item.providerencounterstatus == 5)
+                            {
+                                <a class="btn btn-info text-white mt-2" asp-action="Consult" asp-controller="Admin" asp-route-RequestId="@item.RequestId">
+                                    Housecall
+                                </a>
+                            }
+                        </td>
+                    }
                     @if (CV.role() == "Admin")
                     {
                         <td><small>@item.Notes</small></td>
@@ -107,21 +124,30 @@
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" asp-action="ViewCase" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i> View Case</a></li>
-                            @if (CV.role() == "Admin")
-                            {
-                                <li><a class="dropdown-item" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Uploads</a></li>
-                            }
+                            <li><a class="dropdown-item" asp-action="ViewUploads" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journals"></i> View Uploads</a></li>
                             <li><a class="dropdown-item" asp-action="ViewNotes" asp-controller="Admin"><i class="bi bi-journals"></i> View Notes</a></li>
-                            @if (CV.role() == "Admin")
+                            @if (item.providerencounterstatus == 4 && CV.role() == "Physician")
                             {
-                                <li><a class="dropdown-item" asp-action="Orders" asp-controller="Admin"><i class="bi bi-journal-text"></i> Orders</a></li>
-                                <li><a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-ban"></i> Encounter</a></li>
+                                <li><a data-bs-toggle="modal" data-bs-target="#Encounter" class="dropdown-item" onclick="model_Case(@item.RequestId)"><i class="bi bi-journal-text me-1"></i>Encounter1</a></li>
                             }
-                            @if (CV.role() == "Physician")
+                            else
                             {
-                                <li><a class="dropdown-item" asp-action="ConcludeCare" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-journal-text"></i>Conclude Care</a></li>
-                                <li><a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-ban"></i>Encounter pdf</a></li>
+                                @if (item.IsFinalize)
+                                {
+                                    <li><a data-bs-toggle="modal" data-bs-target="#EncounterPdf" class="dropdown-item" onclick="model_Case(@item.RequestId)"><i class="bi bi-journal-text me-1"></i>Encounter2</a></li>
+                                }
+                                else
+                                {
+                                    <li><a asp-action="EncounterModel" asp-controller="Admin" asp-route-id="@item.RequestId" class="dropdown-item"><i class="bi bi-journal-text me-1"></i>Encounter3</a></li>
+                                }
                             }
+
+                            @*   @if (CV.role() == "Admin")
+                        {
+                        <li><a class="dropdown-item" asp-action="Orders" asp-controller="Admin"><i class="bi bi-journal-text"></i> Orders</a></li>
+                        <li><a class="dropdown-item" asp-action="Encounter" asp-controller="Admin" asp-route-id="@item.RequestId"><i class="bi bi-ban"></i> Encounter</a></li>
+                        } *@
+                            <li><a asp-action="Orders" asp-controller="Admin" asp-route-id="@item.RequestId" class="dropdown-item"><i class="bi bi-journal-check me-1"></i>Orders</a></li>
                         </ul>
                     </td>
                 </tr>
@@ -305,4 +331,8 @@
                 $(".dataTable > thead > tr > .dt-orderable-asc").removeClass("dt-ordering-desc");
             });
         });
+    function model_Case(id) {
+        document.getElementById('RequestID_Encounter').value = id;
+        document.getElementById('RequestID_EncounterPdf').value = id;
+    }
 </script>

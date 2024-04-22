@@ -89,6 +89,16 @@ namespace HelloDocMVC.Controllers
                     return PartialView("../Scheduling/_DayWise");
             }
         }
+        public IActionResult LoadSchedulingPartialProivder(string date)
+        {
+            var currentDate = DateTime.Parse(date);
+            MonthWiseScheduling month = new MonthWiseScheduling
+            {
+                date = currentDate,
+                shiftdetails = _context.ShiftDetails.Include(u => u.Shift).Where(u => u.IsDeleted == new BitArray(new[] { false }) && u.Shift.PhysicianId == Int32.Parse(CV.UserID())).ToList()
+            };
+            return PartialView("../Admin/Providers/Scheduling/_MonthWise", month);
+        }
         public IActionResult AddShift(SchedulingData model)
         {
             string adminId = CV.ID();
