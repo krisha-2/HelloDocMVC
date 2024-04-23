@@ -242,15 +242,15 @@ namespace HelloDocMVC.Repository.Repository
                     _context.SaveChanges();
 
                     //Admin_region
-                    List<int> priceList = admindata.Regionsid.Split(',').Select(int.Parse).ToList();
-                    foreach (var item in priceList)
-                    {
-                        AdminRegion ar = new AdminRegion();
-                        ar.RegionId = item;
-                        ar.AdminId = (int)Admin.AdminId;
-                        _context.AdminRegions.Add(ar);
-                        _context.SaveChanges();
-                    }
+                    //List<int> priceList = admindata.Regionsid.Split(',').Select(int.Parse).ToList();
+                    //foreach (var item in priceList)
+                    //{
+                    //    AdminRegion ar = new AdminRegion();
+                    //    ar.RegionId = item;
+                    //    ar.AdminId = (int)Admin.AdminId;
+                    //    _context.AdminRegions.Add(ar);
+                    //    _context.SaveChanges();
+                    //}
                 }
                 else
                 {

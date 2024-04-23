@@ -5,6 +5,7 @@ using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static Org.BouncyCastle.Bcpg.Attr.ImageAttrib;
 
 namespace HelloDoc.Controllers
 {
@@ -12,12 +13,18 @@ namespace HelloDoc.Controllers
     {
         private readonly HelloDocDbContext _context;
         private readonly IPatientForms _patientForms;
-        public FormsController(HelloDocDbContext context, IPatientForms patientForms)
+        private readonly IComboBox _comboBox;
+        public FormsController(HelloDocDbContext context, IPatientForms patientForms, IComboBox comboBox)
         {
             _context = context;
             _patientForms = patientForms;
+            _comboBox = comboBox;
         }
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+        public async Task<IActionResult> Index()
         {
             return View();
         }

@@ -116,7 +116,7 @@ namespace HelloDocMVC.Controllers
         public async Task<IActionResult> Edit(ViewProvider physicians)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
+            ViewBag.PhysicianRoleComboBox = await _comboBox.PhysicianRoleComboBox();
             // bool b = physicians.Isagreementdoc[0];
 
             /*if (ModelState.IsValid)
@@ -149,7 +149,7 @@ namespace HelloDocMVC.Controllers
             {
                 _notyf.Error("Account Information not Changed Successfully..!");
             }
-            return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+            return RedirectToAction("Edit", new { id = data.Physicianid });
         }
         public async Task<IActionResult> ResetPassAdmin(string password, int Physicianid)
         {
@@ -161,19 +161,19 @@ namespace HelloDocMVC.Controllers
             {
                 _notyf.Error("Password not Changed properly Successfully..!");
             }
-            return RedirectToAction("PhysicianProfile", new { id = Physicianid });
+            return RedirectToAction("Edit", new { id = Physicianid });
         }
         public async Task<IActionResult> EditPhysicianInfo(ViewProvider data)
         {
             if (await _IProvider.EditPhysicianInfo(data))
             {
                 _notyf.Success("Administrator Information Changed Successfully..!");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
                 _notyf.Error("Administrator Information not Changed Successfully..!");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
         public async Task<IActionResult> EditMailBillingInfo(ViewProvider data)
@@ -181,12 +181,12 @@ namespace HelloDocMVC.Controllers
             if (await _IProvider.EditMailBillingInfo(data, CV.ID()))
             {
                 _notyf.Success("mail and billing Information Changed Successfully...");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
                 _notyf.Error("mail and billing Information not Changed Successfully...");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
         public async Task<IActionResult> EditProviderProfile(ViewProvider data)
@@ -194,12 +194,12 @@ namespace HelloDocMVC.Controllers
             if (await _IProvider.EditProviderProfile(data, CV.ID()))
             {
                 _notyf.Success("Profile Changed Successfully...");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
                 _notyf.Error("Profile not Changed Successfully...");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
         public async Task<IActionResult> EditProviderOnbording(ViewProvider data)
@@ -207,12 +207,12 @@ namespace HelloDocMVC.Controllers
             if (await _IProvider.EditProviderOnbording(data, CV.ID()))
             {
                 _notyf.Success("Provider Onbording Changed Successfully...");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
                 _notyf.Error("Provider Onbording not Changed Successfully...");
-                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
+                return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
         public async Task<IActionResult> DeletePhysician(int PhysicianID)

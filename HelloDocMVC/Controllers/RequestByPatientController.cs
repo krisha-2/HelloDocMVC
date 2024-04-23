@@ -7,6 +7,7 @@ using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
+using HelloDocMVC.Repository.Repository;
 
 namespace HelloDoc.Controllers
 {
@@ -25,13 +26,13 @@ namespace HelloDoc.Controllers
         }
 
 
-          public IActionResult Me()
+        public IActionResult Me()
         {
-            int id = (int)_httpContextAccessor.HttpContext.Session.GetInt32("id");
+            int id = Int32.Parse(CV.UserID());
             var ViewPatientCreateRequest = _requestByPatient.viewMeData(id);
             return View(ViewPatientCreateRequest);
         }
-        [HttpPost]
+                [HttpPost]
         public IActionResult Me(Patient viewPatientReq)
         {
             _requestByPatient.meRequset(viewPatientReq);

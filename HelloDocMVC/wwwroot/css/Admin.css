@@ -56,11 +56,10 @@ body {
     height: 100px;
 }
 
-    .new:hover {
-        background-color: #203f9a;
-        color: white;
-    }
-
+        .new:hover, .new.as {
+            background-color: #203f9a;
+            color: white;
+        }
 .pending {
     border: solid thin #0AA2C0;
     color: #70c9e7;
@@ -68,7 +67,7 @@ body {
     height: 100px;
 }
 
-    .pending:hover {
+    .pending:hover, .pending.as {
         background-color: #00adef;
         color: white;
     }
@@ -80,7 +79,7 @@ body {
     height: 100px;
 }
 
-    .active1:hover {
+    .active1:hover, .active1.as {
         background-color: #228c20;
         color: white;
     }
@@ -92,7 +91,7 @@ body {
     height: 100px;
 }
 
-    .conclude:hover {
+    .conclude:hover, .conclude.as {
         background-color: #da0f82;
         color: white;
     }
@@ -104,7 +103,7 @@ body {
     height: 100px;
 }
 
-    .toClose:hover {
+    .toClose:hover, .toClose.as {
         background-color: #0370d7;
         color: white;
     }
@@ -116,7 +115,7 @@ body {
     height: 100px;
 }
 
-    .unpaid:hover {
+    .unpaid:hover, .unpaid.as {
         background-color: #9966cd;
         color: white;
     }

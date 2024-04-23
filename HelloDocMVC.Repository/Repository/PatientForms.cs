@@ -1,6 +1,7 @@
 ﻿using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
+using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Repository.Repository.Interface;
 using System;
 using System.Collections;
@@ -13,13 +14,15 @@ using Concierge = HelloDocMVC.Entity.Models.Concierge;
 
 namespace HelloDocMVC.Repository.Repository
 {
-    public class PatientForms: IPatientForms
+    public class PatientForms : IPatientForms
     {
         private readonly HelloDocDbContext _context;
+        private readonly EmailConfiguration _emailConfig;
 
-        public PatientForms(HelloDocDbContext context)
+        public PatientForms(HelloDocDbContext context, EmailConfiguration emailConfig)
         {
             _context = context;
+            _emailConfig = emailConfig;
         }
         public void PatientRequest(Patient viewdata)
         {
@@ -35,15 +38,22 @@ namespace HelloDocMVC.Repository.Repository
                 A.Id = g.ToString();
                 A.UserName = viewdata.FirstName + " " + viewdata.LastName;
                 A.Email = viewdata.Email;
-                A.PhoneNumber = viewdata.PhoneNumber;
+                A.PasswordHash = viewdata.PasswordHash;
+                A.PhoneNumber = viewdata.Mobile;
                 A.CreatedDate = DateTime.Now;
                 _context.Add(A);
+                _context.SaveChanges();
+
+                var aspnetuserroles = new AspNetUserRole();
+                aspnetuserroles.UserId = A.Id;
+                aspnetuserroles.RoleId = "3";
+                _context.AspNetUserRoles.Add(aspnetuserroles);
                 _context.SaveChanges();
                 //User
                 U.AspNetUserId = A.Id;
                 U.FirstName = viewdata.FirstName;
                 U.LastName = viewdata.LastName;
-                U.CreatedBy = viewdata.FirstName;
+                U.CreatedBy = A.Id;
                 U.Email = viewdata.Email;
                 U.Mobile = viewdata.Mobile;
                 U.Street = viewdata.Street;
@@ -72,11 +82,14 @@ namespace HelloDocMVC.Repository.Repository
             R.RLastName = viewdata.LastName;
             R.PhoneNumber = viewdata.PhoneNumber;
             R.Email = viewdata.Email;
-            R.Status = 5;
+            R.Status = 1;
             R.RelationName = viewdata.RelationName;
             R.ConfirmationNumber = R.PhoneNumber;
+            R.PhoneNumber = viewdata.Mobile;
             R.IsUrgentEmailSent = new BitArray(1);
             R.CreatedDate = DateTime.Now;
+            R.IsDeleted = new BitArray(1);
+            R.IsDeleted[0] = false;
             _context.Add(R);
             _context.SaveChanges();
             //RequestClient
@@ -86,13 +99,14 @@ namespace HelloDocMVC.Repository.Repository
             RClient.IntDate = viewdata.DOB.Day;
             RClient.IntYear = viewdata.DOB.Year;
             RClient.Address = viewdata.Street;
+            RClient.Street = viewdata.Street;
             RClient.City = viewdata.City;
             RClient.State = viewdata.State;
             RClient.Notes = viewdata.Symptoms;
             RClient.ZipCode = viewdata.ZipCode;
             RClient.RcLastName = viewdata.LastName;
             RClient.Email = viewdata.Email;
-            RClient.PhoneNumber = viewdata.PhoneNumber;
+            RClient.PhoneNumber = viewdata.Mobile;
             RClient.Address = viewdata.Street + "," + viewdata.City + "," + viewdata.State;
             _context.Add(RClient);
             _context.SaveChanges();
@@ -131,6 +145,12 @@ namespace HelloDocMVC.Repository.Repository
             Request R = new();
             RequestClient RClient = new();
             var isexist = _context.Users.FirstOrDefault(x => x.Email == viewdata.Email);
+            if (isexist == null)
+            {
+                var Subject = "Create Account";
+                var agreementUrl = "https://localhost:7041/Admin/CreateAccount";
+                _emailConfig.SendMail(viewdata.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
+            }
             //AspNetUser
 
             //if (isexist == null)
@@ -166,12 +186,12 @@ namespace HelloDocMVC.Repository.Repository
             //}
             //Request
             R.RequestTypeId = 3;
-            if (isexist == null)
+            if (isexist != null)
             {
-                R.UserId = U.UserId;
-            }
-            else
-            {
+                //    R.UserId = U.UserId;
+                //}
+                //else
+                //{
                 R.UserId = isexist.UserId;
             }
             R.RFirstName = viewdata.First_Name;
@@ -183,15 +203,19 @@ namespace HelloDocMVC.Repository.Repository
             R.ConfirmationNumber = R.PhoneNumber;
             R.IsUrgentEmailSent = new BitArray(1);
             R.CreatedDate = DateTime.Now;
+            R.IsDeleted = new BitArray(1);
+            R.IsDeleted[0] = false;
             _context.Add(R);
             _context.SaveChanges();
             //RequestClient
             RClient.RequestId = R.RequestId;
+            RClient.Notes = viewdata.Symptoms;
             RClient.RcFirstName = viewdata.FirstName;
             RClient.StrMonth = (viewdata.DOB.Month).ToString();
             RClient.IntDate = viewdata.DOB.Day;
             RClient.IntYear = viewdata.DOB.Year;
             RClient.Address = viewdata.Street;
+            RClient.Street = viewdata.Street;
             RClient.City = viewdata.City;
             RClient.State = viewdata.State;
             RClient.Notes = viewdata.Symptoms;
@@ -202,7 +226,7 @@ namespace HelloDocMVC.Repository.Repository
             RClient.Address = viewdata.Street + "," + viewdata.City + "," + viewdata.State;
             _context.Add(RClient);
             _context.SaveChanges();
-         
+
         }
         public void ConciergeRequest(Concierge viewdata)
         {
@@ -213,6 +237,12 @@ namespace HelloDocMVC.Repository.Repository
             Entity.DataModels.Concierge C = new Entity.DataModels.Concierge();
             RequestConcierge RConcierge = new RequestConcierge();
             var isexist = _context.Users.FirstOrDefault(x => x.Email == viewdata.Email);
+            if (isexist == null)
+            {
+                var Subject = "Create Account";
+                var agreementUrl = "https://localhost:7041/Admin/CreateAccount";
+                _emailConfig.SendMail(viewdata.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
+            }
             //AspNetUser
             //Guid g = Guid.NewGuid();
             //A.Id = g.ToString();
@@ -241,13 +271,13 @@ namespace HelloDocMVC.Repository.Repository
             //_context.Add(U);
             //await _context.SaveChangesAsync();
             //Request
-            R.RequestTypeId = 3;
-            if (isexist == null)
+            R.RequestTypeId = 4;
+            if (isexist != null)
             {
-                R.UserId = U.UserId;
-            }
-            else
-            {
+                //    R.UserId = U.UserId;
+                //}
+                //else
+                //{
                 R.UserId = isexist.UserId;
             }
             R.RFirstName = viewdata.First_Name;
@@ -259,15 +289,19 @@ namespace HelloDocMVC.Repository.Repository
             R.ConfirmationNumber = R.PhoneNumber;
             R.IsUrgentEmailSent = new BitArray(1);
             R.CreatedDate = DateTime.Now;
+            R.IsDeleted = new BitArray(1);
+            R.IsDeleted[0] = false;
             _context.Add(R);
             _context.SaveChanges();
             //RequestClient
             RClient.RequestId = R.RequestId;
             RClient.RcFirstName = viewdata.FirstName;
+            RClient.Notes = viewdata.Symptoms;
             RClient.StrMonth = (viewdata.DOB.Month).ToString();
             RClient.IntDate = viewdata.DOB.Day;
             RClient.IntYear = viewdata.DOB.Year;
             RClient.Address = viewdata.Street;
+            RClient.Street = viewdata.Street;
             RClient.City = viewdata.City;
             RClient.State = viewdata.State;
             RClient.Notes = viewdata.Symptoms;
@@ -293,7 +327,7 @@ namespace HelloDocMVC.Repository.Repository
             RConcierge.ConciergeId = C.ConciergeId;
             _context.Add(RConcierge);
             _context.SaveChanges();
-    }
+        }
         public void BusinessRequest(Business viewdata)
         {
             AspNetUser A = new AspNetUser();
@@ -303,6 +337,13 @@ namespace HelloDocMVC.Repository.Repository
             Entity.DataModels.Business B = new Entity.DataModels.Business();
             RequestBusiness RBusiness = new RequestBusiness();
             var isexist = _context.Users.FirstOrDefault(x => x.Email == viewdata.Email);
+            //var aspnetuser = await _context.Aspnetusers.FirstOrDefaultAsync(m => m.Email == createBusinessRequest.Email);
+            if (isexist == null)
+            {
+                var Subject = "Create Account";
+                var agreementUrl = "https://localhost:7041/Admin/CreateAccount";
+                _emailConfig.SendMail(viewdata.Email, Subject, $"<a href='{agreementUrl}'>Create Account</a>");
+            }
             //AspNetUser
             //Guid g = Guid.NewGuid();
             //A.Id = g.ToString();
@@ -331,13 +372,13 @@ namespace HelloDocMVC.Repository.Repository
             //_context.Add(U);
             //await _context.SaveChangesAsync();
             //Request
-            R.RequestTypeId = 3;
-            if (isexist == null)
+            R.RequestTypeId = 1;
+            if (isexist != null)
             {
-                R.UserId = U.UserId;
-            }
-            else
-            {
+                //    R.UserId = U.UserId;
+                //}
+                //else
+                //{
                 R.UserId = isexist.UserId;
             }
             R.RFirstName = viewdata.First_Name;
@@ -349,15 +390,19 @@ namespace HelloDocMVC.Repository.Repository
             R.ConfirmationNumber = R.PhoneNumber;
             R.IsUrgentEmailSent = new BitArray(1);
             R.CreatedDate = DateTime.Now;
+            R.IsDeleted = new BitArray(1);
+            R.IsDeleted[0] = false;
             _context.Add(R);
             _context.SaveChanges();
             //RequestClient
             RClient.RequestId = R.RequestId;
+            RClient.Notes = viewdata.Symptoms;
             RClient.RcFirstName = viewdata.FirstName;
             RClient.StrMonth = (viewdata.DOB.Month).ToString();
             RClient.IntDate = viewdata.DOB.Day;
             RClient.IntYear = viewdata.DOB.Year;
             RClient.Address = viewdata.Street;
+            RClient.Street = viewdata.Street;
             RClient.City = viewdata.City;
             RClient.State = viewdata.State;
             RClient.Notes = viewdata.Symptoms;
@@ -375,6 +420,7 @@ namespace HelloDocMVC.Repository.Repository
             B.Address2 = viewdata.State;
             B.ZipCode = viewdata.ZipCode;
             B.CreatedDate = DateTime.Now;
+            B.CreatedBy = A.Id;
             _context.Add(B);
             _context.SaveChanges();
             //RequestConcierge
@@ -382,7 +428,6 @@ namespace HelloDocMVC.Repository.Repository
             RBusiness.BusinessId = B.BusinessId;
             _context.Add(RBusiness);
             _context.SaveChanges();
-    }
+        }
     }
 }
-

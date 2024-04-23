@@ -164,9 +164,7 @@ public partial class HelloDocDbContext : DbContext
 
             entity.Property(e => e.BusinessId).HasIdentityOptions(null, null, null, 123456L, true, null);
 
-            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.BusinessCreatedByNavigations)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("Business_CreatedBy_fkey");
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.BusinessCreatedByNavigations).HasConstraintName("Business_CreatedBy_fkey");
 
             entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.BusinessModifiedByNavigations).HasConstraintName("Business_ModifiedBy_fkey");
 

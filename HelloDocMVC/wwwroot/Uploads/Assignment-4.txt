@@ -1,0 +1,173 @@
+/*
+1)Create a stored procedure in the Northwind database that will calculate the average value of Freight for a specified customer.
+Then, a business rule will be added that will be triggered before every Update and Insert command in the Orders controller,
+and will use the stored procedure to verify that the Freight does not exceed the average freight. 
+If it does, a message will be displayed and the command will be cancelled.
+*/
+CREATE PROCEDURE sp_ValidateFreight
+    @CustomerID nvarchar(5)
+AS
+BEGIN
+   SELECT AVG(Freight) AS Avg_Freight
+   FROM Orders
+   WHERE CustomerID = @CustomerID
+END
+GO
+
+EXEC sp_ValidateFreight @CustomerID=VINET
+
+SELECT * FROM Orders
+
+/*2)write a SQL query to Create Stored procedure in the Northwind database to retrieve Employee Sales by Country*/
+
+CREATE PROCEDURE  [dbo].[Sales_by_Country]
+
+@COUNTRY  VARCHAR(50) 
+
+AS
+BEGIN
+	SELECT 
+			--[dbo].[Employees].[Country], 
+			[dbo].[Employees].[FirstName], 
+			SUM( CONVERT(money, ([Order Details].[UnitPrice] * [Order Details].[Quantity]) * (1 - [Order Details].[Discount]) / 100)*100)  
+					AS SaleAmount 
+	FROM	[dbo].[Orders] 
+	INNER JOIN 
+			[dbo].[Employees] 
+	ON		[dbo].[Orders].[EmployeeID] = [dbo].[EmployeeS].[EmployeeID]
+	INNER JOIN  
+			[dbo].[Order Details] 
+	ON		[dbo].[Order Details].OrderID = [dbo].[Orders].[OrderID]
+	WHERE  [dbo].[Employees].[country] = @COUNTRY
+	GROUP BY
+			[dbo].[Employees].[FirstName]
+END
+
+EXEC [dbo].[Sales_by_Country] @COUNTRY='uk'
+/*3)write a SQL query to Create Stored procedure in the Northwind database to retrieve Sales by Year*/
+
+CREATE PROCEDURE  [dbo].[Sales_by_Year] 
+
+@Year VARCHAR(50)
+
+AS
+BEGIN
+	SELECT 
+			Year([dbo].[Orders].[ShippedDate]) AS Year ,
+			SUM( CONVERT(decimal(10,2), ([Order Details].[UnitPrice] *[Order Details].[Quantity])* (1 - [Order Details].[Discount]) / 100)*100)  
+			AS Sales
+	FROM	[dbo].[Orders] 
+	INNER JOIN 
+			[dbo].[Employees] 
+	ON		[dbo].[Orders].[EmployeeID] = [dbo].[EmployeeS].[EmployeeID]
+	INNER JOIN  
+			[dbo].[Order Details] 
+	ON		[dbo].[Order Details].OrderID = [dbo].[Orders].[OrderID]
+	GROUP BY
+			Year([dbo].[Orders].[ShippedDate])
+	HAVING	Year([dbo].[Orders].[ShippedDate]) = @Year
+END
+
+EXEC [dbo].[Sales_by_Year] @Year = '1996'
+
+/*4)write a SQL query to Create Stored procedure in the Northwind database to retrieve Sales By Category*/
+
+CREATE PROCEDURE  [dbo].[Sales_by_Category] 
+@CategoryName nvarchar(15)
+AS
+SELECT 
+		[dbo].[Categories].[CategoryName],
+		SUM( CONVERT(decimal(10,2), ([Order Details].[UnitPrice] * [Order Details].[Quantity]) * (1 - [Order Details].[Discount]) / 100)*100)  
+		AS Sales
+
+FROM	[dbo].[Orders] 
+INNER JOIN 
+		[dbo].[Employees] 
+ON		[dbo].[Orders].[EmployeeID] = [dbo].[EmployeeS].[EmployeeID]
+INNER JOIN  
+		[dbo].[Order Details] 
+ON		[dbo].[Order Details].OrderID = [dbo].[Orders].[OrderID]
+INNER JOIN 
+		[dbo].[Products]
+ON		[dbo].[Products].[ProductID] = [dbo].[Order Details].[ProductID]
+INNER JOIN 
+		[dbo].[Categories]
+ON		[dbo].[Categories].[CategoryID] = [dbo].[Products].[CategoryID]
+GROUP BY
+		[dbo].[Categories].[CategoryName]
+HAVING	[dbo].[Categories].[CategoryName] = @CategoryName
+EXEC [dbo].[Sales_by_Category] @CategoryName='beverages'
+
+/*5)write a SQL query to Create Stored procedure in the Northwind database to retrieve Ten Most Expensive Products*/
+CREATE PROCEDURE  [dbo].[Ten_Most_Expensive_Products]
+
+AS
+BEGIN
+	SELECT 
+			TOP(10) *
+	FROM	 
+			[dbo].[Products]
+	ORDER BY [dbo].[Products].[UnitPrice] DESC
+END
+
+EXEC [dbo].[Ten_Most_Expensive_Products]
+/*6)write a SQL query to Create Stored procedure in the Northwind database to insert Customer Order Details */
+
+CREATE OR ALTER PROCEDURE SP_InsertCustomerOrderDetails
+	@OrderID	INT,
+	@ProductID	INT,
+	@UnitPrice	MONEY,
+	@Quantity	SMALLINT,
+	@Discount	REAL
+AS
+BEGIN
+	INSERT INTO [dbo].[Order Details] 
+				([dbo].[Order Details].[OrderID], 
+				 [dbo].[Order Details].[ProductID], 
+				 [dbo].[Order Details].[UnitPrice], 
+				 [dbo].[Order Details].[Quantity], 
+				 [dbo].[Order Details].[Discount])
+	VALUES		(@OrderID, 
+				 @ProductID, 
+				 @UnitPrice, 
+				 @Quantity, 
+				 @Discount)		
+END
+
+EXEC SP_InsertCustomerOrderDetails
+	@OrderID	= 10248
+	,@ProductID	= 1
+	,@UnitPrice	= 18
+	,@Quantity	= 2
+	,@Discount	= 0
+
+SELECT * FROM [dbo].[Order Details] 
+
+
+/*7)write a SQL query to Create Stored procedure in the Northwind database to update Customer Order Details*/
+
+
+CREATE OR ALTER PROCEDURE SP_UpdateCustomerOrderDetails
+	@OrderID	INT,
+	@ProductID	INT,
+	@UnitPrice	MONEY,
+	@Quantity	SMALLINT,
+	@Discount	REAL
+AS
+BEGIN
+	UPDATE	[dbo].[Order Details] 
+	SET		[dbo].[Order Details].[UnitPrice] = @UnitPrice,
+			[dbo].[Order Details].[Quantity] = @Quantity,
+			[dbo].[Order Details].[Discount] = @Discount
+	WHERE	[dbo].[Order Details].[OrderID]	= @OrderID
+	AND		[dbo].[Order Details].[ProductID] = @ProductID
+END
+
+EXEC SP_UpdateCustomerOrderDetails
+	@OrderID	= 10248
+	,@ProductID	= 1
+	,@UnitPrice	= 20
+	,@Quantity	= 50
+	,@Discount	= 0
+
+SELECT * FROM [dbo].[Order Details] 

@@ -13,7 +13,7 @@
                 @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Dashboard"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link px-3 text-dark @(path.EndsWith("/Admin") ? "activesbnav" : "")" aria-current="page" asp-action="Index" asp-controller="Admin">Dashboard</a>
+                        <a class="nav-link px-3 text-dark @(path.StartsWith("/Admin/Dashboard") ? "activesbnav" : "")" aria-current="page" asp-action="Index" asp-controller="Admin">Dashboard</a>
                     </li>
                 }
                 @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "ProviderLocation"))
@@ -32,17 +32,17 @@
                 @if (CV.role() == "Admin")
                 {
                     <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown px-2 text-dark" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown px-2 text-dark  @(path.StartsWith("/Provider") ? "activesbnav" : "") ||  @(path.StartsWith("/Scheduling") ? "activesbnav" : "")" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Providers
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Provider"))
                             {
-                                <a class="dropdown-item @(path.StartsWith("/Provider") ? "activesbnav" : "")" asp-action="Index" asp-controller="Provider">Provider</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Provider">Provider</a>
                             }
                             @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Scheduling"))
                             {
-                                <a class="dropdown-item @(path.StartsWith("/Provider") ? "activesbnav" : "")" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
+                                <a class="dropdown-item" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
                             }
                             @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Invoicing"))
                             {
@@ -69,7 +69,7 @@
                 @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "VendorsInfo"))
                 {
                     <li class="nav-item">
-                        <a class="nav-link px-3 text-dark " asp-action="Index" asp-controller="Partners">Partners</a>
+                        <a class="nav-link px-3 text-dark @(path.StartsWith("/Partners") ? "activesbnav" : "") " asp-action="Index" asp-controller="Partners">Partners</a>
                     </li>
                 }
                 @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Role"))

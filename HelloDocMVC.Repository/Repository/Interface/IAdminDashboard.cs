@@ -15,6 +15,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
     {
         public List<AdminDashboardList> NewRequestData();
         public PaginatedViewModel IndexData(int ProviderId);
+        public Task<bool> CreatNewAccont(string Email, string Password);
         public ViewCase ViewCaseData(int? id);
         public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data);
         public PaginatedViewModel GetRequests(string Status, PaginatedViewModel data, int ProviderId);

@@ -44,11 +44,27 @@ namespace HelloDocMVC.Controllers
             {
                 sm = _IAdminDashboard.IndexData(Convert.ToInt32(CV.UserID()));
             }
-            return View("../Admin/Index",sm);
+            return View("../Admin/Index", sm);
+        }
+        public async Task<IActionResult> CreatNewAccontPost(string Email, string Password)
+        {
+            if (await _IAdminDashboard.CreatNewAccont(Email, Password))
+            {
+                _notyf.Success("User Created Successfully");
+            }
+            else
+            {
+                _notyf.Error("User Created Successfully");
+            }
+            return View("../AdminLogin/Index");
+        }
+        public async Task<IActionResult> CreateAccount()
+        {
+            return View("../Admin/CreateAccount");
         }
         public IActionResult ViewCase(int? id)
         {
-            ViewBag.RegionComboBox =  _comboBox.RegionComboBox();
+            ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
@@ -164,7 +180,7 @@ namespace HelloDocMVC.Controllers
         public IActionResult Orders()
         {
             ViewBag.Profession = _comboBox.Profession();
-           
+
             return View();
         }
         [HttpPost]
@@ -194,7 +210,7 @@ namespace HelloDocMVC.Controllers
         {
             var v = _comboBox.Business(profession);
             return Json(v);
-        } 
+        }
         public IActionResult OrderData(int profession)
         {
             var v = _comboBox.OrderData(profession);
@@ -572,4 +588,3 @@ namespace HelloDocMVC.Controllers
         }
     }
 }
-    

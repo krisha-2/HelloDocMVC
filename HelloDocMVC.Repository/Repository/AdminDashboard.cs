@@ -9,6 +9,8 @@ using static HelloDocMVC.Entity.Models.ViewDocuments;
 using Org.BouncyCastle.Ocsp;
 using System.Linq.Expressions;
 using System.Globalization;
+using Microsoft.AspNetCore.Identity;
+using Twilio.Types;
 
 namespace HelloDocMVC.Repository.Repository
 {
@@ -40,7 +42,7 @@ namespace HelloDocMVC.Repository.Repository
                            PatientPhoneNumber = req.Requestclient.PhoneNumber,
                            RequestorPhoneNumber = req.Request.PhoneNumber,
                            Notes = req.Requestclient.Notes,
-                           Address = req.Requestclient.Address + " " + req.Requestclient.Street + " " + req.Requestclient.City + " " + req.Requestclient.State + " " + req.Requestclient.ZipCode
+                           Address = req.Requestclient.Address + " " + req.Requestclient.ZipCode
                        })
                        .OrderBy(req => req.RequestedDate)
                         .ToList();
@@ -71,6 +73,77 @@ namespace HelloDocMVC.Repository.Repository
                 UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.PhysicianId == ProviderId).Count(),
                 adl = NewRequestData()
             };
+        }
+        public async Task<bool> CreatNewAccont(string Email, string Password)
+        {
+            try
+            {
+                Guid id = Guid.NewGuid();
+                //var hasher = new PasswordHasher<string>();
+                AspNetUser aspnetuser = new AspNetUser
+                {
+                    Id = id.ToString(),
+                    Email = Email,
+                    PasswordHash = Password,
+                    //PasswordHash = hasher.HashPassword(null, Password),
+                    UserName = Email,
+                    //PhoneNumber = ,
+                    CreatedDate = DateTime.Now,
+                };
+                _context.AspNetUsers.Add(aspnetuser);
+                await _context.SaveChangesAsync();
+                var U = await _context.RequestClients.FirstOrDefaultAsync(m => m.Email == Email);
+                var User = new User
+                {
+                    AspNetUserId = aspnetuser.Id,
+                    FirstName = U.RcFirstName,
+                    LastName = U.RcLastName,
+                    Mobile = U.PhoneNumber,
+                    IntDate = U.IntDate,
+                    IntYear = U.IntYear,
+                    StrMonth = U.StrMonth,
+                    Email = Email,
+                    Street = U.Street,
+                    City = U.City,
+                    State = U.State,
+                    ZipCode = U.ZipCode,
+                    CreatedBy = aspnetuser.Id,
+                    CreatedDate = DateTime.Now,
+                    IsRequestWithEmail = new BitArray(1),
+                };
+                _context.Users.Add(User);
+                await _context.SaveChangesAsync();
+
+                var aspnetuserroles = new AspNetUserRole();
+                aspnetuserroles.UserId = User.AspNetUserId;
+                aspnetuserroles.RoleId = "3";
+                _context.AspNetUserRoles.Add(aspnetuserroles);
+                _context.SaveChanges();
+
+                var rc = _context.RequestClients.Where(e => e.Email == Email).ToList();
+
+                foreach (var r in rc)
+                {
+                    _context.Requests.Where(n => n.RequestId == r.RequestId)
+                   .ExecuteUpdate(s => s.SetProperty(
+                       n => n.UserId,
+                       n => User.UserId));
+                }
+                if (rc.Count > 0)
+                {
+                    User.IntDate = rc[0].IntDate;
+                    User.IntYear = rc[0].IntYear;
+                    User.StrMonth = rc[0].StrMonth;
+                    _context.Users.Update(User);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return false;
         }
         public ViewCase ViewCaseData(int? id)
         {
@@ -136,7 +209,7 @@ namespace HelloDocMVC.Repository.Repository
                                                     RegionId = rg.Name,
                                                     ProviderName = p.FirstName + " " + p.LastName,
                                                     PatientPhoneNumber = rc.PhoneNumber,
-                                                    Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
+                                                    Address = rc.Address + "," + rc.ZipCode,
                                                     Notes = rc.Notes,
                                                     RequestorPhoneNumber = req.PhoneNumber,
                                                     providerencounterstatus = req.Status,
@@ -223,7 +296,7 @@ namespace HelloDocMVC.Repository.Repository
                                                     RegionId = rg.Name,
                                                     ProviderName = p.FirstName + " " + p.LastName,
                                                     PatientPhoneNumber = rc.PhoneNumber,
-                                                    Address = rc.Address + "," + rc.Street + "," + rc.City + "," + rc.State + "," + rc.ZipCode,
+                                                    Address = rc.Address + ","  + rc.ZipCode,
                                                     Notes = rc.Notes,
                                                     ProviderId = (int)req.PhysicianId,
                                                     RequestorPhoneNumber = req.PhoneNumber,

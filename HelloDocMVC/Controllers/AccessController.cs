@@ -139,7 +139,7 @@ namespace HelloDocMVC.Controllers
         public async Task<IActionResult> PhysicianAddEdit(int? id)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
+            ViewBag.PhysicianRoleComboBox = await _comboBox.PhysicianRoleComboBox();
             if (id == null)
             {
                 ViewData["PhysicianAccount"] = "Add";

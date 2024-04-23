@@ -10,7 +10,7 @@
     <form class="bg-white container mt-5 sbox p-5" method="post" enctype="multipart/form-data">
         <h5><b>Patient Information</b></h5>
         <div class="form-group p-3">
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Enter Brief Details of Symptoms"></textarea>
+            <textarea asp-for="Symptoms" class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Enter Brief Details of Symptoms"></textarea>
         </div>
         <div class="row">
             <div class="form-group col-md-6 p-3 form-floating">
@@ -45,12 +45,12 @@
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4" id="username" style="display:none;">
                 <input asp-for="UserName" type="text" class="form-control shadow-none" id="uname" placeholder="Username">
                 <label for="uname">UserName</label>
-                @*<span asp-validation-for="UserName" class="text-danger"></span>*@
+                <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating mb-4" id="password" style="display:none;">
-                <input asp-for="PassWord" type="text" class="form-control shadow-none" id="pass" placeholder="Password">
+                <input asp-for="PasswordHash" type="text" class="form-control shadow-none" id="pass" placeholder="Password">
                 <label for="pass">Confirm Password</label>
-                @*<span asp-validation-for="PassWord" class="text-danger"></span>*@
+                <span asp-validation-for="PasswordHash" class="text-danger"></span>
             </div>
         </div>
         <h5><b>Patient Location</b></h5>
@@ -125,5 +125,3 @@
         });
     </script>
 </body>
-
-

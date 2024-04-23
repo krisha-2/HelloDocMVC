@@ -20,7 +20,7 @@ namespace HelloDocMVC.Entity.Models
         public string? Aspnetuserid { get; set; }
         [Required(ErrorMessage = "UserName is required")]
         public string? UserName { get; set; }
-        [Required(ErrorMessage = "Password is required")]
+        //[Required(ErrorMessage = "Password is required")]
         public string? PassWord { get; set; }
         public string? Regionsid { get; set; }
         [Required(ErrorMessage = "FirstName is required")]

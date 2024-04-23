@@ -34,14 +34,14 @@
                             <div class="form-floating">
                                 <input type="text" asp-for="UserName" class="form-control shadow-none input0" id="UserName" placeholder=Suchtext />
                                 <label for="UserName">User Name</label>
-                                <span asp-validation-for="PassWord" class="text-danger"></span>
+                                <span asp-validation-for="UserName" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
                                 <input type="text" asp-for="PassWord" class="form-control shadow-none" id="PassWord" placeholder="Last Name" />
                                 <label for="PassWord">PassWord</label>
-                                <span asp-validation-for="PassWord" class="text-danger"></span>
+                                @*<span asp-validation-for="PassWord" class="text-danger"></span>*@
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
@@ -49,15 +49,15 @@
                                 <select class="form-select input0" required asp-for="Status" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(enumData, "ID", "Name"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Status">Status</label>
-                                <span asp-validation-for="PassWord" class="text-danger"></span>
+                                <span asp-validation-for="Status" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.userrolecombobox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
+                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.PhysicianRoleComboBox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="Roleid">Role</label>
-                                <span asp-validation-for="PassWord" class="text-danger"></span>
+                                <span asp-validation-for="role" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-end">

@@ -1,0 +1,75 @@
+﻿@{
+    // Layout = "_LoginLayout";
+}
+@model HelloDocMVC.Entity.DataModels.AspNetUser;
+
+<div class="align-self-center w-sm-50">
+    <h3 class="py-3">Create Account</h3>
+    <strong class="text-danger">@ViewData["error"]</strong>
+    <form asp-action="CreatNewAccontPost" asp-controller="Admin" method="post" id="passwordform">
+        <div class="form-floating mb-4 email">
+            <input type="email" class="form-control shadow-none" name="Email" id="loginemail" mailto:placeholder="name@example.com">
+            <label class="bg-transparent" for="floatingInput">Email</label>
+            <div class="btn btn-light">
+                <i class='fa fa-user-circle field-icon position-relative'></i>
+            </div>
+            <span class="text-danger emailerror" style="display:none;">Enter valid email address</span>
+        </div>
+        <div class="form-floating mb-4 password">
+            <input class="form-control shadow-none eyehide" name="Password" type="password" id="password" placeholder="Password">
+            <label for="password">Password</label>
+            <button type="button" class="btn btn-light" onclick="passtoggle1()">
+                <i class="showImg fa fa-eye"></i>
+                <i class="fa fa-eye-slash" style="display:none;"></i>
+            </button>
+        </div>
+        <div class="form-floating mb-4 password">
+            <input type="text" class="form-control shadow-none eyehide" onkeyup="ppd()" id="confirm" placeholder="Password">
+            <label for="confirm">Confirm Password</label>
+            <p id="error" style="display:none;color:red">mis match password</p>
+        </div>
+        <button type="button" class="btn btn-info text-white w-100 mb-4" onclick="submitform()" role="button">Save</button>
+    </form>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+    var temp = false;
+    function ppd() {
+        var password = $("#password").val();
+        var confirm_password = $("#confirm").val();
+        console.log($("#password").val());
+        if (password != confirm_password) {
+            $("#confirm").css('border-color', "red");
+            $("#error").show();
+            temp = false;
+        }
+        else {
+            $("#confirm").css('border-color', "green");
+            $("#error").hide();
+            temp = true;
+        }
+    }
+    function submitform() {
+        if (temp == true) {
+            $('#passwordform').submit();
+        }
+    }
+</script>
+<script>
+    function passtoggle1() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+            document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "none");
+            document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "block");
+        }
+        else {
+            x.type = "password";
+            document.querySelectorAll(".fa-eye-slash").forEach(i => i.style.display = "none");
+            document.querySelectorAll(".fa-eye").forEach(i => i.style.display = "block");
+        }
+    }
+</script>
+
+
