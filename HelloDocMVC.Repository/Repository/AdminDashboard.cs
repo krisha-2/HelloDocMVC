@@ -54,23 +54,23 @@ namespace HelloDocMVC.Repository.Repository
             {
                 return new PaginatedViewModel
                 {
-                    NewRequest = _context.Requests.Where(r => r.Status == 1).Count(),
-                    PendingRequest = _context.Requests.Where(r => r.Status == 2).Count(),
-                    ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5)).Count(),
-                    ConcludeRequest = _context.Requests.Where(r => r.Status == 6).Count(),
-                    ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8)).Count(),
-                    UnpaidRequest = _context.Requests.Where(r => r.Status == 9).Count(),
+                    NewRequest = _context.Requests.Where(r => r.Status == 1 && r.IsDeleted == new BitArray(1)).Count(),
+                    PendingRequest = _context.Requests.Where(r => r.Status == 2 && r.IsDeleted == new BitArray(1)).Count(),
+                    ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5) && r.IsDeleted == new BitArray(1)).Count(),
+                    ConcludeRequest = _context.Requests.Where(r => r.Status == 6 && r.IsDeleted == new BitArray(1)).Count(),
+                    ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8) && r.IsDeleted == new BitArray(1)).Count(),
+                    UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.IsDeleted == new BitArray(1)).Count(),
                     adl = NewRequestData()
                 };
             }
                 return new PaginatedViewModel
             {
-                NewRequest = _context.Requests.Where(r => r.Status == 1 && r.PhysicianId == ProviderId).Count(),
-                PendingRequest = _context.Requests.Where(r => r.Status == 2 && r.PhysicianId == ProviderId).Count(),
-                ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5) && r.PhysicianId == ProviderId).Count(),
-                ConcludeRequest = _context.Requests.Where(r => r.Status == 6 && r.PhysicianId == ProviderId).Count(),
-                ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8) && r.PhysicianId == ProviderId).Count(),
-                UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.PhysicianId == ProviderId).Count(),
+                NewRequest = _context.Requests.Where(r => r.Status == 1 && r.PhysicianId == ProviderId && r.IsDeleted == new BitArray(1)).Count(),
+                PendingRequest = _context.Requests.Where(r => r.Status == 2 && r.PhysicianId == ProviderId && r.IsDeleted == new BitArray(1)).Count(),
+                ActiveRequest = _context.Requests.Where(r => (r.Status == 4 || r.Status == 5) && r.PhysicianId == ProviderId && r.IsDeleted == new BitArray(1)).Count(),
+                ConcludeRequest = _context.Requests.Where(r => r.Status == 6 && r.PhysicianId == ProviderId && r.IsDeleted == new BitArray(1)).Count(),
+                ToCloseRequest = _context.Requests.Where(r => (r.Status == 3 || r.Status == 7 || r.Status == 8) && r.PhysicianId == ProviderId && r.IsDeleted == new BitArray(1)).Count(),
+                UnpaidRequest = _context.Requests.Where(r => r.Status == 9 && r.PhysicianId == ProviderId && r.IsDeleted == new BitArray(1)).Count(),
                 adl = NewRequestData()
             };
         }
@@ -1134,35 +1134,6 @@ namespace HelloDocMVC.Repository.Repository
                                                 }).ToList();
             return allData;
         }
-        //  public bool SendLink(sendAgreement sendAgreement)
-        //{
-
-        //    var agreementUrl = "https://localhost:7151/PatientForm/Index?RequestID=" + sendAgreement.RequestId;
-        //    var subject = "Submit Request Page";
-        //    var EmailTemplate = $"Link for submitting a new request : <a href='{agreementUrl}'>click here..</a>";
-        //    bool sent = _emailConfig.SendMail(sendAgreement.Email, subject, EmailTemplate).Result;
-        //    EmailLog em = new EmailLog
-        //    {
-        //        EmailTemplate = EmailTemplate,
-        //        SubjectName = subject,
-        //        EmailId = sendAgreement.Email,
-        //        ConfirmationNumber = _context.Requests.Where(req => req.RequestId == sendAgreement.RequestId).Select(req => req.ConfirmationNumber).FirstOrDefault(),
-        //        CreateDate = DateTime.Now,
-        //        SentDate = DateTime.Now,
-        //        IsEmailSent = new BitArray(1),
-        //        SentTries = 1,
-        //        Action = 3, // action 3 for send link of submit request
-        //        RoleId = 2, // role 2 for admin
-        //    };
-
-        //    if (sent)
-        //    {
-        //        em.IsEmailSent[0] = true;
-        //    };
-        //    _context.EmailLogs.Add(em);
-        //    _context.SaveChanges();
-        //    return true;
-        //}
         public Boolean SendLink(string FirstName, string LastName, string Email)
         {
             var agreementUrl = "https://localhost:44348/Forms/Index?Name=" + FirstName + " " + LastName + "&Email=" + Email;

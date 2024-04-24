@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model List<ViewStudents>;
+<partial name="_AddStudent.cshtml" />
+<partial name="_EditStudent.cshtml" />
+<div class="text-center text-white backcolor d-flex justify-content-between">
+    <div>
+        <h3 class="backcolor py-4">Student Management System</h3>
+    </div>
+    <div>
+        <button type="button" class="btn btn-light mt-4 me-4" data-bs-toggle="modal" data-bs-target="#addStudent">Add Student</button>
+    </div>
+</div>
+<div class="search m-1">
+    <div onclick="subsubmit()">
+    </div>
+    <input type="text" id="searchInput" class="form-control py-2" placeholder="Search" onkeydown="subsubmit()">
+</div>
+<div class="">
+    <table class="table mt-3 p-3">
+        <thead class="bg-light">
+            <tr>
+                <th scope="col">StudentId</th>
+                <th scope="col">FirstName</th>
+                <th scope="col">LastName</th>
+                <th scope="col">Email</th>
+                <th scope="col">Age</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Course</th>
+                <th scope="col">Grade</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.StudentId</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.LastName</td>
+                    <td>@item.Email</td>
+                    <td>@item.Age</td>
+                    <td>@item.Gender</td>
+                    <td>@item.Course</td>
+                    <td>@item.Grade</td>
+                    <td class="d-flex justify-content-center">
+                        
+                        <a type="button" class="btn text-white backcolor " asp-controller="Home" asp-action="EditStudent">Edit</a>
+                        <form class="DeleteForm" asp-controller="Home" asp-action="DeleteBusiness">
+                            <input type="hidden" name="Id" value="@item.Id" />
+                            <button type="submit" class="btn deletebackcolor btn-sm document-button mx-1 text-white px-2">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

@@ -1,0 +1,77 @@
+﻿<div class="modal fade" id="editStudent" tabindex="-1" role="dialog" aria-labelledby="viewShiftModalLabel1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header backcolor text-white">
+                <h1 class="modal-title fs-5" id="viewShiftModalLabel">Student Form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="ViewShiftForm" class="needs-validation" novalidate>
+                @*<input placeholder=" " name="Id" type="hidden">*@
+                <input type="hidden" name="Id" value="Id" />
+                <div class="modal-body">
+                    <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
+                        <div class="col mb-3 mb-md-0">
+                            <div class="form-floating">
+                                <input type="text" name="FirstName" class="form-control" id="shiftmodalStart" placeholder="FirstName" required />
+                                <span class="invalid-feedback">
+                                    FirstName is Required.
+                                </span>
+                                <label for="floatingInput">FirstName</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" name="LastName" class="form-control" id="shiftmodalEnd" placeholder="LastName" />
+                                <label for="floatingInput">LastName</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
+                        <div class="col mb-3 mb-md-0">
+                            <div class="form-floating">
+                                <input type="text" name="Email" class="form-control" id="shiftmodalStart" placeholder="Email" />
+                                <label for="floatingInput">Email</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="date" name="DateOfBirth" class="form-control" id="shiftmodalEnd" placeholder="Date Of Birth" />
+                                <label for="floatingInput">Date Of Birth</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <small>Gender</small>
+                        <label class="radio-inline">
+                            <input type="radio" name="optradio" checked class="me-2">Male
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="optradio" class="me-2">Female
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="optradio" class="me-2">Other
+                        </label>
+                    </div>
+                    <div class="row row-cols-md-2 row-cols-sm-1 row-cols-1 mt-3">
+                        <div class="col mb-3 mb-md-0">
+                            <div class="form-floating">
+                                <input type="text" name="Grade" class="form-control" id="shiftmodalStart" placeholder="Grade" />
+                                <label for="floatingInput">Grade</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating">
+                                <input type="text" name="Course" class="form-control" id="shiftmodalEnd" placeholder="Course" />
+                                <label for="floatingInput">Course</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn backcolor text-white" value="Save">Save</button>
+                    <button type="reset" onclick="cancelclick()" class="btn btn-light cancel">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
