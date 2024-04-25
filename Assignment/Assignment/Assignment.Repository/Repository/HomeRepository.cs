@@ -2,12 +2,14 @@
 using Assignment.Entity.DataModels;
 using Assignment.Entity.Models;
 using Assignment.Repository.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Assignment.Repository.Repository
 {
@@ -65,7 +67,7 @@ namespace Assignment.Repository.Repository
                 data.FirstName = vs.FirstName;
                 data.Email = vs.Email;
                 data.LastName = vs.LastName;
-                data.Age = vs.Age;
+                data.Age = DateTime.Now.Year-vs.Dob.Year;
                 data.Gender = vs.Gender;
                 data.Course = vs.Course;
                 data.Grade = vs.Grade;
@@ -84,9 +86,26 @@ namespace Assignment.Repository.Repository
             modal.FirstName = students.FirstName;
             modal.LastName = students.LastName;
             modal.Email = students.Email;
-            modal.Age = (int)students.Age;
+            //modal.Dob = students.A;
             modal.Gender = students.Gender;
+            modal.Course = students.Course;
             return modal;
+        }
+        public async Task<bool> EditData(ViewStudents viewdata)
+        {
+            
+            var DataForChange = await _context.Students.Where(W => W.Id == viewdata.Id).FirstOrDefaultAsync();
+                   
+                DataForChange.FirstName = viewdata.FirstName;
+                DataForChange.LastName = viewdata.LastName;
+                DataForChange.Email = viewdata.Email;
+                //DataForChange.Age = viewdata.Age;
+                DataForChange.Age = DateTime.Now.Year - viewdata.Dob.Year;
+                DataForChange.Gender = viewdata.Gender;
+                DataForChange.Course = viewdata.Course;
+                _context.Students.Update(DataForChange);
+                _context.SaveChanges();
+                return true;
         }
     }
 }

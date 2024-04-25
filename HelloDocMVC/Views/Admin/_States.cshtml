@@ -22,7 +22,7 @@
                 </div>
             </button>
             <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('2')">
-                <div class="p-1 rounded pending ps-2 pt-3 a-pending as @{
+                <div class="p-1 rounded pending ps-2 pt-3 a-pending  @{
                 if(CV.CurrentStatus()=="2"){
                     @Html.Raw("active")
 }
@@ -37,7 +37,7 @@
                 </div>
             </button>
             <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('4,5')">
-                <div class="p-1 rounded active1 ps-2 pt-3 a-active1  a-active1 as @{
+                <div class="p-1 rounded active1 ps-2 pt-3 a-active1  a-active1  @{
                 if(CV.CurrentStatus()=="4,5"){
                     @Html.Raw("active")
 }
@@ -52,7 +52,7 @@
                 </div>
             </button>
             <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('6')">
-                <div class="p-1 rounded conclude ps-2 pt-3 a-conclude as @{
+                <div class="p-1 rounded conclude ps-2 pt-3 a-conclude  @{
                 if(CV.CurrentStatus()=="6"){
                     @Html.Raw("active")
 }
@@ -69,7 +69,7 @@
             @if (CV.role() == "Admin")
             {
                 <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('3,7,8')">
-                    <div class="p-1 rounded toClose ps-2 pt-3 a-toClose as @{
+                    <div class="p-1 rounded toClose ps-2 pt-3 a-toClose  @{
                 if(CV.CurrentStatus()=="3,7,8"){
                         @Html.Raw("active")
 }
@@ -84,7 +84,7 @@
                     </div>
                 </button>
                 <button class="btn col-4 col-md-2 text-start shadow-none position-relative" onclick="changeStatus('9')">
-                    <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid as @{
+                    <div class="p-1 rounded unpaid ps-2 pt-3 a-unpaid  @{
                 if(CV.CurrentStatus()=="9"){
                         @Html.Raw("active")
 }

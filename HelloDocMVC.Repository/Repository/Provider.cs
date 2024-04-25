@@ -342,6 +342,7 @@ namespace HelloDocMVC.Repository.Repository
                                             Istrainingdoc = r.IsTrainingDoc[0],
                                             Medicallicense = r.MedicalLicense,
                                             Npinumber = r.Npinumber,
+                                            Createdby = r.CreatedBy,
                                             Syncemailaddress = r.SyncEmailAddress,
                                             Zipcode = r.Zip,
                                             Regionid = r.RegionId

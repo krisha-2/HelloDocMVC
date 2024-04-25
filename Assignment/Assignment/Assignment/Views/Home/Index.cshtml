@@ -1,9 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@using Assignment.Entity.Models;
 @model List<ViewStudents>;
 <partial name="_AddStudent.cshtml" />
-<partial name="_EditStudent.cshtml" />
+
 <div class="text-center text-white backcolor d-flex justify-content-between">
     <div>
         <h3 class="backcolor py-4">Student Management System</h3>
@@ -46,7 +47,7 @@
                     <td>@item.Grade</td>
                     <td class="d-flex justify-content-center">
                         
-                        <a type="button" class="btn text-white backcolor " asp-controller="Home" asp-action="EditStudent">Edit</a>
+                        <a class="btn text-white backcolor " asp-controller="Home" asp-action="EditStudent" asp-route-id="@item.Id">Edit</a>
                         <form class="DeleteForm" asp-controller="Home" asp-action="DeleteBusiness">
                             <input type="hidden" name="Id" value="@item.Id" />
                             <button type="submit" class="btn deletebackcolor btn-sm document-button mx-1 text-white px-2">
@@ -58,6 +59,5 @@
             }
         </tbody>
     </table>
-
 </div>
 

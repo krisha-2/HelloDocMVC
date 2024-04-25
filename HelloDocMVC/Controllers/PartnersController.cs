@@ -36,48 +36,6 @@ namespace HelloDocMVC.Controllers
             PartnersData data = _IPartners.GetPartnersByProfession(searchValue, Profession, pd);
             return View("../Partners/Index", data);
         }
-        //public IActionResult AddEditBusiness(int VendorId)
-        //{
-        //    ViewBag.Profession = _context.HealthProfessionalTypes.ToList();
-
-        //    if (VendorId == null)
-        //    {
-        //        ViewData["Heading"] = "Add";
-        //        return View("../Partners/AddEditBusiness");
-        //    }
-        //    else
-        //    {
-        //        ViewData["Heading"] = "Update";
-        //        var res = _IPartners.EditPartners(VendorId);
-        //        return View("../Partners/AddEditBusiness", res);
-        //    }
-        //}
-        //[HttpPost]
-        //public IActionResult AddEditBusiness1(HealthProfessional obj)
-        //{
-        //    var res = _IPartners.AddBusiness(obj);
-
-        //    if (res)
-        //    {
-        //        _notyf.Success("Data Added Successfully");
-        //    }
-        //    return RedirectToAction("Index");
-
-        //}
-        //public IActionResult DeleteBusiness(int VendorId)
-        //{
-        //    var res = _IPartners.DeleteBusiness(VendorId);
-
-        //    if (res)
-        //    {
-        //        _notyf.Success("Vendor Deleted Successfully");
-        //    }
-        //    else
-        //    {
-        //        _notyf.Error("Vendor not deleted");
-        //    }
-        //    return RedirectToAction("Index");
-        //}
         public IActionResult AddEditBusiness(int VendorId)
         {
             if (VendorId == 0)

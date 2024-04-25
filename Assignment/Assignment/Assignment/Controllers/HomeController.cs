@@ -26,7 +26,7 @@ namespace Assignment.Controllers
         public IActionResult EditStudent(int Id)
         {
             var result = _homeRepository.StudentData(Id);
-            return RedirectToAction("EditStudent", result);
+            return View("../Home/EditStudent", result);
         }
 
         public IActionResult DeleteBusiness(int Id)
@@ -35,6 +35,12 @@ namespace Assignment.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditData(ViewStudents viewdata)
+        {
+            var result = _homeRepository.EditData(viewdata);
+            return RedirectToAction("Index", result);
+        }
         public IActionResult AddStudent(ViewStudents vs)
         {
             var result = _homeRepository.AddStudent(vs);

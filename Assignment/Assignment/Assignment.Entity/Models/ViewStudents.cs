@@ -14,6 +14,7 @@ namespace Assignment.Entity.Models
         public string LastName { get; set;}
         public string Email { get; set;}
         public int Age { get; set;}
+        public DateTime Dob { get; set;}
         public string Gender { get; set;}
         public string Course { get; set;}
         public string Grade { get; set;}

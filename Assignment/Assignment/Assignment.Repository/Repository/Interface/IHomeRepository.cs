@@ -13,5 +13,6 @@ namespace Assignment.Repository.Repository.Interface
         public bool DeleteBusiness(int Id);
         public bool AddStudent(ViewStudents vs);
         public ViewStudents StudentData(int Id);
+        public Task<bool> EditData(ViewStudents viewdata);
     }
 }
