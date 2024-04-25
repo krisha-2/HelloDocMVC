@@ -15,7 +15,7 @@
                     <a class="nav-link px-3 text-dark currentpage @(path.StartsWith("/PatientDashboard") ? "active" : "")" aria-current="page" asp-action="Index" asp-controller="PatientDashboard">Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link px-3 text-dark @(path.StartsWith("../PatientProfile") ? "active" : "")" asp-action="PatientProfile" asp-controller="PatientDashboard">Profile</a>
+                    <a class="nav-link px-3 text-dark @(path.EndsWith("../PatientProfile") ? "active" : "")" asp-action="PatientProfile" asp-controller="PatientDashboard">Profile</a>
                 </li>
             </ul>
         </div>

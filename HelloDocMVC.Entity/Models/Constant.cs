@@ -26,7 +26,7 @@ namespace HelloDocMVC.Entity.Models
         }
         public enum Status1
         {
-            Unassigne = 1,
+            Unassigned = 1,
             Accepted, Cancelled, MDEnRoute, MDONSite, Conclude, CancelledByPatients, Closed, Unpaid, Clear,
             Block
         }

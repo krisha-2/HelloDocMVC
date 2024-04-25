@@ -86,7 +86,7 @@ namespace HelloDocMVC.Repository.Repository
                 _context.SaveChanges();
             }
         }
-        public void elseRequset(FamilyFriend viewFamilyReq)
+        public void elseRequset(FamilyFriend viewFamilyReq,int id)
         {
             var Request = new Request();
             var Requestclient = new RequestClient();
@@ -94,7 +94,7 @@ namespace HelloDocMVC.Repository.Repository
 
             Request.RequestTypeId = 3;
             Request.Status = 1;
-            Request.UserId = isexist.UserId;
+            Request.UserId = id;
             Request.RFirstName = viewFamilyReq.FirstName;
             Request.RLastName = viewFamilyReq.LastName;
             Request.Email = viewFamilyReq.Email;

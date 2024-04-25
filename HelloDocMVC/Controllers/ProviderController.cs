@@ -166,16 +166,16 @@ namespace HelloDocMVC.Controllers
         public async Task<IActionResult> EditPhysicianInfo(ViewProvider data)
         {
             //ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            ViewBag.PhysicianRoleComboBox = await _comboBox.PhysicianRoleComboBox();
+            //ViewBag.PhysicianRoleComboBox = await _comboBox.PhysicianRoleComboBox();
             if (await _IProvider.EditPhysicianInfo(data))
             {
                 _notyf.Success("Administrator Information Changed Successfully..!");
-                return RedirectToAction("Edit", new { id = data.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
             else
             {
                 _notyf.Error("Administrator Information not Changed Successfully..!");
-                return RedirectToAction("Edit", new { id = data.Physicianid });
+                return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
         }
         public async Task<IActionResult> EditMailBillingInfo(ViewProvider data)

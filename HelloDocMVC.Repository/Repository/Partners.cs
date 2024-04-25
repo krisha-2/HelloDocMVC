@@ -30,6 +30,7 @@ namespace HelloDocMVC.Repository.Repository
                              && (Profession == 0 || Hp.Profession == Profession)
                           select new PartnersData
                           {
+                              VendorId = Hp.VendorId,
                               Profession = asp.ProfessionName,
                               Business = Hp.VendorName,
                               Email = Hp.Email,
@@ -73,97 +74,13 @@ namespace HelloDocMVC.Repository.Repository
 
             return model;
         }
-        //public bool EditPartners(HealthProfessional hp)
-        //{
-        //    var Data = _context.HealthProfessionals.Where(req => req.VendorId == hp.VendorId).FirstOrDefault();
-        //    if (Data != null)
-        //    {
-        //        Data.Profession = hp.Profession;
-        //        Data.VendorName = hp.VendorName;
-        //        Data.Email = hp.Email;
-        //        Data.FaxNumber = hp.FaxNumber;
-        //        Data.PhoneNumber = hp.PhoneNumber;
-        //        Data.BusinessContact = hp.BusinessContact;
-        //        Data.Address = hp.Address;
-        //        Data.City = hp.City;
-        //        Data.Zip = hp.Zip;
-        //        Data.State = hp.State;
-        //        _context.HealthProfessionals.Update(Data);
-        //        _context.SaveChanges();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        var data = new HealthProfessional();
 
-        //        data.Profession = hp.Profession;
-        //        data.VendorName = hp.VendorName;
-        //        data.Email = hp.Email;
-        //        data.FaxNumber = hp.FaxNumber;
-        //        data.PhoneNumber = hp.PhoneNumber;
-        //        data.BusinessContact = hp.BusinessContact;
-        //        data.Address = hp.Address;
-        //        data.City = hp.City;
-        //        data.Zip = hp.Zip;
-        //        data.State = hp.State;
-        //        _context.HealthProfessionals.Add(data);
-        //        _context.SaveChanges();
-        //        return true;
-        //    }
-        //}
-        //public bool AddBusiness(HealthProfessional hp)
-        //{
-        //    var Data = _context.HealthProfessionals.Where(req => req.VendorId == hp.VendorId).FirstOrDefault();
-        //    if (Data != null)
-        //    {
-        //        Data.Profession = hp.Profession;
-        //        Data.VendorName = hp.VendorName;
-        //        Data.Email = hp.Email;
-        //        Data.FaxNumber = hp.FaxNumber;
-        //        Data.PhoneNumber = hp.PhoneNumber;
-        //        Data.BusinessContact = hp.BusinessContact;
-        //        Data.Address = hp.Address;
-        //        Data.City = hp.City;
-        //        Data.Zip = hp.Zip;
-        //        Data.State = hp.State;
-        //        _context.HealthProfessionals.Update(Data);
-        //        _context.SaveChanges();
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        var data = new HealthProfessional();
-
-        //        data.Profession = hp.Profession;
-        //        data.VendorName = hp.VendorName;
-        //        data.Email = hp.Email;
-        //        data.FaxNumber = hp.FaxNumber;
-        //        data.PhoneNumber = hp.PhoneNumber;
-        //        data.BusinessContact = hp.BusinessContact;
-        //        data.Address = hp.Address;
-        //        data.City = hp.City;
-        //        data.Zip = hp.Zip;
-        //        data.State = hp.State;
-        //        data.IsDeleted = new BitArray(1);
-        //        data.CreatedDate = DateTime.Now;
-        //        _context.HealthProfessionals.Add(data);
-        //        _context.SaveChanges();
-        //        return true;
-        //    }
-        //}
-        //public bool DeleteBusiness(int vendorId)
-        //{
-        //    HealthProfessional hp = _context.HealthProfessionals.Where(x => x.VendorId == vendorId).FirstOrDefault();
-        //    hp.IsDeleted[0] = true;
-        //    _context.HealthProfessionals.Update(hp);
-        //    _context.SaveChanges();
-        //    return true;
-        //}
         public HealthProfessional EditPartners(int VendorId)
         {
             var result = _context.HealthProfessionals.Where(Req => Req.VendorId == VendorId).FirstOrDefault();
             return result;
         }
+
         public bool EditPartnersData(HealthProfessional hp)
         {
             var Data = _context.HealthProfessionals.Where(req => req.VendorId == hp.VendorId).FirstOrDefault();

@@ -91,7 +91,7 @@
                             <td>@item.PhoneNumber</td>
                             <td>@item.BusinessNumber</td>
                             <td class="d-flex justify-content-center">
-                                <a asp-action="EditPartnersData" asp-controller="Partners" asp-route-id="" class="btn btn-outline-info btn-sm document-button mx-1">
+                                <a asp-action="AddEditBusiness" asp-controller="Partners" asp-route-VendorId="@item.VendorId" class="btn btn-outline-info btn-sm document-button mx-1">
                                     Edit
                                 </a>
                                 <a asp-action="DeleteBusiness" asp-controller="Partners" asp-route-id="" class="btn btn-outline-info btn-sm document-button mx-1">

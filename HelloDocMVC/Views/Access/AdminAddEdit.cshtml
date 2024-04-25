@@ -8,14 +8,14 @@
 @using static HelloDocMVC.Entity.Models.Constant;
 @model HelloDocMVC.Entity.Models.ViewAdminProfileData;
 
-@{
+@*@{
     var enumData = from AdminStatus e in Enum.GetValues(typeof(AdminStatus))
                    select new
                    {
                        ID = (int)e,
                        Name = e.ToString()
                    };
-}
+}*@
 
 <div class="container">
     <div class="d-flex justify-content-between">
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-md-4 pb-3">
                             <div class="form-floating">
-                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.PhysicianRoleComboBox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
+                                <select class="form-select input0" required asp-for="Roleid" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.AdminRoleComboBox, "RoleId", "RoleName"))" data-control="select2" data-placeholder="Select Level">
                                 </select>
                                 <label for="role">Role</label>
                             </div>
@@ -91,7 +91,7 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="Phone Number">
+                                <input type="tel" asp-for="Mobile" class="form-control shadow-none input1" id="phone1" autocomplete="off" placeholder="">
                                 <label for="phone1">Phone Number</label>
                                 <span asp-validation-for="Mobile" class="text-danger"></span>
                             </div>

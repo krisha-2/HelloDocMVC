@@ -14,6 +14,6 @@ namespace HelloDocMVC.Repository.Repository.Interface
     {
         public Patient viewMeData(int id);
         public void meRequset(Patient viewPatientReq);
-        public void elseRequset(FamilyFriend viewFamilyReq);
+        public void elseRequset(FamilyFriend viewFamilyReq,int id);
     }
 }

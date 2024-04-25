@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Http
 @using HelloDocMVC.Entity.Models.ViewModel
 @model  List<PatientDashboardList>
+@using static HelloDocMVC.Entity.Models.Constant
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <div class="justify-content-between d-flex container-fluid mt-5 position-relative ">
@@ -54,7 +55,7 @@
                 {
                     <tr>
                         <td scope="row"> @item.createdDate</td>
-                        <td>@item.Status</td>
+                        <td>@Enum.GetName(typeof(Status1), @item.Status)</td>
                         <td>
                             @{
                                 if (@item.Fcount != 0)
@@ -63,17 +64,7 @@
                                         (@item.Fcount)  Documents
                                     </a>
                                 }
-                                //if (item.Fcount != 0)
-                                //{
-                                //    <a asp-action="Document" asp-controller="PatientDashboard" asp-route-id="@item.RequestId" class="btn btn-outline-info btn-sm document-button">
-                                //        Document (@item.Fcount)
-                                //        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor"
-                                //             class="bi bi-arrow-down-circle mx-1" viewBox="0 0 16 16">
-                                //            <path fill-rule="evenodd"
-                                //                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293z" />
-                                //        </svg>
-                                //    </a>
-                                //}
+                               }
                             }
                         </td>
                     </tr>

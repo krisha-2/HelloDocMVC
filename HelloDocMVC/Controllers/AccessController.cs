@@ -158,7 +158,7 @@ namespace HelloDocMVC.Controllers
 
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            ViewBag.UserRolecombobox = await _comboBox.UserRoleComboBox();
+            ViewBag.AdminRoleComboBox = await _comboBox.AdminRoleComboBox();
             if (id == null)
             {
                 ViewData["AdminAccount"] = "Add Admin";
@@ -177,11 +177,8 @@ namespace HelloDocMVC.Controllers
         {
             //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            ViewBag.UserRolecombobox = await _comboBox.AdminRoleComboBox();
-            // bool b = physicians.Isagreementdoc[0];
-
-            /*if (ModelState.IsValid)
-            {*/
+            ViewBag.AdminRoleComboBox = await _comboBox.AdminRoleComboBox();
+            
             if (await _IAdminProfile.AdminPost(vm, CV.ID()))
             {
                 _notyf.Success("Admin Added Successfully..!");
@@ -191,10 +188,6 @@ namespace HelloDocMVC.Controllers
                 _notyf.Error("Admin not Added Successfully..!");
                 return View("../Access/AdminAddEdit", vm);
             }
-            /*else
-            {
-                return View("../Admin/Access/AdminAddEdit", vm);
-            }*/
             return RedirectToAction("UserRole");
         }
         public async Task<IActionResult> SaveAdminInfo(ViewAdminProfileData vm)

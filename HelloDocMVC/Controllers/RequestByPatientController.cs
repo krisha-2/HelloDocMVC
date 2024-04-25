@@ -32,7 +32,7 @@ namespace HelloDoc.Controllers
             var ViewPatientCreateRequest = _requestByPatient.viewMeData(id);
             return View(ViewPatientCreateRequest);
         }
-                [HttpPost]
+        [HttpPost]
         public IActionResult Me(Patient viewPatientReq)
         {
             _requestByPatient.meRequset(viewPatientReq);
@@ -45,7 +45,8 @@ namespace HelloDoc.Controllers
         [HttpPost]
         public IActionResult SomeoneElse(FamilyFriend viewFamilyReq)
         {
-            _requestByPatient.elseRequset(viewFamilyReq);
+            int id=Int32.Parse(CV.UserID());
+            _requestByPatient.elseRequset(viewFamilyReq, id);
             return RedirectToAction("Index", "PatientDashboard");
         }       
     }

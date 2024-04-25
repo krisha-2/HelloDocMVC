@@ -189,8 +189,8 @@
                         </div>
                         <div class="col-md-6 pb-3">
                             <div class="form-floating h-100 w-100">
-                                <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder=Suchtext autocomplete="off" required>
-                                <label for="phone">Phone Number</label>
+                                <input type="tel" asp-for="Altphone" class="form-control shadow-none input2" id="phone" placeholder="Phone Number" autocomplete="off" required>
+                                <label for="phone"></label>
                                 <span asp-validation-for="Altphone" class="text-danger"></span>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-5 pb-3">
+                        <div class="col-md-6 pb-3">
                             <div class="d-flex justify-content-between bg-light border border-secondary rounded">
                                 <button type="button" id="choosenfile1" class="col btn text-start text-secondary input3">
                                     Select Signature
@@ -242,14 +242,6 @@
                                     <span class="d-none d-sm-inline">Upload</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-1 pb-3 p-0">
-                            @* <div class="d-flex justify-content-between bg-light border border-secondary rounded"> *@
-                            <div class="btn btn-info text-white py-2 px-1 input3">
-                                <i class="fa fa-pen"></i>
-                                <span class="d-none d-sm-inline">Create</span>
-                            </div>
-                            @* </div> *@
                         </div>
                         <div class="col-md-6 pb-3">
                             @if (Model != null && Model.Photo != null)
