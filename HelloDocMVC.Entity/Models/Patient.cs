@@ -13,6 +13,7 @@ namespace HelloDocMVC.Entity.Models
         public string PasswordHash { get; set; }
         [Required(ErrorMessage = "FirstName is required")]
         public string? FirstName { get; set; }
+        [Required(ErrorMessage = "LastName is required")]
         public string? LastName { get; set; }
         public string? RFirstName { get; set; }
         public string? RLastName { get; set; }
@@ -31,10 +32,15 @@ namespace HelloDocMVC.Entity.Models
         public string? PatientDetails { get; set; }
         public string? Symptoms { get; set; }
         public short? Status { get; set; }
+        [Required(ErrorMessage = "DateOfBirth is required")]
+
         public DateTime DOB { get; set; }
         public string? Contact { get; set; }
+        [Required(ErrorMessage = "Street is required")]
         public string? Street { get; set; }
+        [Required(ErrorMessage = "CIty is required")]
         public string? City { get; set; }
+        [Required(ErrorMessage = "State is required")]
         public string? State { get; set; }
         [Required(ErrorMessage = "ZipCode is Required")]
         //[RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid ZipCode")]

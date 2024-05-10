@@ -7,9 +7,11 @@ namespace HelloDocMVC.Entity.Models
         public int Id { get; set; }
         [Required(ErrorMessage = "FirstName is required")]
         public string FirstName { get; set; }
+        [Required(ErrorMessage = "LastName is required")]
         public string LastName { get; set; }
         [Required(ErrorMessage = "FirstName is required")]
         public string First_Name { get; set; }
+        [Required(ErrorMessage = "LastName is required")]
         public string Last_Name { get; set; }
         [Required(ErrorMessage = "PhoneNumber is required")]
         [StringLength(10, MinimumLength = 10, ErrorMessage = "Mobile Number must be of 10 digits!")]
@@ -32,8 +34,11 @@ namespace HelloDocMVC.Entity.Models
         public string Symptoms { get; set; }
         public DateTime DOB { get; set; }
         public string Contact { get; set; }
+        [Required(ErrorMessage = "Street is required")]
         public string Street { get; set; }
+        [Required(ErrorMessage = "City is required")]
         public string City { get; set; }
+        [Required(ErrorMessage = "State is required")]
         public string State { get; set; }
         [Required(ErrorMessage = "ZipCode is Required")]
         public string ZipCode { get; set; }

@@ -1,7 +1,6 @@
 ﻿using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
 using Microsoft.AspNetCore.Mvc;
-using AspNetCoreHero.ToastNotification.Abstractions;
 using System.Diagnostics;
 using System.Web;
 using HelloDocMVC.Entity;
@@ -22,13 +21,11 @@ namespace HelloDocMVC.Controllers
     {
         private readonly IAdminDashboard _IAdminDashboard;
         private readonly IComboBox _comboBox;
-        private readonly INotyfService _notyf;
 
-        public AdminController(IAdminDashboard adminDashboard, IComboBox comboBox, INotyfService notyf)
+        public AdminController(IAdminDashboard adminDashboard, IComboBox comboBox)
         {
             _IAdminDashboard = adminDashboard;
             _comboBox = comboBox;
-            _notyf = notyf;
         }
         [CheckProviderAccess("Admin,Physician")]
         [Route("Physician/Dashboard")]
@@ -50,12 +47,17 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.CreatNewAccont(Email, Password))
             {
-                _notyf.Success("User Created Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "User Created Successfully";
             }
             else
             {
-                _notyf.Error("User Created Successfully");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Failed to Create User";
             }
+
             return View("../AdminLogin/Index");
         }
         public async Task<IActionResult> CreateAccount()
@@ -68,22 +70,6 @@ namespace HelloDocMVC.Controllers
             var Data = _IAdminDashboard.ViewCaseData(id);
             return View(Data);
         }
-        //public IActionResult Encounter(int id)
-        //{
-        //    ViewEncounter ei = _IAdminDashboard.EncounterInfo(id);
-        //    return View(ei);
-        //}
-        //[HttpPost]
-        //public IActionResult EncounterPost(ViewEncounter _viewencounterinfo)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        _IAdminDashboard.EditEncounterinfo(_viewencounterinfo);
-        //        return RedirectToAction("Index", "Admin");
-
-        //    }
-        //    return View(_viewencounterinfo);
-        //}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> _SearchResult(PaginatedViewModel data, String Status)
@@ -136,13 +122,15 @@ namespace HelloDocMVC.Controllers
             bool CancelCase = _IAdminDashboard.CancelCase(RequestID, Note, CaseTag);
             if (CancelCase)
             {
-                _notyf.Success("Case Canceled Successfully");
-
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Canceled Successfully";
             }
             else
             {
-                _notyf.Error("Case Not Canceled");
-
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case Not Canceled";
             }
             return RedirectToAction("Index", "Admin");
         }
@@ -151,11 +139,15 @@ namespace HelloDocMVC.Controllers
             bool BlockCase = _IAdminDashboard.BlockCase(RequestID, Note);
             if (BlockCase)
             {
-                _notyf.Success("Case Blocked Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Blocked Successfully";
             }
             else
             {
-                _notyf.Error("Case Not Blocked");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case Not BLocked";
             }
             return RedirectToAction("Index", "Admin");
         }
@@ -163,11 +155,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.AssignProvider(requestid, ProviderId, Notes))
             {
-                _notyf.Success("Physician Assigned successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Physician Assigned successfully";
             }
             else
             {
-                _notyf.Error("Physician Not Assigned...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Physician Not Assigned";
             }
 
             return RedirectToAction("Index", "Admin");
@@ -191,13 +187,16 @@ namespace HelloDocMVC.Controllers
                 bool data = _IAdminDashboard.SendOrder(sm);
                 if (data)
                 {
-                    _notyf.Success("Order Created  successfully...");
-                    _notyf.Information("Mail is sended to Vendor successfully...");
+                    // Success notification
+                    TempData["SweetAlertType"] = "success";
+                    TempData["SweetAlertMessage"] = "Order Created successfully";
                     return RedirectToAction("Index", "Admin");
                 }
                 else
                 {
-                    _notyf.Error("Order Not Created...");
+                    // Error notification
+                    TempData["SweetAlertType"] = "error";
+                    TempData["SweetAlertMessage"] = "Order Not Created";
                     return View("../Admin/Orders", sm);
                 }
             }
@@ -221,12 +220,15 @@ namespace HelloDocMVC.Controllers
             bool cc = _IAdminDashboard.ClearCase(RequestID);
             if (cc)
             {
-                _notyf.Success("Case Cleared...");
-                _notyf.Warning("You can not show Cleared Case ...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Cleared...You can not show Cleared Case";
             }
             else
             {
-                _notyf.Error("there is some error in deletion...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "there is some error in deletion";
             }
             return RedirectToAction("Index", "Admin", new { Status = "2" });
         }
@@ -239,11 +241,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.SaveDoc(Requestid, file))
             {
-                _notyf.Success("File Uploaded Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "File Uploaded Successfully";
             }
             else
             {
-                _notyf.Error("File Not Uploaded");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "File Not Uploaded";
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
@@ -251,11 +257,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.DeleteDocumentByRequest(id.ToString()))
             {
-                _notyf.Success("File Deleted Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "File Deleted Successfully";
             }
             else
             {
-                _notyf.Error("File Not Deleted");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "File Not Deleted";
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
@@ -263,11 +273,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.DeleteDocumentByRequest(deleteids))
             {
-                _notyf.Success("All Selected File Deleted Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "All Selected File Deleted Successfully";
             }
             else
             {
-                _notyf.Error("All Selected File Not Deleted");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "All Selected File Not Deleted";
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
@@ -275,13 +289,16 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.TransferProvider(requestId, ProviderId, Notes))
             {
-                _notyf.Success("Physician Transfered successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Physician Transfered successfully";
             }
             else
             {
-                _notyf.Error("Physician Not Transfered...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Physician Not Transfered";
             }
-
             return RedirectToAction("Index", "Admin");
         }
         public IActionResult ViewNotes(int id)
@@ -297,18 +314,23 @@ namespace HelloDocMVC.Controllers
                 bool result = _IAdminDashboard.EditViewNotes(adminnotes, physiciannotes, RequestID);
                 if (result)
                 {
-                    _notyf.Success("Notes Updated successfully...");
+                    // Success notification
+                    TempData["SweetAlertType"] = "success";
+                    TempData["SweetAlertMessage"] = "Notes Updated successfully";
                     return RedirectToAction("ViewNotes", new { id = RequestID });
                 }
                 else
                 {
-                    _notyf.Error("Notes Not Updated");
+                    // Error notification
+                    TempData["SweetAlertType"] = "error";
+                    TempData["SweetAlertMessage"] = "Notes Not Updated";
                     return View("../Admin/ViewNotes");
                 }
             }
             else
             {
-                _notyf.Information("Please Select one of the note!!");
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Please Select one of the note!!";
                 TempData["Errormassage"] = "Please Select one of the note!!";
                 return RedirectToAction("ViewNotes", new { id = RequestID });
             }
@@ -319,7 +341,9 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.SendAgreement(requestid))
             {
-                _notyf.Success("Mail Send  Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Mail Send Successfully";
             }
             return RedirectToAction("Index", "Admin");
         }
@@ -333,13 +357,15 @@ namespace HelloDocMVC.Controllers
             bool sm = _IAdminDashboard.CloseCase(id);
             if (sm)
             {
-                _notyf.Success("Case Closed...");
-                _notyf.Information("You can see Closed case in unpaid State...");
-
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Closed..You can see Closed case in unpaid State";
             }
             else
             {
-                _notyf.Error("there is some error in CloseCase...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "there is some error in CloseCase";
             }
             return RedirectToAction("Index", "Admin");
         }
@@ -349,38 +375,41 @@ namespace HelloDocMVC.Controllers
 
             if (result)
             {
-                _notyf.Success("Case Edited Successfully..");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Edited Successfully";
                 return RedirectToAction("CloseCase", new { sm.RequestID });
             }
             else
             {
-                _notyf.Error("Case Not Edited...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case Not Edited";
                 return RedirectToAction("CloseCase", new { sm.RequestID });
             }
 
         }
-        #region Encounter_View
         public IActionResult EncounterModel(int id)
         {
             ViewEncounter data = _IAdminDashboard.GetEncounterDetails(id);
             return View("../Admin/EncounterForm", data);
         }
-        #endregion
-        #region EncounterEdit
         public IActionResult EncounterEdit(ViewEncounter data)
         {
             if (_IAdminDashboard.EditEncounterDetails(data, CV.ID()))
             {
-                _notyf.Success("Encounter Changes Saved...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Encounter Changes Saved";
             }
             else
             {
-                _notyf.Error("Encounter Changes Not Saved...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Encounter Changes Not Saved";
             }
             return RedirectToAction("EncounterModel", new { id = data.Requesid });
         }
-        #endregion
-        #region Finalize
         public IActionResult Finalize(ViewEncounter model)
         {
             bool data = _IAdminDashboard.EditEncounterDetails(model, CV.ID());
@@ -389,7 +418,9 @@ namespace HelloDocMVC.Controllers
                 bool final = _IAdminDashboard.CaseFinalized(model);
                 if (final)
                 {
-                    _notyf.Success("Case Is Finalized...");
+                    // Success notification
+                    TempData["SweetAlertType"] = "success";
+                    TempData["SweetAlertMessage"] = "Case Is Finalized";
                     if (CV.role() == "Physician")
                     {
                         return Redirect("~/Physician/DashBoard");
@@ -398,25 +429,26 @@ namespace HelloDocMVC.Controllers
                 }
                 else
                 {
-                    _notyf.Error("Case Is Not Finalized Please Enter Valid Data...");
+                    // Error notification
+                    TempData["SweetAlertType"] = "error";
+                    TempData["SweetAlertMessage"] = "there is some error in CloseCase";
                     return RedirectToAction("EncounterModel", new { id = model.Requesid });
                 }
             }
             else
             {
-                _notyf.Error("Case Is Not Finalized...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case Is Not Finalized";
                 return RedirectToAction("EncounterModel", new { id = model.Requesid });
             }
 
         }
-        #endregion
-        #region generatePDF
         public IActionResult generatePDF(int id)
         {
             var FormDetails = _IAdminDashboard.GetEncounterDetails(id);
             return new ViewAsPdf("../Admin/EncounterPdf", FormDetails);
         }
-        #endregion
         public IActionResult Export(string status)
         {
             var requestData = _IAdminDashboard.Export(status);
@@ -464,7 +496,9 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.SendLink(FirstName, LastName, Email))
             {
-                _notyf.Success("Mail Send  Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Mail Send Successfully";
             }
             return RedirectToAction("Index", "Admin");
         }
@@ -482,12 +516,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.SendFileEmail(mailids, Requestid, email))
             {
-
-                _notyf.Success("Mail Send successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Mail Send Successfully";
             }
             else
             {
-                _notyf.Error("Mail is not send successfully");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Mail is not send successfully";
             }
             return RedirectToAction("ViewUploads", "Admin", new { id = Requestid });
         }
@@ -497,11 +534,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.AcceptPhysician(RequestId, Note, Convert.ToInt32(CV.UserID())))
             {
-                _notyf.Success("Case Accepted...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Accepted";
             }
             else
             {
-                _notyf.Success("Case Not Accepted...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case Not Accepted";
             }
             return Redirect("~/Physician/Dashboard");
         }
@@ -511,7 +552,9 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminDashboard.TransfertoAdmin(RequestID, Note, Convert.ToInt32(CV.UserID())))
             {
-                _notyf.Success("Request Successfully transfered to admin...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Request Successfully transfered to admin";
             }
 
             return Redirect("~/Physician/Dashboard");
@@ -521,11 +564,15 @@ namespace HelloDocMVC.Controllers
             bool Contact = _IAdminDashboard.ContactAdmin(Convert.ToInt32(CV.UserID()), Note);
             if (Contact)
             {
-                _notyf.Success("Mail Send Succesfully Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Mail Send Succesfully";
             }
             else
             {
-                _notyf.Error("Mail Not Send Succesfully");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Mail Not Send Succesfully";
             }
             return RedirectToAction("PhysicianProfile", "Providers", new { id = Convert.ToInt32(CV.UserID()) });
         }
@@ -533,11 +580,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.Housecall(RequestId))
             {
-                _notyf.Success("Case Accepted...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Accepted";
             }
             else
             {
-                _notyf.Error("Case Not Accepted...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case Not Accepted";
             }
             return Redirect("~/Physician/DashBoard");
         }
@@ -545,11 +596,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.Consult(RequestId))
             {
-                _notyf.Success("Case is in conclude state...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case is in conclude state";
             }
             else
             {
-                _notyf.Error("Error...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Error";
             }
             return Redirect("~/Physician/DashBoard");
         }
@@ -566,11 +621,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.SaveDoc(Requestid, file))
             {
-                _notyf.Success("File Uploaded Successfully");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "File Uploaded Successfully";
             }
             else
             {
-                _notyf.Error("File Not Uploaded");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "File Not Uploaded";
             }
             return RedirectToAction("ConcludeCare", "Admin", new { id = Requestid });
         }
@@ -578,11 +637,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminDashboard.ConcludeCarePost(RequestId, Notes))
             {
-                _notyf.Success("Case concluded...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case concluded";
             }
             else
             {
-                _notyf.Error("Error...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Error";
             }
             return Redirect("~/Physician/Dashboard");
         }

@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using HelloDocMVC.Entity.DataContext;
+﻿using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository.Interface;
@@ -20,13 +19,11 @@ namespace HelloDocMVC.Repository.Repository
     {
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly HelloDocDbContext _context;
-        private readonly INotyfService _notyf;
         private readonly EmailConfiguration _emailConfig;
-        public LoginRepository(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, INotyfService notyf, EmailConfiguration emailConfig)
+        public LoginRepository(HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, EmailConfiguration emailConfig)
         {
             this.httpContextAccessor = httpContextAccessor;
             _context = context;
-            _notyf = notyf;
             _emailConfig = emailConfig;
         }
         public async Task<UserInfo> CheckAccessLogin(AspNetUser aspNetUser)

@@ -80,7 +80,7 @@ namespace HelloDocMVC.Repository.Repository
             {
                 Guid id = Guid.NewGuid();
                 //var hasher = new PasswordHasher<string>();
-                AspNetUser aspnetuser = new AspNetUser
+                AspNetUser aspnetuser = new()
                 {
                     Id = id.ToString(),
                     Email = Email,
@@ -1380,7 +1380,7 @@ namespace HelloDocMVC.Repository.Repository
             _context.Requests.Update(requestData);
             _context.SaveChanges();
 
-            RequestStatusLog rsl = new RequestStatusLog
+            RequestStatusLog rsl = new()
             {
                 RequestId = RequestId,
                 Notes = Notes,

@@ -24,8 +24,6 @@ namespace HelloDoc.Controllers
             _requestByPatient = requestByPatient;
             _httpContextAccessor = httpContextAccessor;
         }
-
-
         public IActionResult Me()
         {
             int id = Int32.Parse(CV.UserID());

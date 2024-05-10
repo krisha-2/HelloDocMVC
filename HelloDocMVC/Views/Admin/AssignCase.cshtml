@@ -14,7 +14,7 @@
                     <input type="hidden" id="RequestID_Input_ModelAssignCase" name="RequestId" />
                     <div class="col my-3">
                         <div class="form-floating">
-                            <select class="form-select input-outline input-outline-select w-100" required aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" required>
+                            <select class="form-select input-outline input-outline-select w-100" aria-label="Phone" name="region" data-allow-clear="true" tabindex="-1" onchange="myFunction1()" id="region2" asp-items="@(new SelectList(ViewBag.RegionComboBox,"RegionId","RegionName"))" data-control="select2" data-placeholder="Select Level" required>
                                 @*<option value="-1">All Region</option>*@
                             </select>
                             <span class="invalid-feedback">
@@ -25,7 +25,7 @@
                     </div>
                     <div class="col mb-3">
                         <div class="form-floating">
-                            <select class="form-select input-outline input-outline-select w-100" required name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level" required>
+                            <select class="form-select input-outline input-outline-select w-100" name="ProviderId" data-allow-clear="true" tabindex="-1" id="provider" data-control="select2" data-placeholder="Select Level" required>
                                 @*<option value="-1">Select Physician</option>*@
                             </select>
                             <span class="invalid-feedback">

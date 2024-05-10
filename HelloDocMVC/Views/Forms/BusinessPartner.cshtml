@@ -18,7 +18,8 @@
             <div class="col-md-6 p-3 form-floating">
                 <input asp-for="Last_Name" type="text" class="form-control" id="lname" placeholder="Your Last Name">
                 <label for="lname">Your Last Name</label>
-            </div>
+                <span asp-validation-for="Last_Name" class="text-danger"></span>
+            </div>x
         </div>
         <div class="row">
             <div class="mb-3 col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 form-floating my-3">
@@ -42,8 +43,10 @@
             </div>
         </div>
         <h5><b>Patient Information</b></h5>
-        <div class="form-group p-3">
-            <textarea asp-for="Symptoms" class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Enter Brief Details of Symptoms"></textarea>
+        <div class="row">
+            <div class="form-group p-3">
+                <textarea asp-for="Symptoms" class="form-control" id="exampleFormControlTextarea1" rows="2" placeholder="Enter Brief Details of Symptoms"></textarea>
+            </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6 p-3 form-floating">
@@ -54,11 +57,13 @@
             <div class="col-md-6 p-3 form-floating">
                 <input asp-for="LastName" type="text" class="form-control" id="naming" placeholder="LName">
                 <label for="naming">Lastname</label>
+                <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="row">
                 <div class="form-group col-md-6 p-3 form-floating">
-                    <input asp-for="DOB" type="date" class="form-control" id="name" placeholder="DOB">
+                    <input asp-for="DOB" type="date" class="form-control" id="name" placeholder="DOB" max="@DateTime.Now.ToString("yyyy-MM-dd")">
                     <label for="name">Date of Birth</label>
+                    <span asp-validation-for="DOB" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -79,16 +84,19 @@
             <div class="form-group col-md-6 p-3 form-floating">
                 <input asp-for="Street" type="text" class="form-control" id="name" placeholder="Street">
                 <label for="name">Street</label>
+                <span asp-validation-for="Street" class="text-danger"></span>
             </div>
             <div class="col-md-6 p-3 form-floating">
                 <input asp-for="City" type="text" class="form-control" id="naming" placeholder="City">
                 <label for="naming">City</label>
+                <span asp-validation-for="City" class="text-danger"></span>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6 p-3 form-floating">
                 <input asp-for="State" type="text" class="form-control" id="name" placeholder="State">
                 <label for="name">State</label>
+                <span asp-validation-for="State" class="text-danger"></span>
             </div>
             <div class="col-md-6 p-3 form-floating">
                 <input asp-for="ZipCode" type="text" class="form-control" id="naming" placeholder="ZipCode">

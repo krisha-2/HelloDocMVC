@@ -14,7 +14,7 @@
                     <h3 class="modal-title fs-5" id="exampleModelLabel">Patient Name:<span class="text-info" id="PatientName_ModelCancelCase"> </span></h3>
                     <div class="col mb-3">
                     <div class="form-floating">
-                        <select class="form-select input-outline input-outline-select w-100" required name="CaseTag" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason" required>
+                        <select class="form-select input-outline input-outline-select w-100" name="CaseTag" data-allow-clear="true" tabindex="-1" id="Region" asp-items="@(new SelectList(ViewBag.CaseReasonComboBox,"CaseReasonId","CaseReasonName"))" data-control="select2" data-placeholder="Cancel Reason" required>
                             <option>Cancel Reason</option>
                         </select>
                             <span class="invalid-feedback">

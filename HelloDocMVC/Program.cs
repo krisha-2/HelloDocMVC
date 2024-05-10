@@ -2,8 +2,6 @@ using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Repository.Repository.Interface;
 
-using AspNetCoreHero.ToastNotification;
-using AspNetCoreHero.ToastNotification.Extensions;
 using HelloDocMVC.Entity.Models;
 using Rotativa.AspNetCore;
 
@@ -28,7 +26,7 @@ builder.Services.AddScoped<IScheduling, Scheduling>();
 builder.Services.AddScoped<IPartners, Partners>();
 builder.Services.AddScoped<IRecords, Records>();
 builder.Services.AddScoped<IRequestByPatient, RequestByPatient>();
-builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
+builder.Services.AddScoped<IInvoicing, Invoicing>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
@@ -43,7 +41,6 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseNotyf();
 app.UseSession();
 app.UseAuthorization();
 app.UseRotativa();

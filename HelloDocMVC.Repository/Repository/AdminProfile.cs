@@ -45,7 +45,7 @@ namespace HelloDocMVC.Repository.Repository
                                              Status = r.Status,
                                              Zip = r.Zip
                                          }).FirstOrDefaultAsync();
-            List<Regions> regions = new List<Regions>();
+            List<Regions> regions = new();
             regions = await _context.AdminRegions
                   .Where(r => r.AdminId == UserId)
                   .Select(req => new Regions()

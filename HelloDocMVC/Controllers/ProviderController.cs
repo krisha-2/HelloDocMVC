@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Repository.Repository.Interface;
@@ -7,36 +6,35 @@ using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Models;
 using Twilio.TwiML.Messaging;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace HelloDocMVC.Controllers
 {
     public class ProviderController : Controller
     {
         private readonly IProvider _IProvider;
-        private readonly INotyfService _notyf;
         private readonly IComboBox _comboBox;
         private readonly ILogger<AdminController> _logger;
         private readonly EmailConfiguration _emailConfig;
 
-        public ProviderController(ILogger<AdminController> logger,IProvider IProvider,INotyfService notyf, IComboBox comboBox,EmailConfiguration emailConfiguration)
+        public ProviderController(ILogger<AdminController> logger, IProvider IProvider, IComboBox comboBox, EmailConfiguration emailConfiguration)
         {
             _IProvider = IProvider;
-            _notyf = notyf;
             _logger = logger;
             _comboBox = comboBox;
             _emailConfig = emailConfiguration;
         }
-        public async Task<IActionResult> IndexAsync(int? region,ViewProvider vp)
+        public async Task<IActionResult> IndexAsync(int? region, ViewProvider vp)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
-            var v =  _IProvider.PhysicianAll(vp);
+            var v = _IProvider.PhysicianAll(vp);
             if (region == null)
             {
-                v =  _IProvider.PhysicianAll(vp);
+                v = _IProvider.PhysicianAll(vp);
             }
             else
             {
-                v = _IProvider.PhysicianByRegion(region,vp);
+                v = _IProvider.PhysicianByRegion(region, vp);
             }
             return View("../Provider/Index", v);
         }
@@ -84,11 +82,15 @@ namespace HelloDocMVC.Controllers
             }
             if (result)
             {
-                _notyf.Success("Email sent Successfully.");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Email Sent Successfully";
             }
             if (sms)
             {
-                _notyf.Success("Message sent Successfully.");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Message Sent Successfully";
             }
             return RedirectToAction("Index");
 
@@ -107,7 +109,7 @@ namespace HelloDocMVC.Controllers
             {
                 ViewData["PhysicianAccount"] = "Edit";
                 ViewProvider v = await _IProvider.GetPhysicianById((int)id);
-                return View("../Provider/Edit",v);
+                return View("../Provider/Edit", v);
 
             }
             return View("../Provider/Edit");
@@ -117,25 +119,19 @@ namespace HelloDocMVC.Controllers
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.PhysicianRoleComboBox = await _comboBox.PhysicianRoleComboBox();
-            // bool b = physicians.Isagreementdoc[0];
-
-            /*if (ModelState.IsValid)
-            {*/
-
-            /*}
+            if (await _IProvider.PhysicianAddEdit(physicians, CV.ID()))
+            {
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Physician added Successfully";
+            }
             else
             {
-                return View("../Admin/Providers/AddEditProvider", physicians);
-            }*/
-            if (await _IProvider.PhysicianAddEdit(physicians, CV.ID()))
-			{
-				_notyf.Success("Physician added Successfully..!");
-			}
-			else
-			{
-				_notyf.Error("Physician not added Successfully..!");
-			}
-			return RedirectToAction("UserRole","Access");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Physician not added Successfully";
+            }
+            return RedirectToAction("UserRole", "Access");
         }
         public async Task<IActionResult> EditAccountInfo(ViewProvider data)
         {
@@ -143,11 +139,15 @@ namespace HelloDocMVC.Controllers
             string actionNameaq = ControllerContext.ActionDescriptor.ActionName; // Get the current action name
             if (await _IProvider.EditAccountInfo(data))
             {
-                _notyf.Success("Account Information Changed Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Account Information Changed Successfully";
             }
             else
             {
-                _notyf.Error("Account Information not Changed Successfully..!");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Account Information not Changed Successfully";
             }
             return RedirectToAction("Edit", new { id = data.Physicianid });
         }
@@ -155,11 +155,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IProvider.ChangePasswordAsync(password, Physicianid))
             {
-                _notyf.Success("Password Information Changed Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Password Information Changed Successfully";
             }
             else
             {
-                _notyf.Error("Password not Changed properly Successfully..!");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Password Information not Changed Successfully";
             }
             return RedirectToAction("Edit", new { id = Physicianid });
         }
@@ -169,12 +173,16 @@ namespace HelloDocMVC.Controllers
             //ViewBag.PhysicianRoleComboBox = await _comboBox.PhysicianRoleComboBox();
             if (await _IProvider.EditPhysicianInfo(data))
             {
-                _notyf.Success("Administrator Information Changed Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Administrator Information Changed Successfully";
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
             else
             {
-                _notyf.Error("Administrator Information not Changed Successfully..!");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Administrator Information not Changed Successfully";
                 return RedirectToAction("PhysicianProfile", new { id = data.Physicianid });
             }
         }
@@ -182,12 +190,16 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IProvider.EditMailBillingInfo(data, CV.ID()))
             {
-                _notyf.Success("mail and billing Information Changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "mail and billing Information Changed Successfully";
                 return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
-                _notyf.Error("mail and billing Information not Changed Successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "mail and billing Information not Changed Successfully";
                 return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
@@ -195,12 +207,16 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IProvider.EditProviderProfile(data, CV.ID()))
             {
-                _notyf.Success("Profile Changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Profile Changed Successfully";
                 return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
-                _notyf.Error("Profile not Changed Successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Profile not Changed Successfully";
                 return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
@@ -208,12 +224,16 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IProvider.EditProviderOnbording(data, CV.ID()))
             {
-                _notyf.Success("Provider Onbording Changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Provider Onbording Changed Successfully";
                 return RedirectToAction("Edit", new { id = data.Physicianid });
             }
             else
             {
-                _notyf.Error("Provider Onbording not Changed Successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Provider Onbording not Changed Successfully";
                 return RedirectToAction("Edit", new { id = data.Physicianid });
             }
         }
@@ -222,18 +242,26 @@ namespace HelloDocMVC.Controllers
             bool data = await _IProvider.DeletePhysician(PhysicianID, CV.ID());
             if (data)
             {
-                _notyf.Success("Physician deleted successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Physician deleted successfully";
                 return RedirectToAction("Index");
             }
             else
             {
-                _notyf.Success("Physician not deleted successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Physician not deleted successfully";
                 return RedirectToAction("PhysicianAll");
             }
         }
         public async Task<IActionResult> Location()
         {
             ViewBag.Log = _IProvider.FindPhysicianLocation();
+            return View();
+        }
+        public async Task<IActionResult> PayRate()
+        {
             return View();
         }
     }

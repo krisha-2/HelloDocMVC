@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using HelloDocMVC.Entity.DataModels;
+﻿using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using Microsoft.AspNetCore.Mvc;
 using HelloDocMVC.Repository.Repository.Interface;
@@ -11,16 +10,14 @@ namespace HelloDocMVC.Controllers
     public class AccessController : Controller
     {
         private readonly IAccessRole _IAccessRole;
-        private readonly INotyfService _notyf;
         private readonly IComboBox _comboBox;
         private readonly ILogger<AdminController> _logger;
         private readonly EmailConfiguration _emailConfig;
         private readonly IAdminProfile _IAdminProfile;
         private readonly IProvider _IProvider;
-        public AccessController(ILogger<AdminController> logger, IAccessRole IRoleAccessRepository, INotyfService notyf, IComboBox comboBox, EmailConfiguration emailConfiguration, IAdminProfile IMyProfileRepository, IProvider IProvider)
+        public AccessController(ILogger<AdminController> logger, IAccessRole IRoleAccessRepository, IComboBox comboBox, EmailConfiguration emailConfiguration, IAdminProfile IMyProfileRepository, IProvider IProvider)
         {
             _IAccessRole = IRoleAccessRepository;
-            _notyf = notyf;
             _logger = logger;
             _comboBox = comboBox;
             _emailConfig = emailConfiguration;
@@ -95,22 +92,30 @@ namespace HelloDocMVC.Controllers
                 {
                     if (await _IAccessRole.PostRoleMenu(role, Menusid, CV.ID()))
                     {
-                        _notyf.Success("Role Added Successfully...");
+                        // Success notification
+                        TempData["SweetAlertType"] = "success";
+                        TempData["SweetAlertMessage"] = "Role Added Successfully";
                     }
                     else
                     {
-                        _notyf.Error("Role not Added...");
+                        // Error notification
+                        TempData["SweetAlertType"] = "error";
+                        TempData["SweetAlertMessage"] = "Role not Added";
                     }
                 }
                 else
                 {
                     if (await _IAccessRole.PutRoleMenu(role, Menusid, CV.ID()))
                     {
-                        _notyf.Success("Role Modified Successfully...");
+                        // Success notification
+                        TempData["SweetAlertType"] = "success";
+                        TempData["SweetAlertMessage"] = "Role Modified Successfully";
                     }
                     else
                     {
-                        _notyf.Error("Role not Modified...");
+                        // Error notification
+                        TempData["SweetAlertType"] = "error";
+                        TempData["SweetAlertMessage"] = "Role not Modified";
                     }
                 }
             }
@@ -126,16 +131,20 @@ namespace HelloDocMVC.Controllers
 		{
 			bool data = await _IAccessRole.DeleteRoles(roleid, CV.ID());
 			if (data)
-			{
-				_notyf.Success("Role deleted successfully...");
-				return RedirectToAction("Index");
-			}
-			else
-			{
-				_notyf.Success("Role not deleted successfully...");
-				return RedirectToAction("Index");
-			}
-		}
+            {
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Role Deleted Successfully";
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Role not Deleted";
+                return RedirectToAction("Index");
+            }
+        }
         public async Task<IActionResult> PhysicianAddEdit(int? id)
         {
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
@@ -154,9 +163,6 @@ namespace HelloDocMVC.Controllers
         }
         public async Task<IActionResult> AdminAddEdit(int? id)
         {
-
-
-            //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.AdminRoleComboBox = await _comboBox.AdminRoleComboBox();
             if (id == null)
@@ -175,17 +181,20 @@ namespace HelloDocMVC.Controllers
         [HttpPost]
         public async Task<IActionResult> AdminAdd(ViewAdminProfileData vm)
         {
-            //TempData["Status"] = TempData["Status"];
             ViewBag.RegionComboBox = _comboBox.RegionComboBox();
             ViewBag.AdminRoleComboBox = await _comboBox.AdminRoleComboBox();
             
             if (await _IAdminProfile.AdminPost(vm, CV.ID()))
             {
-                _notyf.Success("Admin Added Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Admin Added Successfully";
             }
             else
             {
-                _notyf.Error("Admin not Added Successfully..!");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Admin not Added";
                 return View("../Access/AdminAddEdit", vm);
             }
             return RedirectToAction("UserRole");
@@ -195,11 +204,15 @@ namespace HelloDocMVC.Controllers
             bool data = await _IAdminProfile.SaveAdminInfo(vm);
             if (data)
             {
-                _notyf.Success("Admin Information Changed successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Admin Information Changed successfully";
             }
             else
             {
-                _notyf.Error("Admin Information not Changed successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Admin Information not Changed successfully";
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
@@ -221,11 +234,15 @@ namespace HelloDocMVC.Controllers
             bool data = await _IAdminProfile.BillingInfoEdit(vm);
             if (data)
             {
-                _notyf.Success("Billing Information Changed successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Billing Information Changed successfully";
             }
             else
             {
-                _notyf.Error("Billing Information not Changed successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Billing Information not Changed successfully";
             }
             return RedirectToAction("AdminEdit", new { id = vm.AdminId });
         }
@@ -234,11 +251,15 @@ namespace HelloDocMVC.Controllers
             bool data = await _IAdminProfile.EditPassword(password, AdminId);
             if (data)
             {
-                _notyf.Success("Password changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Password changed Successfully";
             }
             else
             {
-                _notyf.Error("Password not Changed Successfully...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Password not Changed Successfully";
             }
             return RedirectToAction("AdminEdit", new { id = AdminId });
         }

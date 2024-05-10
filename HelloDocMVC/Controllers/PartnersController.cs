@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using HelloDocMVC.Entity.DataContext;
+﻿using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.DataModels;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Repository.Repository;
@@ -10,26 +9,22 @@ namespace HelloDocMVC.Controllers
 {
     public class PartnersController : Controller
     {
-        #region Constructor
         private readonly HelloDocDbContext _context;
 
         private readonly IPartners _IPartners;
         private readonly IProvider _IProvider;
         private readonly IAdminProfile _IMyProfileRepository;
-        private readonly INotyfService _notyf;
         private readonly IComboBox _comboBox;
         private readonly ILogger<AdminController> _logger;
         private readonly EmailConfiguration _emailConfig;
-        public PartnersController(ILogger<AdminController> logger, IPartners IPartnersRepository, INotyfService notyf, IComboBox combobox, EmailConfiguration emailConfiguration, HelloDocDbContext context)
+        public PartnersController(ILogger<AdminController> logger, IPartners IPartnersRepository, IComboBox combobox, EmailConfiguration emailConfiguration, HelloDocDbContext context)
         {
             _context = context;
             _IPartners = IPartnersRepository;
-            _notyf = notyf;
             _logger = logger;
             _comboBox = combobox;
             _emailConfig = emailConfiguration;
         }
-        #endregion
         public IActionResult Index(string searchValue, int Profession, PartnersData pd)
         {
             ViewBag.Profession = _context.HealthProfessionalTypes.ToList();
@@ -55,11 +50,15 @@ namespace HelloDocMVC.Controllers
             var result = _IPartners.EditPartnersData(hp);
             if (result == true)
             {
-                _notyf.Success("Data edited Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Data edited Successfully";
             }
             else
             {
-                _notyf.Error("Data not Changed...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Data not Changed";
             }
             return RedirectToAction("Index");
         }
@@ -68,7 +67,9 @@ namespace HelloDocMVC.Controllers
             bool res = _IPartners.DeleteBusiness(VendorId);
             if (res == true)
             {
-                _notyf.Success("Business Deleted Successfully..");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Business Deleted Successfully";
             }
             return RedirectToAction("Index");
         }

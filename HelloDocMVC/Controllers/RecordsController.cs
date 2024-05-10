@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using HelloDocMVC.Entity.DataContext;
+﻿using HelloDocMVC.Entity.DataContext;
 using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Models;
 using HelloDocMVC.Repository.Repository;
@@ -12,12 +11,10 @@ namespace HelloDocMVC.Controllers
     {
         private readonly HelloDocDbContext _context;
         private readonly IRecords _IRecords;
-        private readonly INotyfService _notyf;
-        public RecordsController(HelloDocDbContext context, IRecords Records, INotyfService notyf)
+        public RecordsController(HelloDocDbContext context, IRecords Records)
         {
             _context = context;
             _IRecords = Records;
-            _notyf = notyf;
         }
         public IActionResult PatientRecord(string firstname, string lastname, string email, string phone)
         {
@@ -38,11 +35,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IRecords.DeleteRequest(RequestId))
             {
-                _notyf.Success("Request Deleted Successfully.");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Request Deleted Successfully";
             }
             else
             {
-                _notyf.Error("Request not deleted");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Request Not deleted";
             }
             return RedirectToAction("SearchRecord");
         }
@@ -55,13 +56,16 @@ namespace HelloDocMVC.Controllers
         {
             if (_IRecords.Unblock(RequestId, CV.ID()))
             {
-                _notyf.Success("Case Unblocked Successfully.");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Case Unblocked Successfully";
             }
             else
             {
-                _notyf.Error("Case remains blocked.");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Case remains blocked";
             }
-
             return RedirectToAction("BlockHistory");
         }
         public IActionResult EmailLogs(RecordsData rm)
@@ -74,6 +78,6 @@ namespace HelloDocMVC.Controllers
             RecordsData r = _IRecords.GetFilteredSMSLogs(rm);
             return PartialView("../Records/SMSLogs", r);
         }
- 
+
     }
 }

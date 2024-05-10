@@ -6,7 +6,7 @@ using System.Net.Mail;
 using System.Net;
 using System.Text.RegularExpressions;
 using HelloDocMVC.Entity.DataContext;
-using AspNetCoreHero.ToastNotification.Abstractions;
+//using AspNetCoreHero.ToastNotification.Abstractions;
 using HelloDocMVC.Repository.Repository.Interface;
 using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Entity.Models;
@@ -19,14 +19,12 @@ namespace HelloDoc.Controllers
         private readonly ILoginRepository _ILoginRepository;
         private readonly HelloDocDbContext _context;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly INotyfService _notyf;
         private readonly IJwtSession _jwtSession;
-        public LoginController(ILoginRepository loginRepository,HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, INotyfService notyf, IJwtSession jwtSession)
+        public LoginController(ILoginRepository loginRepository,HelloDocDbContext context, IHttpContextAccessor httpContextAccessor, IJwtSession jwtSession)
         {
             _ILoginRepository = loginRepository;
             _context = context;
             _httpContextAccessor = httpContextAccessor;
-            _notyf = notyf;
             _jwtSession = jwtSession;
         }
         public IActionResult Index()
@@ -68,7 +66,9 @@ namespace HelloDoc.Controllers
         {
             if (_ILoginRepository.SendResetLink(Email))
             {
-                _notyf.Success("Mail Send  Successfully..!");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Mail Send  Successfully";
             }
             return RedirectToAction("Forgetpass", "Login");
 

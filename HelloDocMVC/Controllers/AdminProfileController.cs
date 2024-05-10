@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using HelloDocMVC.Entity.Models;
+﻿using HelloDocMVC.Entity.Models;
 using HelloDocMVC.Models;
 using HelloDocMVC.Repository.Repository;
 using HelloDocMVC.Repository.Repository.Interface;
@@ -11,12 +10,10 @@ namespace HelloDocMVC.Controllers
     {
         private readonly IAdminProfile _IAdminProfile;
         private readonly IComboBox _combobox;
-        private readonly INotyfService _notyf;
-        public AdminProfileController(IAdminProfile IMyProfileRepository, IComboBox combobox, INotyfService INotyfService)
+        public AdminProfileController(IAdminProfile IMyProfileRepository, IComboBox combobox)
         {
             _IAdminProfile = IMyProfileRepository;
             _combobox = combobox;
-            _notyf = INotyfService;
         }
         public async Task<IActionResult> Index(int? id)
         {
@@ -29,11 +26,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminProfile.EditPassword(password, Convert.ToInt32(CV.UserID())))
             {
-                _notyf.Success("Password changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Password changed Successfully";
             }
             else
             {
-                _notyf.Error("Password not Changed...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Password not Changed";
             }
             return RedirectToAction("Index");
         }
@@ -42,11 +43,15 @@ namespace HelloDocMVC.Controllers
         {
             if (_IAdminProfile.EditAdministratorInfo(_viewAdminProfile))
             {
-                _notyf.Success("Information changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Information changed Successfully";
             }
             else
             {
-                _notyf.Error("Information not Changed...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Information not Changed";
             }
             return RedirectToAction("Index");
         }
@@ -55,11 +60,15 @@ namespace HelloDocMVC.Controllers
         {
             if (await _IAdminProfile.BillingInfoEdit(_viewAdminProfile))
             {
-                _notyf.Success("Information changed Successfully...");
+                // Success notification
+                TempData["SweetAlertType"] = "success";
+                TempData["SweetAlertMessage"] = "Information changed Successfully";
             }
             else
             {
-                _notyf.Error("Information not Changed...");
+                // Error notification
+                TempData["SweetAlertType"] = "error";
+                TempData["SweetAlertMessage"] = "Information not Changed";
             }
             return RedirectToAction("Index");
         }

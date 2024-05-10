@@ -56,13 +56,13 @@
                     @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "MySchedule"))
                     {
                         <li class="nav-item me-3">
-                            <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
+                            <a class="nav-link text-dark @(path.StartsWith("/Scheduling") ? "activesbnav" : "")" asp-action="Index" asp-controller="Scheduling">Scheduling</a>
                         </li>
                     }
                     @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Invoicing"))
                     {
                         <li class="nav-item me-3">
-                            <a class="nav-link text-dark @(path.StartsWith("/ProviderLocation") ? "activesbnav" : "")" href="#">Invoicing</a>
+                            <a class="nav-link text-dark @(path.StartsWith("/Invoicing") ? "activesbnav" : "")" asp-action="Index" asp-controller="Invoicing">Invoicing</a>
                         </li>
                     }
                 }

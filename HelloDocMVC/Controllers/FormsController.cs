@@ -20,10 +20,6 @@ namespace HelloDoc.Controllers
             _patientForms = patientForms;
             _comboBox = comboBox;
         }
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
         public async Task<IActionResult> Index()
         {
             return View();
