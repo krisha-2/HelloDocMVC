@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "";
+}
+@model HelloDocMVC.Entity.Models.ViewTimeSheet
+<div class="table-responsive my-4">
+    @if (Model.ViewTimesheetDetails.Count > 0)
+    {
+        <table class="table">
+            <thead>
+                <tr class="table-secondary">
+                    <th>Shift Date</th>
+                    <th>Shift</th>
+                    <th>Nightshift Weekend</th>
+                    <th>Housecall</th>
+                    <th>Housecall Nights Weekend</th>
+                    <th>Phone consults</th>
+                    <th>Phone consults Night Weekend</th>
+                    <th>Batch Testing</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ViewTimesheetDetails)
+                {
+                    <tr>
+                        <td>@item.TimeSheetDate</td>
+                        <td>@item.OnCallHours</td>
+                        <td>0</td>
+                        <td>@item.NumberofHousecall</td>
+                        <td>0</td>
+                        <td>@item.NumberofPhonecall</td>
+                        <td>0</td>
+                        <td>0</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h5 class="my-5 mx-2 text-muted">No record(s) found</h5>
+    }
+
+    <h3>Timesheet Reimbursement</h3>
+
+    @if (Model.ViewTimesheetDetailReimbursements != null)
+    {
+        <table class="table my-4">
+            <thead>
+                <tr class="table-secondary">
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Amount</th>
+                    <th>Bill</th>
+                    <th>action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ViewTimesheetDetailReimbursements)
+                {
+                    <tr>
+                        <td>@item.TimeSheetDate</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Amount</td>
+                        <td>@item.Bill</td>
+                        <td>
+                            <a target="_blank" href="/Upload/TimeSheet/@Model.TimesheetId/@item.Bill" class="btn mx-1 btn-sm btn-outline-info view-btn">
+                                view
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <h5 class="my-5 mx-2 text-muted">No record(s) found</h5>
+    }
+</div>

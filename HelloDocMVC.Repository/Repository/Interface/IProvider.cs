@@ -24,5 +24,7 @@ namespace HelloDocMVC.Repository.Repository.Interface
         public Task<bool> DeletePhysician(int PhysicianID, string AdminID);
         public List<PhysicianLocation> FindPhysicianLocation();
         public bool SendMessage(string? Message);
+        public Payrate GetPayrate(int id);
+        public bool PayratePost(Payrate pr, string id);
     }
 }

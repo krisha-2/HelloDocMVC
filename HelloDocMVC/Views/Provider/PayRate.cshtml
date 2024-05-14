@@ -1,147 +1,244 @@
 ﻿@{
     Layout = "_LayoutAdminDashboard";
+    ViewData["Title"] = "Physician Payrates Information";
 }
-@using HelloDocMVC.Entity.Models;
-@model ViewProvider;
-<div class="container mb-3">
-    <div class="d-flex justify-content-between mt-3">
-        <div class="d-flex align-self-center">
-            <h4><strong> Physician Account</strong></h4>
-        </div>
-        <div>
-            <div class="border border-info rounded p-2 m-1">
-                <a asp-controller="Provider" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+@model HelloDocMVC.Entity.Models.Payrate
+
+<div class="body">
+    <div class="container">
+        <div class="d-flex justify-content-between mt-3">
+            <div class="d-flex align-items-center">
+                <h4 class="pt-2">Payrate</h4>
+            </div>
+            <div>
+                <div class="border border-info rounded p-2 m-1">
+                    <a asp-controller="Provider" asp-action="Index" class="text-decoration-none text-info"><i class='fa fa-angle-left text-info me-1'></i>Back</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="bg-white rounded shadow mt-3">
-        <table class="table table-responsive mt-3 mb-0">
-            <thead class="theadbg table-secondary">
-                <tr>
-                        <th scope="col" width="30%">Category</th>
-                        <th scope="col" width="50%">Payrate</th>
-                        <th scope="col" width="20%">Action</th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider" id="providerbody">
+        <div class="card border-0 shadow py-4 mb-5 mt-3 rounded p-3 rounded container">
+            <table class="w-100 mt-3 table dataTable" id="fullTable">
+                <thead class="theadbg py-2" id="tableHead">
                     <tr>
-                        <td>NightShift_Weekend</td>
+                        <th scope="col" style="width:30%">
+                            <small>Category</small>
+                        </th>
+                        <th scope="col" style="width:50%">
+                            <small>Payrate</small>
+                        </th>
+                        <th scope="col" style="width:20%">
+                            <small>Action</small>
+                        </th>
+                    </tr>
+                </thead>
+                <form class="mt-0" id="payrateForm" asp-action="PayratePost" asp-controller="Provider" method="post">
+                    <input type="hidden" asp-for="PhysicianId" />
+                <tbody class="mb-5" id="tableBody">
+                    <tr>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none " id="Firstname" placeholder="First Name">
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            NightShift_Weekend
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button p-2 px-3 mt-2">
-                                Edit
-                            </a>
+                        <td class="form-floating">
+                            <input asp-for="NightShiftWeekend" type="text" class="form-control shadow-none" id="nsWeekend" placeholder="Payrate" disabled>
+                            <label for="nsWeekend">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit1" class="btn btn-info text-white" onclick="toggleElement1()" />
+                            <input type="button" value="Save" id="save1" class="btn btn-info text-white save" />
                         </td>
                     </tr>
                     <tr>
-                        <td>Shift</td>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none " id="Firstname" placeholder="First Name">
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            Shift
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button mx-1 p-2 px-3 mt-2">
-                                Edit
-                            </a>
+                        <td class="form-floating">
+                            <input asp-for="Shift" type="text" class="form-control shadow-none" id="shift" placeholder="Payrate" disabled>
+                            <label for="shift">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit2" class="btn btn-info text-white" onclick="toggleElement2()" />
+                            <input type="button" value="Save" id="save2" class="btn btn-info text-white save" />
                         </td>
                     </tr>
                     <tr>
-                        <td>HouseCalls_Night_Weekend</td>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            HouseCalls_Nights_Weekend
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button mx-1 p-2 px-3 mt-2">
-                                Edit
-                            </a>
+                        <td class="form-floating">
+                            <input asp-for="HouseCallNightsWeekend" type="text" class="form-control shadow-none" id="hcnWeekend" placeholder="Payrate" disabled>
+                            <label for="hcnWeekend">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit3" class="btn btn-info text-white" onclick="toggleElement3()" />
+                            <input type="button" value="Save" id="save3" class="btn btn-info text-white save" />
                         </td>
                     </tr>
                     <tr>
-                        <td>PhoneConsults</td>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            PhoneConsults
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button mx-1 p-2 px-3 mt-2">
-                                Edit
-                            </a>
+                        <td class="form-floating">
+                            <input asp-for="PhoneConsults" type="text" class="form-control shadow-none" id="phoneConsults" placeholder="Payrate" disabled>
+                            <label for="phoneConsults">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit4" class="btn btn-info text-white" onclick="toggleElement4()" />
+                            <input type="button" value="Save" id="save4" class="btn btn-info text-white save" />
                         </td>
                     </tr>
                     <tr>
-                        <td>PhoneConsults_Nights_Weekend</td>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            PhoneConsults_Nights_Weekend
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button mx-1 p-2 px-3 mt-2">
-                                Edit
-                            </a>
+                        <td class="form-floating">
+                            <input asp-for="PhoneConsultsNightsWeekend" type="text" class="form-control shadow-none" id="pcnWeekend" placeholder="Payrate" disabled>
+                            <label for="pcnWeekend">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit5" class="btn btn-info text-white" onclick="toggleElement5()" />
+                            <input type="button" value="Save" id="save5" class="btn btn-info text-white save" />
                         </td>
                     </tr>
                     <tr>
-                        <td>BatchTesting</td>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input1" id="Firstname" placeholder="First Name">
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            BatchTesting
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button mx-1 p-2 px-3 mt-2">
-                                Edit
-                            </a>
+                        <td class="form-floating">
+                            <input asp-for="BatchTesting" type="text" class="form-control shadow-none" id="batchTesting" placeholder="Payrate" disabled>
+                            <label for="batchTesting">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit6" class="btn btn-info text-white" onclick="toggleElement6()" />
+                            <input type="button" value="Save" id="save6" class="btn btn-info text-white save" />
                         </td>
                     </tr>
                     <tr>
-                        <td>HouseCalls</td>
                         <td>
-                            <div class="form-floating">
-                                <input type="text" asp-for="Firstname" class="form-control shadow-none input" id="Firstname" placeholder="First Name" disabled>
-                                <label for="Firstname">Payrate</label>
-                            </div>
+                            HouseCalls
                         </td>
-                        <td class="text-center">
-                            <a asp-action="PhysicianProfile" asp-controller="Provider" asp-route-id="Physicianid" class="btn btn-info text-white btn-sm document-button mx-1 p-2 px-3 mt-2">
-                                Edit
-                            </a>
-                            <input type="button" value="Edit" id="edit" class="btn btn-info text-white" onclick="toggleFormElements()" />
-                            <button type="submit" id="save" class="btn btn-info text-white" asp-action="EditPhysicianInfo" asp-controller="Provider">Save</button>
+                        <td class="form-floating">
+                            <input asp-for="HouseCalls" type="text" class="form-control shadow-none" id="houseCalls" placeholder="Payrate" disabled>
+                            <label for="houseCalls">Payrate</label>
+                        </td>
+                        <td>
+                            <input type="button" value="Edit" id="edit7" class="btn btn-info text-white" onclick="toggleElement7()" />
+                            <input type="button" value="Save" id="save7" class="btn btn-info text-white save" />
                         </td>
                     </tr>
-            </tbody>
-        </table>
+                </tbody>
+                </form>
+            </table>
+        </div>
     </div>
 </div>
-<script>
-    function toggleFormElements(bDisabled) {
-        var inputs = document.getElementsByClassName("input");
-        var submit = document.getElementById("save");
-        var editprofile = document.getElementById("edit");
-        for (var i = 0; i < inputs0.length; i++) {
-            inputs[i].disabled = !inputs[i].disabled;
-        }
-        if (inputs[0].disabled) {
+<script type="text/javascript">
+    window.onload = function (e) {
+        $(".save").hide();
+    }
+    function toggleElement1(bDisabled) {
+        var input = document.getElementById("nsWeekend");
+        var submit = document.getElementById("save1");
+        var edit = document.getElementById("edit1");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
             submit.style.display = "none";
-            editprofile.style.display = "block";
+            edit.style.display = "block";
         } else {
-            submit0.style.display = "block";
-            editprofile0.style.display = "none";
+            submit.style.display = "block";
+            edit.style.display = "none";
         }
     }
+    function toggleElement2(bDisabled) {
+        var input = document.getElementById("shift");
+        var submit = document.getElementById("save2");
+        var edit = document.getElementById("edit2");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
+            submit.style.display = "none";
+            edit.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            edit.style.display = "none";
+        }
+    }
+    function toggleElement3(bDisabled) {
+        var input = document.getElementById("hcnWeekend");
+        var submit = document.getElementById("save3");
+        var edit = document.getElementById("edit3");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
+            submit.style.display = "none";
+            edit.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            edit.style.display = "none";
+        }
+    }
+    function toggleElement4(bDisabled) {
+        var input = document.getElementById("phoneConsults");
+        var submit = document.getElementById("save4");
+        var edit = document.getElementById("edit4");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
+            submit.style.display = "none";
+            edit.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            edit.style.display = "none";
+        }
+    }
+    function toggleElement5(bDisabled) {
+        var input = document.getElementById("pcnWeekend");
+        var submit = document.getElementById("save5");
+        var edit = document.getElementById("edit5");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
+            submit.style.display = "none";
+            edit.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            edit.style.display = "none";
+        }
+    }
+    function toggleElement6(bDisabled) {
+        var input = document.getElementById("batchTesting");
+        var submit = document.getElementById("save6");
+        var edit = document.getElementById("edit6");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
+            submit.style.display = "none";
+            edit.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            edit.style.display = "none";
+        }
+    }
+    function toggleElement7(bDisabled) {
+        var input = document.getElementById("houseCalls");
+        var submit = document.getElementById("save7");
+        var edit = document.getElementById("edit7");
+        input.disabled = !input.disabled;
+        if (input.disabled) {
+            submit.style.display = "none";
+            edit.style.display = "block";
+        } else {
+            submit.style.display = "block";
+            edit.style.display = "none";
+        }
+    }
+    $(function () {
+        $('.save').on('click', function () {
+            Swal.fire({
+                title: "Do you want to Edit Information ?",
+                showDenyButton: false,
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                denyButtonText: `Don't save`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#payrateForm').submit();
+                }
+            });
+        });
+    });
 </script>

@@ -260,9 +260,24 @@ namespace HelloDocMVC.Controllers
             ViewBag.Log = _IProvider.FindPhysicianLocation();
             return View();
         }
-        public async Task<IActionResult> PayRate()
+        public IActionResult PayRate(int id)
         {
-            return View();
+            Payrate p = _IProvider.GetPayrate(id);
+            return View("../Provider/PayRate", p);
+        }
+        [HttpPost]
+        public IActionResult PayratePost(Payrate pr)
+        {
+            string id = CV.ID();
+            if (_IProvider.PayratePost(pr, id))
+            {
+                //_notyf.Success("Payrate Information changed Successfully...");
+            }
+            else
+            {
+                //_notyf.Error("Payrate Information not Changed...");
+            }
+            return RedirectToAction("PayRate", new { id = pr.PhysicianId });
         }
     }
 }

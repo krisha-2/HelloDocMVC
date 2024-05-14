@@ -4,6 +4,8 @@ using HelloDocMVC.Repository.Repository.Interface;
 
 using HelloDocMVC.Entity.Models;
 using Rotativa.AspNetCore;
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var emailConfig = builder.Configuration
@@ -29,6 +31,7 @@ builder.Services.AddScoped<IRequestByPatient, RequestByPatient>();
 builder.Services.AddScoped<IInvoicing, Invoicing>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
+builder.Services.AddNotyf(config => { config.DurationInSeconds = 3; config.IsDismissable = true; config.Position = NotyfPosition.TopRight; });
 
 var app = builder.Build();
 // Configure the HTTP request pipeline.
@@ -44,6 +47,7 @@ app.UseRouting();
 app.UseSession();
 app.UseAuthorization();
 app.UseRotativa();
+app.UseNotyf();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index1}/{id?}");

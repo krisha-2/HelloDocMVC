@@ -46,7 +46,7 @@
                             }
                             @if (LoginRepository.isAccessGranted((int)CV.RoleID(), "Invoicing"))
                             {
-                                <a class="dropdown-item" href="#">Invoicing</a>
+                                <a class="dropdown-item" asp-action="IndexAdmin" asp-controller="Invoicing">Invoicing</a>
                             }
                         </div>
                     </li>

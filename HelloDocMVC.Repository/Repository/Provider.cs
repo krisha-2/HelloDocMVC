@@ -677,5 +677,65 @@ namespace HelloDocMVC.Repository.Repository
             bool sms = _emailConfig.SendSMS(contact, Message).Result;
             return sms;
         }
+        public Payrate GetPayrate(int id)
+        {
+            Payrate? p = (from r in _context.PhysicianPayrates
+                         where r.PhysicianId == id
+                         select new Payrate
+                         {
+                             PhysicianId = id,
+                             NightShiftWeekend = r.NightShiftWeekend,
+                             Shift = r.Shift,
+                             HouseCallNightsWeekend = r.HouseCallNightsWeekend,
+                             PhoneConsults = r.PhoneConsults,
+                             PhoneConsultsNightsWeekend = r.PhoneConsultsNightsWeekend,
+                             BatchTesting = r.BatchTesting,
+                             HouseCalls = r.HouseCalls,
+                         }).FirstOrDefault();
+            if (p == null)
+            {
+                Payrate pr = new();
+                pr.PhysicianId = id;
+                return pr;
+            }
+            return p;
+        }
+        public bool PayratePost(Payrate pr, string id)
+        {
+            try
+            {
+                if (pr == null)
+                {
+                    return false;
+                }
+                else
+                {
+                    var p = _context.PhysicianPayrates.Where(W => W.PhysicianId == pr.PhysicianId).FirstOrDefault();
+                    if (p == null)
+                    {
+                        p = new PhysicianPayrate { PhysicianId = pr.PhysicianId, CreatedBy = id, CreatedDate = DateTime.Now };
+                        _context.PhysicianPayrates.Add(p);
+                    }
+                    p.NightShiftWeekend = pr.NightShiftWeekend == null ? p.NightShiftWeekend : pr.NightShiftWeekend;
+                    p.Shift = pr.Shift == null ? p.Shift : pr.Shift;
+                    p.HouseCallNightsWeekend = pr.HouseCallNightsWeekend == null ? p.HouseCallNightsWeekend : pr.HouseCallNightsWeekend;
+                    p.PhoneConsults = pr.PhoneConsults == null ? p.PhoneConsults : pr.PhoneConsults;
+                    p.PhoneConsultsNightsWeekend = pr.PhoneConsultsNightsWeekend == null ? p.PhoneConsultsNightsWeekend : pr.PhoneConsultsNightsWeekend;
+                    p.BatchTesting = pr.BatchTesting == null ? p.BatchTesting : pr.BatchTesting;
+                    p.HouseCalls = pr.HouseCalls == null ? p.HouseCalls : pr.HouseCalls;
+                    if (p != null)
+                    {
+                        p.ModifiedBy = id;
+                        p.ModifiedDate = DateTime.Now;
+                    }
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
     }
 }

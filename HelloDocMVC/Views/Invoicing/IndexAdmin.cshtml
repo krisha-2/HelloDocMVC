@@ -9,29 +9,44 @@
                 <i class="fa fa-solid fa-angle-left"></i> Back
             </span>
         </a>
-        <h3>Timesheets</h3>
+        <h3>Timesheets Admin</h3>
     </div>
-    <div class="d-flex justify-content-between">
-        <div class="form-floating w-25">
-            <select class="form-select" id="dateRangeDropdown" aria-label="Floating label select example">
-                <option selected value="@DateOnly.MinValue">Select</option>
+    <div class="d-flex">
+        <div class="form-floating col-3 mx-3">
+            <select class="form-select" id="Physicianinvoice" data-allow-clear="true" tabindex="-1" asp-items="@(new SelectList(ViewBag.GetAllPhysicians,"Physicianid","UserName"))" data-control="select2" data-placeholder="Select Level">
+                <option selected value="0">Select Physician</option>
+            </select>
+            <label for="Physicianinvoice">Search by Physician </label>
+        </div>
+        <div class="form-floating col-3">
+            <select class="form-select" id="dateRangeDropdownadmin" data-allow-clear="true" tabindex="-1" data-control="select2" data-placeholder="Select Level">
+                <option selected value="@DateOnly.MinValue">Select timesheet period</option>
             </select>
             <label for="floatingSelect">Search by timesheet period </label>
         </div>
-        <a id="finalizeBtn" class="my-2 btn  btn-outline-info text-decoration-none" style="display:none">
 
-            Finalize Timesheet
-
-        </a>
     </div>
-    <div id="Timesheet"></div>
+    <div id="NotFinalize" style="display : none;">
+
+        <h5 class="my-5 mx-2 text-muted">“Provider has not finalized the timesheet in specified time period.”</h5>
+    </div>
+    <div id="NotApprove" style="display : none !important;"></div>
+    <div id="Approve" style="display : none;"></div>
 </section>
 
 
 @section Scripts {
 
     <script>
-        var loginId = @CV.UserID();
+        var Physicianid;
+        $("#Physicianinvoice").change(function () {
+            Physicianid = $('#Physicianinvoice').val();
+            document.getElementById("dateRangeDropdownadmin").value = "01-01-0001";
+            console.log(Physicianid + " Physicianid");
+            $("#NotApprove").hide();
+            $("#NotFinalize").hide();
+            $("#Approve").hide();
+        });
         // Function to generate date options for the past and next six months
         function generateDateOptions() {
             var options = [];
@@ -81,7 +96,7 @@
         }
         // Function to populate the dropdown with date options
         function populateDropdown() {
-            var dropdown = document.getElementById("dateRangeDropdown");
+            var dropdown = document.getElementById("dateRangeDropdownadmin");
             var dateOptions = generateDateOptions();
             // Add options to the dropdown
             dateOptions.forEach(function (option) {
@@ -91,24 +106,59 @@
                 dropdown.add(opt);
                 // Trigger the function for the default value
                 var selectedValue = dropdown.value;
-                myFunction(loginId, selectedValue);
+                myFunction(Physicianid, selectedValue);
             });
         }
         // Call the function to populate the dropdown on page load
         populateDropdown();
-        function myFunction(loginId, selectedValue) {
+        function myFunction(Physicianid, selectedValue) {
             console.log(selectedValue);
+            console.log(Physicianid);
             $.ajax({
                 type: "POST",
                 url: '@Url.Action("IsFinalizeSheet", "Invoicing")',
-                data: { PhysicianId: loginId, StartDate: selectedValue },
+                data: { PhysicianId: Physicianid, StartDate: selectedValue },
                 cache: false,
                 success: function (response) {
                     if (response.x == true) {
-                        $("#finalizeBtn").hide();
+                        $("#NotFinalize").hide();
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("IsApproveSheet", "Invoicing")',
+                            data: { PhysicianId: Physicianid, StartDate: selectedValue },
+                            cache: false,
+                            success: function (response) {
+                                if (response.x == true) {
+                                    $("#NotApprove").hide();
+                                    debugger;
+                                    $.ajax({
+                                        method: "GET",
+                                        url: "/Invoicing/GetTimesheetDetailsData",
+                                        data: { PhysicianId: Physicianid, StartDate: selectedValue },
+                                        success: function (response) {
+                                            $("#Approve").show();
+                                            $("#Approve").html(response);
+                                            $("#NotFinalize").hide();
+                                            $("#NotApprove").hide();
+                                        }
+                                    });
+                                }
+                                else {
+                                    $("#NotApprove").show();
+                                    $("#NotApprove").html(response);
+                                    $("#NotFinalize").hide();
+                                    $("#Approve").hide();
+                                }
+                            },
+                            error: function () {
+                                alert("Error while checking date.");
+                            }
+                        });
                     }
                     else {
-                        $("#finalizeBtn").show();
+                        $("#NotFinalize").show();
+                        $("#NotApprove").hide();
+                        $("#Approve").hide();
                     }
                 },
                 error: function () {
@@ -117,32 +167,10 @@
             });
         }
         $(document).ready(function () {
-            $("#dateRangeDropdown").change(function () {
+            $("#dateRangeDropdownadmin").change(function () {
                 // Get the selected value
                 var selectedValue = $(this).val();
-                myFunction(loginId, selectedValue);
-                // myFunctionfortimesheetData(loginId, selectedValue);
-                // $("#Startdate").val(selectedValue);
-                // $("#PhysicianId").val(loginId);
-                var dateObj = new Date(selectedValue);
-                var date = dateObj.getDate();
-                var month = dateObj.getMonth() + 1; // Months are zero-based
-                var year = dateObj.getFullYear();
-                if (date == 1) {
-                    var url = '@Url.Action("Timesheet", "Invoicing")' + '?PhysicianId=' + loginId + '&StartDate=' + selectedValue;
-                } else {
-                    var daysInMonth = new Date(year, month, 0).getDate();
-                    var url = '@Url.Action("Timesheet", "Invoicing")' + '?PhysicianId=' + loginId + '&StartDate=' + selectedValue;
-                }
-                $('#finalizeBtn').attr('href', url).show();
-                $.ajax({
-                    method: "GET",
-                    url: "/Invoicing/GetTimesheetDetailsData",
-                    data: { StartDate: selectedValue, PhysicianId: loginId },
-                    success: function (response) {
-                        $("#Timesheet").html(response);
-                    }
-                });
+                myFunction(Physicianid, selectedValue);
             });
         });
     </script>

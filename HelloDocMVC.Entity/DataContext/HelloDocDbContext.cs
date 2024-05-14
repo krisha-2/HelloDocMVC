@@ -52,6 +52,8 @@ public partial class HelloDocDbContext : DbContext
 
     public virtual DbSet<PhysicianNotification> PhysicianNotifications { get; set; }
 
+    public virtual DbSet<PhysicianPayrate> PhysicianPayrates { get; set; }
+
     public virtual DbSet<PhysicianRegion> PhysicianRegions { get; set; }
 
     public virtual DbSet<Region> Regions { get; set; }
@@ -85,6 +87,12 @@ public partial class HelloDocDbContext : DbContext
     public virtual DbSet<ShiftDetailRegion> ShiftDetailRegions { get; set; }
 
     public virtual DbSet<Smslog> Smslogs { get; set; }
+
+    public virtual DbSet<TimeSheet> TimeSheets { get; set; }
+
+    public virtual DbSet<TimeSheetDetail> TimeSheetDetails { get; set; }
+
+    public virtual DbSet<TimeSheetDetailReimbursement> TimeSheetDetailReimbursements { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
@@ -288,6 +296,23 @@ public partial class HelloDocDbContext : DbContext
             entity.HasOne(d => d.Physician).WithMany(p => p.PhysicianNotifications)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("PhysicianNotification_PhysicianId_fkey");
+        });
+
+        modelBuilder.Entity<PhysicianPayrate>(entity =>
+        {
+            entity.HasKey(e => e.PhysicianId).HasName("PhysicianPayrate_pkey");
+
+            entity.Property(e => e.PhysicianId).ValueGeneratedNever();
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.PhysicianPayrateCreatedByNavigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("PhysicianPayrate_CreatedBy_fkey");
+
+            entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.PhysicianPayrateModifiedByNavigations).HasConstraintName("PhysicianPayrate_ModifiedBy_fkey");
+
+            entity.HasOne(d => d.Physician).WithOne(p => p.PhysicianPayrate)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("PhysicianPayrate_PhysicianId_fkey");
         });
 
         modelBuilder.Entity<PhysicianRegion>(entity =>
@@ -511,6 +536,54 @@ public partial class HelloDocDbContext : DbContext
             entity.HasOne(d => d.Request).WithMany(p => p.Smslogs).HasConstraintName("SMSLog_RequestId_fkey");
 
             entity.HasOne(d => d.Role).WithMany(p => p.Smslogs).HasConstraintName("SMSLog_RoleId_fkey");
+        });
+
+        modelBuilder.Entity<TimeSheet>(entity =>
+        {
+            entity.HasKey(e => e.TimeSheetId).HasName("timesheet_pkey");
+
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.IsApproved).HasDefaultValueSql("false");
+            entity.Property(e => e.IsFinalize).HasDefaultValueSql("false");
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.TimeSheetCreatedByNavigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("timesheet_createdby_fkey");
+
+            entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.TimeSheetModifiedByNavigations).HasConstraintName("timesheet_modifiedby_fkey");
+
+            entity.HasOne(d => d.Physician).WithMany(p => p.TimeSheets)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("timesheet_physicianid_fkey");
+        });
+
+        modelBuilder.Entity<TimeSheetDetail>(entity =>
+        {
+            entity.HasKey(e => e.TimeSheetDetailId).HasName("timesheetdetail_pkey");
+
+            entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.TimeSheetDetails).HasConstraintName("timesheetdetail_modifiedby_fkey");
+
+            entity.HasOne(d => d.TimeSheet).WithMany(p => p.TimeSheetDetails)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("timesheetdetail_timesheetid_fkey");
+        });
+
+        modelBuilder.Entity<TimeSheetDetailReimbursement>(entity =>
+        {
+            entity.HasKey(e => e.TimeSheetDetailReimbursementId).HasName("timesheetdetailreimbursement_pkey");
+
+            entity.Property(e => e.CreatedDate).HasDefaultValueSql("CURRENT_TIMESTAMP");
+            entity.Property(e => e.IsDeleted).HasDefaultValueSql("false");
+
+            entity.HasOne(d => d.CreatedByNavigation).WithMany(p => p.TimeSheetDetailReimbursementCreatedByNavigations)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("timesheetdetailreimbursement_createdby_fkey");
+
+            entity.HasOne(d => d.ModifiedByNavigation).WithMany(p => p.TimeSheetDetailReimbursementModifiedByNavigations).HasConstraintName("timesheetdetailreimbursement_modifiedby_fkey");
+
+            entity.HasOne(d => d.TimeSheetDetail).WithMany(p => p.TimeSheetDetailReimbursements)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("timesheetdetailreimbursement_timesheetdetailid_fkey");
         });
 
         modelBuilder.Entity<User>(entity =>
